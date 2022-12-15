@@ -10,6 +10,7 @@ class MainWindow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(
@@ -18,11 +19,22 @@ class MainWindow extends ConsumerWidget {
             TapDebouncer(
               cooldown: const Duration(seconds: 1),
               onTap: () async {
-                bool isLive = await ref.watch(liveProvider);
+                bool live = await ref.watch(liveProvider);
 
-                ref.watch(liveProvider.notifier).state = !isLive;
+                ref.watch(liveProvider.notifier).state = !live;
 
-                await toggleLive(!isLive);
+                if (!live) {
+                  await DesktopMultiWindow.createWindow('Projector Window');
+                } else {
+                  await DesktopMultiWindow.getAllSubWindowIds().then(
+                    (value) async {
+                      if (value.isNotEmpty) {
+                        await DesktopMultiWindow.invokeMethod(value.first, 'close', '');
+                      }
+                      return;
+                    },
+                  );
+                }
               },
               builder: (context, onTap) {
                 return Switch(
@@ -44,19 +56,5 @@ class MainWindow extends ConsumerWidget {
     );
   }
 
-  Future<void> toggleLive(bool to) async {
-    if (to == true) {
-      await DesktopMultiWindow.createWindow('Projector Window');
-     
-    } else {
-      await DesktopMultiWindow.getAllSubWindowIds().then(
-        (value) async {
-          if (value.isNotEmpty) {
-            await DesktopMultiWindow.invokeMethod(value.first, 'close', '');
-          }
-          return;
-        },
-      );
-    }
-  }
+  Future<void> toggleLive(bool to) async {}
 }

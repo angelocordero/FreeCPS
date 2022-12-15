@@ -5,7 +5,7 @@ import 'package:freecps/windows/main_window.dart';
 import 'package:freecps/windows/projector_window.dart';
 import 'package:window_manager/window_manager.dart';
 
-void main(List<String> args) async {
+void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (args.isEmpty) {
@@ -15,12 +15,12 @@ void main(List<String> args) async {
       ),
     );
   } else {
-    await runProjectorWindow();
+    runProjectorWindow();
   }
 }
 
-Future<void> runProjectorWindow() async {
-  await windowManager.ensureInitialized();
+void runProjectorWindow()  {
+   windowManager.ensureInitialized();
   DartVLC.initialize();
 
   WindowOptions windowOptions = const WindowOptions(
@@ -30,7 +30,6 @@ Future<void> runProjectorWindow() async {
   );
 
   windowManager.waitUntilReadyToShow(windowOptions);
-
   windowManager.setBounds(
     null,
     position: const Offset(1920, 0),
@@ -39,7 +38,6 @@ Future<void> runProjectorWindow() async {
   );
   windowManager.setAsFrameless();
   windowManager.setClosable(false);
-  windowManager.show();
-
   runApp(const ProjectorWindow());
+  windowManager.show();
 }

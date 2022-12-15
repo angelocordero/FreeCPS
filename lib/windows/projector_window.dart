@@ -16,6 +16,8 @@ class ProjectorWindow extends StatelessWidget {
     );
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
       home: Scaffold(
         body: Container(),
       ),
