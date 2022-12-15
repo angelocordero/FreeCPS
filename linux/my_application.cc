@@ -7,6 +7,10 @@
 
 #include "flutter/generated_plugin_registrant.h"
 
+#include "desktop_multi_window/desktop_multi_window_plugin.h"
+#include "window_manager/window_manager_plugin.h"
+#include "dart_vlc/dart_vlc_plugin.h"
+
 struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
@@ -58,6 +62,20 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+
+   //! IMPORTANT
+   //* registers plugins to windows created by desktop_multi_window
+
+    desktop_multi_window_plugin_set_window_created_callback([](FlPluginRegistry* registry){
+    g_autoptr(FlPluginRegistrar) window_manager_registrar =
+        fl_plugin_registry_get_registrar_for_plugin(registry, "WindowManagerPlugin");
+    window_manager_plugin_register_with_registrar(window_manager_registrar);
+    g_autoptr(FlPluginRegistrar) dart_vlc_registrar =
+        fl_plugin_registry_get_registrar_for_plugin(registry, "DartVlc");
+    dart_vlc_plugin_register_with_registrar(dart_vlc_registrar);
+  });
+
+   //! IMPORTANT
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
