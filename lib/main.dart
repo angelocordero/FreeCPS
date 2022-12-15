@@ -1,5 +1,6 @@
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/windows/main_window.dart';
 import 'package:freecps/windows/projector_window.dart';
 import 'package:window_manager/window_manager.dart';
@@ -8,7 +9,11 @@ void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (args.isEmpty) {
-    runApp(const MainWindow());
+    runApp(
+      const ProviderScope(
+        child: MainWindow(),
+      ),
+    );
   } else {
     await runProjectorWindow();
   }
@@ -33,6 +38,7 @@ Future<void> runProjectorWindow() async {
     animate: false,
   );
   windowManager.setAsFrameless();
+  windowManager.setClosable(false);
   windowManager.show();
 
   runApp(const ProjectorWindow());
