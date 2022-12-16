@@ -1,13 +1,4 @@
 class BibleReference {
-  String? translation;
-  String? book;
-  int? chapter;
-  String? verse;
-
-  int? startVerse;
-  int? endVerse;
-  String name = '';
-
   BibleReference({
     this.translation,
     this.book,
@@ -25,6 +16,14 @@ class BibleReference {
       endVerse = int.tryParse(num[1]);
     }
   }
+
+  String? book;
+  int? chapter;
+  int? endVerse;
+  String name = '';
+  int? startVerse;
+  String? translation;
+  String? verse;
 
   @override
   bool operator ==(covariant BibleReference other) {
@@ -44,7 +43,7 @@ class BibleReference {
 
   @override
   String toString() {
-    return 'BibleReference(name: $name, translation: $translation, book: $book, chapter: $chapter, verse: $verse)';
+    return 'BibleReference(name: $name, translation: $translation, book: $book, chapter: $chapter, verse: $verse, startVerse: $startVerse, endVerse: $endVerse)';
   }
 
   BibleReference copyWith({

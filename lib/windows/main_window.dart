@@ -13,7 +13,7 @@ class MainWindow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO : put this in a loading widget
-    ref.read(availableBiblesProvider);
+    //ref.read(availableBiblesProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
