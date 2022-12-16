@@ -1,15 +1,14 @@
 class BibleReference {
-  String? tag;
   String? translation;
   String? book;
   int? chapter;
   String? verse;
 
-  int? _startVerse;
-  int? _endVerse;
+  int? startVerse;
+  int? endVerse;
+  String name = '';
 
   BibleReference({
-    this.tag,
     this.translation,
     this.book,
     this.chapter,
@@ -17,13 +16,13 @@ class BibleReference {
   }) {
     if (verse == null) return;
 
+    if (verse!.isEmpty) return;
+
     List<String> num = verse!.split('-');
 
+    startVerse = int.tryParse(num[0]) ?? 1;
     if (num.length == 2) {
-      _startVerse = int.tryParse(num[0]);
-      _endVerse = int.tryParse(num[1]);
-    } else {
-      _startVerse = int.tryParse(num[0]);
+      endVerse = int.tryParse(num[1]);
     }
   }
 
@@ -31,21 +30,44 @@ class BibleReference {
   bool operator ==(covariant BibleReference other) {
     if (identical(this, other)) return true;
 
-    return other.tag == tag &&
-        other.translation == translation &&
+    return other.translation == translation &&
         other.book == book &&
         other.chapter == chapter &&
-        other._startVerse == _startVerse &&
-        other._endVerse == _endVerse;
+        other.startVerse == startVerse &&
+        other.endVerse == endVerse;
   }
 
   @override
   int get hashCode {
-    return tag.hashCode ^ translation.hashCode ^ book.hashCode ^ chapter.hashCode ^ _startVerse.hashCode ^ _endVerse.hashCode;
+    return name.hashCode ^ translation.hashCode ^ book.hashCode ^ chapter.hashCode ^ startVerse.hashCode ^ endVerse.hashCode;
   }
 
   @override
   String toString() {
-    return 'BibleReference(tag: $tag, translation: $translation, book: $book, chapter: $chapter, startVerse: $_startVerse, endVerse: $_endVerse)';
+    return 'BibleReference(name: $name, translation: $translation, book: $book, chapter: $chapter, verse: $verse)';
+  }
+
+  BibleReference copyWith({
+    String? translation,
+    String? book,
+    int? chapter,
+    String? verse,
+  }) {
+    return BibleReference(
+      translation: translation ?? this.translation,
+      book: book ?? this.book,
+      chapter: chapter ?? this.chapter,
+      verse: verse ?? this.verse,
+    );
+  }
+
+  bool get isValid {
+    if (translation == null && book == null && chapter == null && startVerse == null) return false;
+
+    if (endVerse != null) {
+      return translation!.isNotEmpty && book!.isNotEmpty && chapter! >= 1 && startVerse! >= 1 && endVerse! > startVerse!;
+    }
+
+    return translation!.isNotEmpty && book!.isNotEmpty && chapter! >= 1 && startVerse! >= 1;
   }
 }
