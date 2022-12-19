@@ -17,16 +17,16 @@ class VerseField extends ConsumerWidget {
     BibleReferenceNotifier bibleRefNotifer = ref.watch(bibleReferenceProvider.notifier);
 
     _controller.text = bibleRef.verse.toString();
+    _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
     return SizedBox(
       width: 130,
       child: TextField(
         controller: _controller,
         enabled: bibleRef.translation != null,
-        onSubmitted: ((value) {
-
+        onChanged: (value) {
           bibleRefNotifer.verseRef = value;
-        }),
+        },
         inputFormatters: verseInputFormatters(max: bibleRefNotifer.getVerseMax),
       ),
     );

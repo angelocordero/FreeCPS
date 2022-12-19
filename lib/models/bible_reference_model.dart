@@ -4,6 +4,7 @@ class BibleReference {
     this.book,
     this.chapter,
     this.verse,
+    this.verses,
   }) {
     if (verse == null) return;
 
@@ -24,6 +25,7 @@ class BibleReference {
   int? startVerse;
   String? translation;
   String? verse;
+  List<Map>? verses;
 
   @override
   bool operator ==(covariant BibleReference other) {
@@ -51,12 +53,14 @@ class BibleReference {
     String? book,
     int? chapter,
     String? verse,
+    List<Map>? verses,
   }) {
     return BibleReference(
       translation: translation ?? this.translation,
       book: book ?? this.book,
       chapter: chapter ?? this.chapter,
       verse: verse ?? this.verse,
+      verses: verses ?? this.verses,
     );
   }
 

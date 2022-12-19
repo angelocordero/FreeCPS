@@ -10,7 +10,7 @@ class ChapterField extends ConsumerWidget {
   const ChapterField({super.key});
 
   static final TextEditingController _controller = TextEditingController();
-  static final FocusNode _focusNode = FocusNode();
+  //static final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +23,7 @@ class ChapterField extends ConsumerWidget {
     return SizedBox(
       width: 130,
       child: TextField(
-        focusNode: _focusNode,
+        //focusNode: _focusNode,
         enabled: bibleRef.translation != null,
         onChanged: (value) {
           if (value == '') {
