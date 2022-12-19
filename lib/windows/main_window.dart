@@ -60,9 +60,9 @@ class MainWindow extends ConsumerWidget {
         body: ResizableWidget(
           isHorizontalSeparator: true,
           isDisabledSmartHide: true,
-          percentages: const [0.7, 0.3], // optional
-          minPercentages: const [0.0, 0.25],
-          maxPercentages: const [double.infinity, 0.4],
+          percentages: const [0.65, 0.35], // optional
+          minPercentages: const [0.6, 0.0],
+          maxPercentages: const [0.7, double.infinity],
           children: [
             ResizableWidget(
               isDisabledSmartHide: true,
