@@ -1,3 +1,2 @@
 change focus when pressing enter on input fields
-change BibleReference to ScriptureModel
-create new bible reference model that only includes reference
+improve ScriptureModel and BibleReference model implementation to be cleaner

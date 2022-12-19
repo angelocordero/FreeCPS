@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/models/scripture_model.dart';
 
+
+/// Notifier that holds all data of the selected scripture
 class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
   ScriptureModelNotifier(ScriptureModel scripture) : super(scripture) {
     _init();

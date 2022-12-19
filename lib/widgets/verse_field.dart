@@ -4,7 +4,7 @@ import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/models/scripture_model.dart';
 
 import '../core/input_formatters.dart';
-import '../notifiers/bible_reference_notifier.dart';
+import '../notifiers/scripture_model_notifier.dart';
 
 class VerseField extends ConsumerWidget {
   const VerseField({super.key});

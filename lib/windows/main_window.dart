@@ -2,11 +2,13 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
+import 'package:freecps/models/bible_reference_model.dart';
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 
+import '../models/scripture_model.dart';
 import '../panels/scripture_picker.dart';
 
 class MainWindow extends ConsumerWidget {
@@ -85,12 +87,27 @@ class MainWindow extends ConsumerWidget {
                 const Expanded(
                   flex: 4,
                   child: VersesList(),
-                  //child: ScripturePanel(),
                 ),
                 const VerticalDivider(),
                 Expanded(
                   flex: 1,
-                  child: Container(),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScriptureModel bibleRef = ref.read(scriptureModelProvider);
+                      ref.read(projectorSlidesProvider.notifier).generateScripture(
+                            verses: bibleRef.verses ?? [],
+                            bibleRef: BibleReference(
+                              translation: bibleRef.translation!,
+                              book: bibleRef.book!,
+                              chapter: bibleRef.chapter.toString(),
+                              verse: bibleRef.verse!,
+                            ),
+                            startVerse: bibleRef.startVerse!,
+                            endVerse: bibleRef.endVerse
+                          );
+                    },
+                    child: const Text('Generate'),
+                  ),
                 ),
               ],
             ),

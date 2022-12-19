@@ -63,14 +63,4 @@ class ScriptureModel {
       verses: verses ?? this.verses,
     );
   }
-
-  bool get isValid {
-    if (translation == null && book == null && chapter == null && startVerse == null) return false;
-
-    if (endVerse != null) {
-      return translation!.isNotEmpty && book!.isNotEmpty && chapter! >= 1 && startVerse! >= 1 && endVerse! > startVerse!;
-    }
-
-    return translation!.isNotEmpty && book!.isNotEmpty && chapter! >= 1 && startVerse! >= 1;
-  }
 }
