@@ -19,11 +19,14 @@ class VersesList extends ConsumerWidget {
         itemBuilder: (context, index) {
           if (map.isEmpty) return Container();
 
-
-          return ListTile(
-            selected: end != null ? ((index + 1) >= start &&  (index + 1 <= end)) : (index + 1) == start,
-            title: Text(map[index]['text']),
-            subtitle: Text((index + 1).toString()),
+          return Card(
+            child: ListTile(
+              selected: end != null ? ((index + 1) >= start && (index + 1 <= end)) : (index + 1) == start,
+              selectedColor: Colors.black,
+              selectedTileColor: Colors.lightBlue.shade50,
+              title: Text(map[index]['text']),
+              subtitle: Text((index + 1).toString()),
+            ),
           );
         },
       ),

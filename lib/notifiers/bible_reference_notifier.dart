@@ -190,19 +190,17 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
 
     //! untested
 
-    if (state.startVerse! > _verseMax! && state.endVerse == null) {
+    if (state.startVerse! >= _verseMax!) {
+
       verseRef = _verseMax.toString();
       return;
     }
 
-    if (state.startVerse == _verseMax) {
-      verseRef = _verseMax.toString();
-    }
 
     if (state.endVerse == null) return;
 
     if (state.endVerse! > _verseMax!) {
-      verseRef = '${state.startVerse}=$_verseMax';
+      verseRef = '${state.startVerse}-$_verseMax';
       return;
     }
 
