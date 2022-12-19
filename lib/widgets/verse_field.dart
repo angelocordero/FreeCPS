@@ -10,6 +10,7 @@ class VerseField extends ConsumerWidget {
   const VerseField({super.key});
 
   static final TextEditingController _controller = TextEditingController();
+  static final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,9 +20,18 @@ class VerseField extends ConsumerWidget {
     _controller.text = bibleRef.verse.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
+    _focusNode.addListener(
+      () {
+        if (_focusNode.hasFocus) {
+          _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+        }
+      },
+    );
+
     return SizedBox(
       width: 130,
       child: TextField(
+        focusNode: _focusNode,
         controller: _controller,
         enabled: bibleRef.translation != null,
         onChanged: (value) {

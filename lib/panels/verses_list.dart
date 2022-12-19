@@ -21,6 +21,7 @@ class VersesList extends ConsumerWidget {
 
           return Card(
             child: ListTile(
+              visualDensity: VisualDensity.compact,
               selected: end != null ? ((index + 1) >= start && (index + 1 <= end)) : (index + 1) == start,
               selectedColor: Colors.black,
               selectedTileColor: Colors.lightBlue.shade50,

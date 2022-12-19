@@ -10,7 +10,7 @@ class ChapterField extends ConsumerWidget {
   const ChapterField({super.key});
 
   static final TextEditingController _controller = TextEditingController();
-  //static final FocusNode _focusNode = FocusNode();
+  static final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,10 +20,19 @@ class ChapterField extends ConsumerWidget {
     _controller.text = bibleRef.chapter.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
+    _focusNode.addListener(
+      () {
+        if (_focusNode.hasFocus) {
+          _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+        }
+      },
+    );
+
     return SizedBox(
       width: 130,
       child: TextField(
-        //focusNode: _focusNode,
+        focusNode: _focusNode,
+        controller: _controller,
         enabled: bibleRef.translation != null,
         onChanged: (value) {
           if (value == '') {
@@ -32,10 +41,7 @@ class ChapterField extends ConsumerWidget {
 
           bibleRefNotifier.chapterRef = int.tryParse(value);
         },
-        controller: _controller,
-        inputFormatters: chapterInputFormatters(
-          max: bibleRefNotifier.getChapterMax,
-        ),
+        inputFormatters: chapterInputFormatters(max: bibleRefNotifier.getChapterMax),
       ),
     );
   }

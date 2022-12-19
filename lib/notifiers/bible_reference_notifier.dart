@@ -13,7 +13,7 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
   List<Map<String, dynamic>>? _bookData;
   Set<String>? _books;
   int? _chapterMax;
-  final List<int> _selectedVerse = [0];
+
   Map<String, dynamic>? _translationData;
   int? _verseMax;
 
@@ -25,20 +25,21 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
     _setBooks();
 
     if (state.book == null && _books != null) {
-      state = state.copyWith(book: _books!.first);
+      state.book = _books!.first;
     }
     _setBookData();
 
-    if (state.chapter == null) {
-      state = state.copyWith(chapter: 1);
-    }
+    state.chapter ??= 1;
+
     _setChapterMax();
 
     if (state.verse == null && _bookData != null) {
-      state = state.copyWith(verse: '1');
+      state.verse = '1';
     }
     _setVerses();
     _setVerseMax();
+
+    //set state to rebuild listener widgets
     state = state;
   }
 
@@ -49,42 +50,43 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
       book = 'Genesis';
     }
 
-    state = state.copyWith(book: book);
+    // state = state.copyWith(book: book);
+    state.book = book;
+
     _setBookData();
 
-    if (state.chapter == null) {
-      state = state.copyWith(chapter: 1);
-    }
+    state.chapter ??= 1;
+
     _setChapterMax();
 
     if (state.verse == null && _bookData != null) {
-      state = state.copyWith(verse: '1');
+      //state = state.copyWith(verse: '1');
 
-      // _setVerseMax();
-      // return;
+      state.verse = '1';
     }
 
     _setVerses();
     _setVerseMax();
 
-    state = state.copyWith();
+    //set state to rebuild listener widgets
+    state = state;
   }
 
   set chapterRef(int? chapter) {
     if (state.chapter == chapter) return;
 
-    state = state.copyWith(chapter: chapter);
+    state.chapter = chapter;
     _setChapterMax();
 
     if (state.verse == null && _bookData != null) {
-      state = state.copyWith(verse: '1');
-
-      //_setVerses();
-      //  return;
+      state.verse = '1';
     }
 
     _setVerses();
     _setVerseMax();
+
+    //set state to rebuild listener widgets
+    state = state;
   }
 
   set verseRef(String? verse) {
@@ -93,10 +95,6 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
 
   Set<String>? get getAvailableBibles {
     return _availableBibles;
-  }
-
-  List<int> get getSelectedVerse {
-    return _selectedVerse;
   }
 
   Set<String> get getBooks {
@@ -172,12 +170,11 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
     try {
       state = state.copyWith(verses: List<Map<dynamic, dynamic>>.from(_bookData![state.chapter! - 1]['verses']));
     } catch (e) {
-      //_verses = List<Map<dynamic, dynamic>>.from(_bookData![_chapterMax! - 1]['verses']);
+      //
     }
   }
 
   void _setVerseMax() {
-    print(_verseMax);
     if (state.verses == null) return;
 
     _verseMax = state.verses!.length;
@@ -191,11 +188,9 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
     //! untested
 
     if (state.startVerse! >= _verseMax!) {
-
       verseRef = _verseMax.toString();
       return;
     }
-
 
     if (state.endVerse == null) return;
 
@@ -205,15 +200,5 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
     }
 
     //! untested
-  }
-
-  void _setSelectedVerse() {
-    if (state.verses == null || state.startVerse == null) return;
-
-    _selectedVerse.clear();
-
-    _selectedVerse.add(state.startVerse!);
-
-    if (state.endVerse != null) _selectedVerse.add(state.endVerse!);
   }
 }

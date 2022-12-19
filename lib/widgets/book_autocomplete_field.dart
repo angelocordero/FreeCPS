@@ -22,17 +22,19 @@ class BookAutocompleteField extends ConsumerWidget {
 
     _focusNode.addListener(
       () {
-        if (!_focusNode.hasPrimaryFocus) {
-          if (_controller.text != bibleRef.book) {
-            bibleRefNotifier.bookRef = bibleRefNotifier.getBooks.firstWhere(
-              (String option) {
-                return option.toLowerCase().startsWith(_controller.text.toLowerCase().trim());
-              },
-              orElse: () {
-                return '';
-              },
-            );
-          }
+        if (!_focusNode.hasFocus) {
+          if (_controller.text.toLowerCase() == bibleRef.book.toString().toLowerCase()) return;
+          bibleRefNotifier.bookRef = bibleRefNotifier.getBooks.firstWhere(
+            (String option) {
+              return option.toLowerCase().startsWith(_controller.text.toLowerCase().trim());
+            },
+            orElse: () {
+              return '';
+            },
+          );
+        }
+        if (_focusNode.hasPrimaryFocus) {
+          _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
         }
       },
     );
@@ -72,8 +74,7 @@ class BookAutocompleteField extends ConsumerWidget {
             dense: true,
           );
         }),
-        onSuggestionSelected: ((suggestion) {
-        }),
+        onSuggestionSelected: ((suggestion) {}),
         hideOnEmpty: true,
         hideOnError: true,
       ),
