@@ -10,8 +10,8 @@ class TranslationPicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ScriptureModel scripture = ref.watch(ScriptureModelProvider);
-    ScriptureModelNotifier scriptureNotifer = ref.watch(ScriptureModelProvider.notifier);
+    ScriptureModel scripture = ref.watch(scriptureModelProvider);
+    ScriptureModelNotifier scriptureNotifer = ref.watch(scriptureModelProvider.notifier);
 
     return ButtonTheme(
       alignedDropdown: true,

@@ -14,8 +14,8 @@ class ChapterField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ScriptureModel scripture = ref.watch(ScriptureModelProvider);
-    ScriptureModelNotifier scriptureNotifier = ref.watch(ScriptureModelProvider.notifier);
+    ScriptureModel scripture = ref.watch(scriptureModelProvider);
+    ScriptureModelNotifier scriptureNotifier = ref.watch(scriptureModelProvider.notifier);
 
     _controller.text = scripture.chapter.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));

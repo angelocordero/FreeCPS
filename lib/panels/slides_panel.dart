@@ -11,6 +11,7 @@ class SlidesPanel extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: GridView.builder(
+        itemCount: 0,
         // itemCount: selectedVerses.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,

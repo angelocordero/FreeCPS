@@ -14,8 +14,8 @@ class BookAutocompleteField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScriptureModel scripture = ref.watch(ScriptureModelProvider);
-    final ScriptureModelNotifier scriptureNotifier = ref.watch(ScriptureModelProvider.notifier);
+    final ScriptureModel scripture = ref.watch(scriptureModelProvider);
+    final ScriptureModelNotifier scriptureNotifier = ref.watch(scriptureModelProvider.notifier);
 
     _controller.text = scripture.book.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));

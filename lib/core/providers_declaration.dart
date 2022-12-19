@@ -6,6 +6,6 @@ final liveProvider = StateProvider<bool>((ref) {
   return false;
 });
 
-final ScriptureModelProvider = StateNotifierProvider<ScriptureModelNotifier, ScriptureModel>((ref) {
+final scriptureModelProvider = StateNotifierProvider<ScriptureModelNotifier, ScriptureModel>((ref) {
   return ScriptureModelNotifier(ScriptureModel());
 });
