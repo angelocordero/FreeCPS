@@ -7,5 +7,19 @@ final liveProvider = StateProvider<bool>((ref) {
 });
 
 final bibleReferenceProvider = StateNotifierProvider<BibleReferenceNotifier, BibleReference>((ref) {
-    return BibleReferenceNotifier(BibleReference());
+  return BibleReferenceNotifier(BibleReference());
+});
+
+final selectedVersesProvider = StateProvider<List<Map>?>((ref) {
+  BibleReference bibleRef = ref.watch(bibleReferenceProvider);
+
+  List<Map>? verses = bibleRef.verses;
+
+  if (verses == null) return null;
+
+  if (bibleRef.endVerse != null) {
+    return verses.getRange(bibleRef.startVerse! - 1, bibleRef.endVerse!).toList();
+  }
+
+  return [bibleRef.verses![bibleRef.startVerse! - 1]];
 });

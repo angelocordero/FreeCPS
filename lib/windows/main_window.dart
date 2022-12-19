@@ -2,6 +2,7 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
+import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
@@ -63,7 +64,17 @@ class MainWindow extends ConsumerWidget {
           minPercentages: const [0.0, 0.25],
           maxPercentages: const [double.infinity, 0.4],
           children: [
-            Container(),
+            ResizableWidget(
+              isDisabledSmartHide: true,
+              percentages: const [0.175, 1 - 0.175 - 0.175, 0.175], // optional
+              minPercentages: const [0.15, 0.0, 0.15],
+              maxPercentages: const [0.2, double.infinity, 0.2],
+              children: [
+                Container(),
+                const SlidesPanel(),
+                Container(),
+              ],
+            ),
             Row(
               children: [
                 const Expanded(
