@@ -15,7 +15,7 @@ final selectedVersesProvider = StateProvider<List<Map>?>((ref) {
 
   List<Map>? verses = bibleRef.verses;
 
-  if (verses == null) return null;
+  if (verses == null || bibleRef.verse == null) return null;
 
   if (bibleRef.endVerse != null) {
     return verses.getRange(bibleRef.startVerse! - 1, bibleRef.endVerse!).toList();
