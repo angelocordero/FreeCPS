@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/bible_reference_model.dart';
+import 'package:freecps/models/scripture_model.dart';
 
-class BibleReferenceNotifier extends StateNotifier<BibleReference> {
-  BibleReferenceNotifier(BibleReference bibleRef) : super(bibleRef) {
+class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
+  ScriptureModelNotifier(ScriptureModel scripture) : super(scripture) {
     _init();
   }
 
@@ -200,5 +200,15 @@ class BibleReferenceNotifier extends StateNotifier<BibleReference> {
     }
 
     //! untested
+  }
+
+  List<Map>? get selectedVerses {
+    if (state.verses == null || state.verse == null) return null;
+
+    if (state.endVerse != null) {
+      return state.verses!.getRange(state.startVerse! - 1, state.endVerse!).toList();
+    }
+
+    return [state.verses![state.startVerse! - 1]];
   }
 }

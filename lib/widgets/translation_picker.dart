@@ -3,15 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/notifiers/bible_reference_notifier.dart';
 
 import '../core/providers_declaration.dart';
-import '../models/bible_reference_model.dart';
+import '../models/scripture_model.dart';
 
 class TranslationPicker extends ConsumerWidget {
   const TranslationPicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    BibleReference bibleRef = ref.watch(bibleReferenceProvider);
-    BibleReferenceNotifier bibleRefNotifer = ref.watch(bibleReferenceProvider.notifier);
+    ScriptureModel scripture = ref.watch(ScriptureModelProvider);
+    ScriptureModelNotifier scriptureNotifer = ref.watch(ScriptureModelProvider.notifier);
 
     return ButtonTheme(
       alignedDropdown: true,
@@ -19,14 +19,14 @@ class TranslationPicker extends ConsumerWidget {
         isDense: true,
         borderRadius: const BorderRadius.all(Radius.circular(3)),
         underline: Container(),
-        value: bibleRef.translation,
+        value: scripture.translation,
         disabledHint: const Text('No Bibles Available'),
         elevation: 16,
         style: const TextStyle(color: Colors.lightBlueAccent),
         onChanged: (String? value) {
-          bibleRefNotifer.translationRef = value;
+          scriptureNotifer.translationRef = value;
         },
-        items: bibleRefNotifer.getAvailableBibles?.map<DropdownMenuItem<String>>(
+        items: scriptureNotifer.getAvailableBibles?.map<DropdownMenuItem<String>>(
               (String value) {
                 return DropdownMenuItem<String>(
                   value: value,

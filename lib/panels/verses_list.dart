@@ -7,10 +7,10 @@ class VersesList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Map>? map = ref.watch(bibleReferenceProvider).verses ?? [];
+    List<Map>? map = ref.watch(ScriptureModelProvider).verses ?? [];
 
-    int start = ref.watch(bibleReferenceProvider).startVerse ?? 0;
-    int? end = ref.watch(bibleReferenceProvider).endVerse;
+    int start = ref.watch(ScriptureModelProvider).startVerse ?? 0;
+    int? end = ref.watch(ScriptureModelProvider).endVerse;
 
     return Padding(
       padding: const EdgeInsets.all(10),

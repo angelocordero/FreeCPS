@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
-import 'package:freecps/models/bible_reference_model.dart';
+import 'package:freecps/models/scripture_model.dart';
 
 import '../core/input_formatters.dart';
 import '../notifiers/bible_reference_notifier.dart';
@@ -14,10 +14,10 @@ class VerseField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    BibleReference bibleRef = ref.watch(bibleReferenceProvider);
-    BibleReferenceNotifier bibleRefNotifer = ref.watch(bibleReferenceProvider.notifier);
+    ScriptureModel scripture = ref.watch(ScriptureModelProvider);
+    ScriptureModelNotifier scriptureNotifer = ref.watch(ScriptureModelProvider.notifier);
 
-    _controller.text = bibleRef.verse.toString();
+    _controller.text = scripture.verse.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
     _focusNode.addListener(
@@ -33,11 +33,11 @@ class VerseField extends ConsumerWidget {
       child: TextField(
         focusNode: _focusNode,
         controller: _controller,
-        enabled: bibleRef.translation != null,
+        enabled: scripture.translation != null,
         onChanged: (value) {
-          bibleRefNotifer.verseRef = value;
+          scriptureNotifer.verseRef = value;
         },
-        inputFormatters: verseInputFormatters(max: bibleRefNotifer.getVerseMax),
+        inputFormatters: verseInputFormatters(max: scriptureNotifer.getVerseMax),
       ),
     );
   }
