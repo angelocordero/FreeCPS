@@ -13,7 +13,6 @@ class ProjectorSlidesNotifier extends StateNotifier<List<ProjectorSlide>> {
     int? endVerse,
   }) {
     if (endVerse != null) {
-      print('here');
       state = verses
           .getRange(
         startVerse - 1,
@@ -27,7 +26,6 @@ class ProjectorSlidesNotifier extends StateNotifier<List<ProjectorSlide>> {
           );
         },
       ).toList();
-      print(state);
       return;
     }
 

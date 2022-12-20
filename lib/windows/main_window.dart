@@ -27,23 +27,18 @@ class MainWindow extends ConsumerWidget {
           title: const Text('FreeCPS'),
           actions: [
             TapDebouncer(
-              cooldown: const Duration(seconds: 1),
+              cooldown: const Duration(seconds: 3),
               onTap: () async {
                 bool live = await ref.watch(liveProvider);
 
-                ref.watch(liveProvider.notifier).state = !live;
+                ref.read(liveProvider.notifier).state = !live;
 
                 if (!live) {
                   await DesktopMultiWindow.createWindow('Projector Window');
                 } else {
-                  await DesktopMultiWindow.getAllSubWindowIds().then(
-                    (value) async {
-                      if (value.isNotEmpty) {
-                        await DesktopMultiWindow.invokeMethod(value.first, 'close', '');
-                      }
-                      return;
-                    },
-                  );
+                  int windowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
+
+                  await DesktopMultiWindow.invokeMethod(windowID, 'close');
                 }
               },
               builder: (context, onTap) {
@@ -95,16 +90,15 @@ class MainWindow extends ConsumerWidget {
                     onPressed: () {
                       ScriptureModel bibleRef = ref.read(scriptureModelProvider);
                       ref.read(projectorSlidesProvider.notifier).generateScripture(
-                            verses: bibleRef.verses ?? [],
-                            bibleRef: BibleReference(
-                              translation: bibleRef.translation!,
-                              book: bibleRef.book!,
-                              chapter: bibleRef.chapter.toString(),
-                              verse: bibleRef.verse!,
-                            ),
-                            startVerse: bibleRef.startVerse!,
-                            endVerse: bibleRef.endVerse
-                          );
+                          verses: bibleRef.verses ?? [],
+                          bibleRef: BibleReference(
+                            translation: bibleRef.translation!,
+                            book: bibleRef.book!,
+                            chapter: bibleRef.chapter.toString(),
+                            verse: bibleRef.verse!,
+                          ),
+                          startVerse: bibleRef.startVerse!,
+                          endVerse: bibleRef.endVerse);
                     },
                     child: const Text('Generate'),
                   ),
@@ -116,6 +110,4 @@ class MainWindow extends ConsumerWidget {
       ),
     );
   }
-
-  Future<void> toggleLive(bool to) async {}
 }
