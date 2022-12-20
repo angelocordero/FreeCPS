@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
 import '../core/providers_declaration.dart';
+import '../models/bible_reference_model.dart';
 import '../models/scripture_model.dart';
 
 class TranslationPicker extends ConsumerWidget {
@@ -25,6 +26,18 @@ class TranslationPicker extends ConsumerWidget {
         style: const TextStyle(color: Colors.lightBlueAccent),
         onChanged: (String? value) {
           scriptureNotifer.translationRef = value;
+
+          ScriptureModel bibleRef = ref.read(scriptureModelProvider);
+          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
+              verses: bibleRef.verses ?? [],
+              bibleRef: BibleReference(
+                translation: bibleRef.translation!,
+                book: bibleRef.book!,
+                chapter: bibleRef.chapter.toString(),
+                verse: bibleRef.verse!,
+              ),
+              startVerse: bibleRef.startVerse!,
+              endVerse: bibleRef.endVerse);
         },
         items: scriptureNotifer.getAvailableBibles?.map<DropdownMenuItem<String>>(
               (String value) {

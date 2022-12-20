@@ -89,7 +89,7 @@ class MainWindow extends ConsumerWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       ScriptureModel bibleRef = ref.read(scriptureModelProvider);
-                      ref.read(projectorSlidesProvider.notifier).generateScripture(
+                      ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
                           verses: bibleRef.verses ?? [],
                           bibleRef: BibleReference(
                             translation: bibleRef.translation!,

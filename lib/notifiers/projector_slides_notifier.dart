@@ -6,7 +6,7 @@ import 'package:freecps/models/projector_slide_model.dart';
 class ProjectorSlidesNotifier extends StateNotifier<List<ProjectorSlide>> {
   ProjectorSlidesNotifier() : super([]);
 
-  generateScripture({
+  generateScriptureSlides({
     required List<Map> verses,
     required BibleReference bibleRef,
     required int startVerse,

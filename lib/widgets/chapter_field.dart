@@ -5,6 +5,7 @@ import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
 import '../core/input_formatters.dart';
+import '../models/bible_reference_model.dart';
 
 class ChapterField extends ConsumerWidget {
   const ChapterField({super.key});
@@ -34,6 +35,19 @@ class ChapterField extends ConsumerWidget {
         focusNode: _focusNode,
         controller: _controller,
         enabled: scripture.translation != null,
+        onSubmitted: (value) {
+          ScriptureModel bibleRef = ref.read(scriptureModelProvider);
+          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
+              verses: bibleRef.verses ?? [],
+              bibleRef: BibleReference(
+                translation: bibleRef.translation!,
+                book: bibleRef.book!,
+                chapter: bibleRef.chapter.toString(),
+                verse: bibleRef.verse!,
+              ),
+              startVerse: bibleRef.startVerse!,
+              endVerse: bibleRef.endVerse);
+        },
         onChanged: (value) {
           if (value == '') {
             return;

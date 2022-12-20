@@ -5,6 +5,8 @@ import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
+import '../models/bible_reference_model.dart';
+
 class BookAutocompleteField extends ConsumerWidget {
   const BookAutocompleteField({super.key});
 
@@ -74,7 +76,19 @@ class BookAutocompleteField extends ConsumerWidget {
             dense: true,
           );
         }),
-        onSuggestionSelected: ((suggestion) {}),
+        onSuggestionSelected: ((suggestion) {
+          ScriptureModel bibleRef = ref.read(scriptureModelProvider);
+          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
+              verses: bibleRef.verses ?? [],
+              bibleRef: BibleReference(
+                translation: bibleRef.translation!,
+                book: bibleRef.book!,
+                chapter: bibleRef.chapter.toString(),
+                verse: bibleRef.verse!,
+              ),
+              startVerse: bibleRef.startVerse!,
+              endVerse: bibleRef.endVerse);
+        }),
         hideOnEmpty: true,
         hideOnError: true,
       ),
