@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
 import '../core/providers_declaration.dart';
-import '../models/bible_reference_model.dart';
 import '../models/scripture_model.dart';
 
 class TranslationPicker extends ConsumerWidget {
@@ -11,8 +10,8 @@ class TranslationPicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ScriptureModel scripture = ref.watch(scriptureModelProvider);
-    ScriptureModelNotifier scriptureNotifer = ref.watch(scriptureModelProvider.notifier);
+    Scripture scripture = ref.watch(scriptureProvider);
+    ScriptureNotifier scriptureNotifer = ref.watch(scriptureProvider.notifier);
 
     return ButtonTheme(
       alignedDropdown: true,
@@ -20,24 +19,14 @@ class TranslationPicker extends ConsumerWidget {
         isDense: true,
         borderRadius: const BorderRadius.all(Radius.circular(3)),
         underline: Container(),
-        value: scripture.translation,
+        value: scripture.scriptureRef.translation,
         disabledHint: const Text('No Bibles Available'),
         elevation: 16,
         style: const TextStyle(color: Colors.lightBlueAccent),
         onChanged: (String? value) {
           scriptureNotifer.translationRef = value;
 
-          ScriptureModel bibleRef = ref.read(scriptureModelProvider);
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
-              verses: bibleRef.verses ?? [],
-              bibleRef: BibleReference(
-                translation: bibleRef.translation!,
-                book: bibleRef.book!,
-                chapter: bibleRef.chapter.toString(),
-                verse: bibleRef.verse!,
-              ),
-              startVerse: bibleRef.startVerse!,
-              endVerse: bibleRef.endVerse);
+          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
         },
         items: scriptureNotifer.getAvailableBibles?.map<DropdownMenuItem<String>>(
               (String value) {

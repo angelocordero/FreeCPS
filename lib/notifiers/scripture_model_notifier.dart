@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/utils.dart';
 import 'package:freecps/models/scripture_model.dart';
 
+import '../models/verse_model.dart';
 
 /// Notifier that holds all data of the selected scripture
-class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
-  ScriptureModelNotifier(ScriptureModel scripture) : super(scripture) {
+class ScriptureNotifier extends StateNotifier<Scripture> {
+  ScriptureNotifier(Scripture scripture) : super(scripture) {
     _init();
   }
 
@@ -20,51 +22,49 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
   int? _verseMax;
 
   set translationRef(String? translation) {
-    if (state.translation == translation) return;
+    if (state.scriptureRef.translation == translation) return;
 
-    state = state.copyWith(translation: translation);
+    state = state.copyWith.scriptureRef(translation: translation);
     _setTranslationData();
     _setBooks();
 
-    if (state.book == null && _books != null) {
-      state.book = _books!.first;
+    if (state.scriptureRef.book == null && _books != null) {
+      state = state.copyWith.scriptureRef(book: _books!.first);
     }
     _setBookData();
 
-    state.chapter ??= 1;
+    if (state.scriptureRef.chapter == null) {
+      state = state.copyWith.scriptureRef(chapter: 1);
+    }
 
     _setChapterMax();
 
-    if (state.verse == null && _bookData != null) {
-      state.verse = '1';
+    if (state.scriptureRef.verse == null && _bookData != null) {
+      state = state.copyWith.scriptureRef(verse: '1');
     }
     _setVerses();
     _setVerseMax();
-
-    //set state to rebuild listener widgets
-    state = state;
   }
 
   set bookRef(String? book) {
-    if (state.translation == null) return;
+    if (state.scriptureRef.translation == null) return;
 
     if (book != null && book.isEmpty) {
       book = 'Genesis';
     }
 
-    // state = state.copyWith(book: book);
-    state.book = book;
+    state = state.copyWith.scriptureRef(book: book);
 
     _setBookData();
 
-    state.chapter ??= 1;
+    if (state.scriptureRef.chapter == null) {
+      state = state.copyWith.scriptureRef(chapter: 1);
+    }
 
     _setChapterMax();
 
-    if (state.verse == null && _bookData != null) {
-      //state = state.copyWith(verse: '1');
-
-      state.verse = '1';
+    if (state.scriptureRef.verse == null && _bookData != null) {
+      state = state.copyWith.scriptureRef(verse: '1');
     }
 
     _setVerses();
@@ -75,13 +75,13 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
   }
 
   set chapterRef(int? chapter) {
-    if (state.chapter == chapter) return;
+    if (state.scriptureRef.chapter == chapter) return;
 
-    state.chapter = chapter;
+    state = state.copyWith.scriptureRef(chapter: chapter);
     _setChapterMax();
 
-    if (state.verse == null && _bookData != null) {
-      state.verse = '1';
+    if (state.scriptureRef.verse == null && _bookData != null) {
+      state = state.copyWith.scriptureRef(verse: '1');
     }
 
     _setVerses();
@@ -92,7 +92,7 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
   }
 
   set verseRef(String? verse) {
-    state = state.copyWith(verse: verse);
+    state = state.copyWith.scriptureRef(verse: verse);
   }
 
   Set<String>? get getAvailableBibles {
@@ -111,7 +111,7 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
     return _verseMax ?? 0;
   }
 
-  List<Map> get getVerses {
+  List<Verse> get getVerses {
     return state.verses ?? [];
   }
 
@@ -138,13 +138,14 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
   }
 
   void _setTranslationData() {
-    if (state.translation == null) return;
-    _translationData = jsonDecode(File('bibles/${state.translation}/${state.translation}.bibledata.json').readAsStringSync());
+    if (state.scriptureRef.translation == null) return;
+    _translationData =
+        jsonDecode(File('bibles/${state.scriptureRef.translation}/${state.scriptureRef.translation}.bibledata.json').readAsStringSync());
   }
 
   void _setBookData() {
-    if (state.translation == null) return;
-    String bookPath = 'bibles/${state.translation}/books/${state.translation}.${state.book}.bible.json';
+    if (state.scriptureRef.translation == null) return;
+    String bookPath = 'bibles/${state.scriptureRef.translation}/books/${state.scriptureRef.translation}.${state.scriptureRef.book}.bible.json';
 
     _bookData = List<Map<String, dynamic>>.from(jsonDecode(File(bookPath).readAsStringSync())['chapters']);
   }
@@ -157,20 +158,24 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
 
   /// lists chapters from a given book in a translation
   void _setChapterMax() {
-    if (_translationData == null || state.book == null) return;
+    if (_translationData == null || state.scriptureRef.book == null) return;
 
-    _chapterMax = _translationData!['books'][state.book];
-    if (state.chapter! > _chapterMax!) {
-      state = state.copyWith(chapter: _chapterMax);
+    _chapterMax = _translationData!['books'][state.scriptureRef.book];
+    if (state.scriptureRef.chapter! > _chapterMax!) {
+      state = state.copyWith.scriptureRef(chapter: _chapterMax);
     }
   }
 
   /// lists verses from a chapter in a book in a translation
   void _setVerses() {
-    if (_bookData == null || state.chapter == null || _chapterMax == null) return;
+    if (_bookData == null || state.scriptureRef.chapter == null || _chapterMax == null) return;
 
     try {
-      state = state.copyWith(verses: List<Map<dynamic, dynamic>>.from(_bookData![state.chapter! - 1]['verses']));
+      state = state.copyWith(
+        verses: List<Map>.from(_bookData![state.scriptureRef.chapter! - 1]['verses']).map((element) {
+          return Verse(text: element['text'], num: element['num']);
+        }).toList(),
+      );
     } catch (e) {
       //
     }
@@ -183,34 +188,36 @@ class ScriptureModelNotifier extends StateNotifier<ScriptureModel> {
 
     // fix this
     //set initial verse to 1
-    if (_bookData != null && state.verse == null) {
-      state = state.copyWith(verse: '1');
+    if (_bookData != null && state.scriptureRef.verse == null) {
+      state = state.copyWith.scriptureRef(verse: '1');
     }
 
     //! untested
 
-    if (state.startVerse! >= _verseMax!) {
+    List<int?> verseList = Utils.verseListFromVerseString(state.scriptureRef.verse);
+
+    if (verseList[0]! >= _verseMax!) {
       verseRef = _verseMax.toString();
       return;
     }
 
-    if (state.endVerse == null) return;
+    if (verseList[1] == null) return;
 
-    if (state.endVerse! > _verseMax!) {
-      verseRef = '${state.startVerse}-$_verseMax';
+    if (verseList[1]! > _verseMax!) {
+      verseRef = '${verseList[0]!}-$_verseMax';
       return;
     }
 
     //! untested
   }
 
-  List<Map>? get selectedVerses {
-    if (state.verses == null || state.verse == null) return null;
+  // List<Map>? get selectedVerses {
+  //   if (state.verses == null || state.verse == null) return null;
 
-    if (state.endVerse != null) {
-      return state.verses!.getRange(state.startVerse! - 1, state.endVerse!).toList();
-    }
+  //   if (state.endVerse != null) {
+  //     return state.verses!.getRange(state.startVerse! - 1, state.endVerse!).toList();
+  //   }
 
-    return [state.verses![state.startVerse! - 1]];
-  }
+  //   return [state.verses![state.startVerse! - 1]];
+  // }
 }

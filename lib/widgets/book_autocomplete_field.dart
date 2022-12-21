@@ -5,8 +5,6 @@ import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
-import '../models/bible_reference_model.dart';
-
 class BookAutocompleteField extends ConsumerWidget {
   const BookAutocompleteField({super.key});
 
@@ -16,16 +14,16 @@ class BookAutocompleteField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScriptureModel scripture = ref.watch(scriptureModelProvider);
-    final ScriptureModelNotifier scriptureNotifier = ref.watch(scriptureModelProvider.notifier);
+    final Scripture scripture = ref.watch(scriptureProvider);
+    final ScriptureNotifier scriptureNotifier = ref.watch(scriptureProvider.notifier);
 
-    _controller.text = scripture.book.toString();
+    _controller.text = scripture.scriptureRef.book.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
     _focusNode.addListener(
       () {
         if (!_focusNode.hasFocus) {
-          if (_controller.text.toLowerCase() == scripture.book.toString().toLowerCase()) return;
+          if (_controller.text.toLowerCase() == scripture.scriptureRef.book.toString().toLowerCase()) return;
           scriptureNotifier.bookRef = scriptureNotifier.getBooks.firstWhere(
             (String option) {
               return option.toLowerCase().startsWith(_controller.text.toLowerCase().trim());
@@ -49,7 +47,7 @@ class BookAutocompleteField extends ConsumerWidget {
         textFieldConfiguration: TextFieldConfiguration(
           controller: _controller,
           focusNode: _focusNode,
-          enabled: scripture.translation != null,
+          enabled: scripture.scriptureRef.translation != null,
         ),
         suggestionsCallback: ((pattern) {
           if (pattern == '') {
@@ -77,17 +75,7 @@ class BookAutocompleteField extends ConsumerWidget {
           );
         }),
         onSuggestionSelected: ((suggestion) {
-          ScriptureModel bibleRef = ref.read(scriptureModelProvider);
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
-              verses: bibleRef.verses ?? [],
-              bibleRef: BibleReference(
-                translation: bibleRef.translation!,
-                book: bibleRef.book!,
-                chapter: bibleRef.chapter.toString(),
-                verse: bibleRef.verse!,
-              ),
-              startVerse: bibleRef.startVerse!,
-              endVerse: bibleRef.endVerse);
+          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
         }),
         hideOnEmpty: true,
         hideOnError: true,

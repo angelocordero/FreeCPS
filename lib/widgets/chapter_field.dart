@@ -5,7 +5,6 @@ import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
 import '../core/input_formatters.dart';
-import '../models/bible_reference_model.dart';
 
 class ChapterField extends ConsumerWidget {
   const ChapterField({super.key});
@@ -15,10 +14,10 @@ class ChapterField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ScriptureModel scripture = ref.watch(scriptureModelProvider);
-    ScriptureModelNotifier scriptureNotifier = ref.watch(scriptureModelProvider.notifier);
+    Scripture scripture = ref.watch(scriptureProvider);
+    ScriptureNotifier scriptureNotifier = ref.watch(scriptureProvider.notifier);
 
-    _controller.text = scripture.chapter.toString();
+    _controller.text = scripture.scriptureRef.chapter.toString();
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
     _focusNode.addListener(
@@ -34,19 +33,9 @@ class ChapterField extends ConsumerWidget {
       child: TextField(
         focusNode: _focusNode,
         controller: _controller,
-        enabled: scripture.translation != null,
+        enabled: scripture.scriptureRef.translation != null,
         onSubmitted: (value) {
-          ScriptureModel bibleRef = ref.read(scriptureModelProvider);
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
-              verses: bibleRef.verses ?? [],
-              bibleRef: BibleReference(
-                translation: bibleRef.translation!,
-                book: bibleRef.book!,
-                chapter: bibleRef.chapter.toString(),
-                verse: bibleRef.verse!,
-              ),
-              startVerse: bibleRef.startVerse!,
-              endVerse: bibleRef.endVerse);
+          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
         },
         onChanged: (value) {
           if (value == '') {

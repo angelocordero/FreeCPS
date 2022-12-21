@@ -2,7 +2,6 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
-import 'package:freecps/models/bible_reference_model.dart';
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
@@ -16,9 +15,6 @@ class MainWindow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO : put this in a loading widget
-    //ref.read(availableBiblesProvider);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
@@ -88,17 +84,9 @@ class MainWindow extends ConsumerWidget {
                   flex: 1,
                   child: ElevatedButton(
                     onPressed: () {
-                      ScriptureModel bibleRef = ref.read(scriptureModelProvider);
-                      ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(
-                          verses: bibleRef.verses ?? [],
-                          bibleRef: BibleReference(
-                            translation: bibleRef.translation!,
-                            book: bibleRef.book!,
-                            chapter: bibleRef.chapter.toString(),
-                            verse: bibleRef.verse!,
-                          ),
-                          startVerse: bibleRef.startVerse!,
-                          endVerse: bibleRef.endVerse);
+                      Scripture scripture = ref.read(scriptureProvider);
+
+                      ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
                     },
                     child: const Text('Generate'),
                   ),

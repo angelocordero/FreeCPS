@@ -1,28 +1,29 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/bible_reference_model.dart';
+import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/models/projector_slide_model.dart';
+
+import '../core/utils.dart';
 
 /// Notifier that holds all the generated slides in the Slides Panel
 class ProjectorSlidesNotifier extends StateNotifier<List<ProjectorSlide>> {
   ProjectorSlidesNotifier() : super([]);
 
   generateScriptureSlides({
-    required List<Map> verses,
-    required BibleReference bibleRef,
-    required int startVerse,
-    int? endVerse,
+    required Scripture scripture,
   }) {
-    if (endVerse != null) {
-      state = verses
+    List<int?> verseRefList = Utils.verseListFromVerseString(scripture.scriptureRef.verse);
+
+    if (verseRefList[1] != null) {
+      state = scripture.verses!
           .getRange(
-        startVerse - 1,
-        endVerse,
+        verseRefList[0]! - 1,
+        verseRefList[1]!,
       )
           .map(
         (verse) {
           return ProjectorSlide.scripture(
-            text: verse['text'],
-            bibleRef: bibleRef,
+            text: verse.text,
+            bibleRef: scripture.scriptureRef,
           );
         },
       ).toList();
@@ -31,8 +32,8 @@ class ProjectorSlidesNotifier extends StateNotifier<List<ProjectorSlide>> {
 
     state = [
       ProjectorSlide.scripture(
-        text: verses[startVerse - 1]['text'],
-        bibleRef: bibleRef,
+        text: scripture.verses![verseRefList[0]! - 1].text,
+        bibleRef: scripture.scriptureRef,
       ),
     ];
   }
