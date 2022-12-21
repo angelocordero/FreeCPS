@@ -74,9 +74,7 @@ class BookAutocompleteField extends ConsumerWidget {
             dense: true,
           );
         }),
-        onSuggestionSelected: ((suggestion) {
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
-        }),
+        onSuggestionSelected: ((suggestion) {}),
         hideOnEmpty: true,
         hideOnError: true,
       ),

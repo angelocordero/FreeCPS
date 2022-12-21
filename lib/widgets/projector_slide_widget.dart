@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:freecps/models/projector_slide_model.dart';
+
+import '../models/slide_model.dart';
+
+// TODO needs to be redone
 
 class ProjectorSlideWidget extends StatelessWidget {
   const ProjectorSlideWidget({
@@ -7,7 +10,7 @@ class ProjectorSlideWidget extends StatelessWidget {
     required this.slide,
   });
 
-  final ProjectorSlide slide;
+  final Slide slide;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,6 @@ class ProjectorSlideWidget extends StatelessWidget {
       height: 1080,
       width: 1920,
       child: Column(
-     
         mainAxisSize: MainAxisSize.max,
         children: [
           Align(
@@ -33,7 +35,7 @@ class ProjectorSlideWidget extends StatelessWidget {
           Align(
             alignment: Alignment.bottomRight,
             child: Text(
-              slide.bibleRef.toString(),
+              slide.reference.toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 40,

@@ -1,3 +1,4 @@
+import 'package:freecps/models/verse_reference_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'scripture_reference_model.freezed.dart';
@@ -9,7 +10,7 @@ class ScriptureReference with _$ScriptureReference {
      String? translationName,
      String? book,
      int? chapter,
-     String? verse,
+     VerseReference? verse,
 
   }) = _ScriptureReference;
 }

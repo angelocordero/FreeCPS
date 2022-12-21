@@ -4,7 +4,7 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
-import '../constants.dart' as constants;
+import '../core/constants.dart' as constants;
 
 class MediaLayer extends StatefulWidget {
   const MediaLayer({super.key});

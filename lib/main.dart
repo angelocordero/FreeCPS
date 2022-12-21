@@ -19,8 +19,8 @@ void main(List<String> args) {
   }
 }
 
-void runProjectorWindow()  {
-   windowManager.ensureInitialized();
+void runProjectorWindow() {
+  windowManager.ensureInitialized();
   DartVLC.initialize();
 
   WindowOptions windowOptions = const WindowOptions(

@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/projector_slide_model.dart';
-import 'package:freecps/models/scripture_model.dart';
-import 'package:freecps/models/scripture_reference_model.dart';
-import 'package:freecps/notifiers/projector_slides_notifier.dart';
-import 'package:freecps/notifiers/scripture_model_notifier.dart';
+import '../models/scripture_model.dart';
+import '../models/slide_model.dart';
+import '../notifiers/scripture_model_notifier.dart';
+
+import '../models/scripture_reference_model.dart';
+import '../notifiers/slides_notifier.dart';
 
 final liveProvider = StateProvider<bool>((ref) {
   return false;
@@ -15,6 +16,7 @@ final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((r
   ));
 });
 
-final projectorSlidesProvider = StateNotifierProvider<ProjectorSlidesNotifier, List<ProjectorSlide>>((ref) {
-  return ProjectorSlidesNotifier();
+final projectorSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {
+  return SlidesNotifier();
 });
+

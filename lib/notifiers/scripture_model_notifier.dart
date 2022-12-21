@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/utils.dart';
 import 'package:freecps/models/scripture_model.dart';
+import 'package:freecps/models/verse_reference_model.dart';
 
 import '../models/verse_model.dart';
 
@@ -40,7 +40,7 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
     _setChapterMax();
 
     if (state.scriptureRef.verse == null && _bookData != null) {
-      state = state.copyWith.scriptureRef(verse: '1');
+      state = state.copyWith.scriptureRef(verse: VerseReference.defaultVerse());
     }
     _setVerses();
     _setVerseMax();
@@ -64,14 +64,11 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
     _setChapterMax();
 
     if (state.scriptureRef.verse == null && _bookData != null) {
-      state = state.copyWith.scriptureRef(verse: '1');
+      state = state.copyWith.scriptureRef(verse: VerseReference.defaultVerse());
     }
 
     _setVerses();
     _setVerseMax();
-
-    //set state to rebuild listener widgets
-    state = state;
   }
 
   set chapterRef(int? chapter) {
@@ -81,18 +78,16 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
     _setChapterMax();
 
     if (state.scriptureRef.verse == null && _bookData != null) {
-      state = state.copyWith.scriptureRef(verse: '1');
+      state = state.copyWith.scriptureRef(verse: VerseReference.defaultVerse());
     }
 
     _setVerses();
     _setVerseMax();
-
-    //set state to rebuild listener widgets
-    state = state;
   }
 
   set verseRef(String? verse) {
-    state = state.copyWith.scriptureRef(verse: verse);
+    state = state.copyWith.scriptureRef(verse: VerseReference(verseString: verse!));
+    //print(state.scriptureRef.verse!.verseRange.toString());
   }
 
   Set<String>? get getAvailableBibles {
@@ -189,35 +184,25 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
     // fix this
     //set initial verse to 1
     if (_bookData != null && state.scriptureRef.verse == null) {
-      state = state.copyWith.scriptureRef(verse: '1');
+      state = state.copyWith.scriptureRef(verse: VerseReference.defaultVerse());
     }
 
     //! untested
 
-    List<int?> verseList = Utils.verseListFromVerseString(state.scriptureRef.verse);
+    //List<int?> verseList = Utils.verseListFromVerseString(state.scriptureRef.verse);
 
-    if (verseList[0]! >= _verseMax!) {
+    if (state.scriptureRef.verse!.verseRange.item1 >= _verseMax!) {
       verseRef = _verseMax.toString();
       return;
     }
 
-    if (verseList[1] == null) return;
+    if (state.scriptureRef.verse!.verseRange.item2 == null) return;
 
-    if (verseList[1]! > _verseMax!) {
-      verseRef = '${verseList[0]!}-$_verseMax';
+    if (state.scriptureRef.verse!.verseRange.item1 > _verseMax!) {
+      verseRef = '${state.scriptureRef.verse!.verseRange.item1}-$_verseMax';
       return;
     }
 
     //! untested
   }
-
-  // List<Map>? get selectedVerses {
-  //   if (state.verses == null || state.verse == null) return null;
-
-  //   if (state.endVerse != null) {
-  //     return state.verses!.getRange(state.startVerse! - 1, state.endVerse!).toList();
-  //   }
-
-  //   return [state.verses![state.startVerse! - 1]];
-  // }
 }

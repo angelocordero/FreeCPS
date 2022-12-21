@@ -20,7 +20,7 @@ mixin _$ScriptureReference {
   String? get translationName => throw _privateConstructorUsedError;
   String? get book => throw _privateConstructorUsedError;
   int? get chapter => throw _privateConstructorUsedError;
-  String? get verse => throw _privateConstructorUsedError;
+  VerseReference? get verse => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ScriptureReferenceCopyWith<ScriptureReference> get copyWith =>
@@ -38,7 +38,7 @@ abstract class $ScriptureReferenceCopyWith<$Res> {
       String? translationName,
       String? book,
       int? chapter,
-      String? verse});
+      VerseReference? verse});
 }
 
 /// @nodoc
@@ -80,7 +80,7 @@ class _$ScriptureReferenceCopyWithImpl<$Res, $Val extends ScriptureReference>
       verse: freezed == verse
           ? _value.verse
           : verse // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as VerseReference?,
     ) as $Val);
   }
 }
@@ -98,7 +98,7 @@ abstract class _$$_ScriptureReferenceCopyWith<$Res>
       String? translationName,
       String? book,
       int? chapter,
-      String? verse});
+      VerseReference? verse});
 }
 
 /// @nodoc
@@ -138,7 +138,7 @@ class __$$_ScriptureReferenceCopyWithImpl<$Res>
       verse: freezed == verse
           ? _value.verse
           : verse // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as VerseReference?,
     ));
   }
 }
@@ -162,7 +162,7 @@ class _$_ScriptureReference implements _ScriptureReference {
   @override
   final int? chapter;
   @override
-  final String? verse;
+  final VerseReference? verse;
 
   @override
   String toString() {
@@ -201,7 +201,7 @@ abstract class _ScriptureReference implements ScriptureReference {
       final String? translationName,
       final String? book,
       final int? chapter,
-      final String? verse}) = _$_ScriptureReference;
+      final VerseReference? verse}) = _$_ScriptureReference;
 
   @override
   String? get translation;
@@ -212,7 +212,7 @@ abstract class _ScriptureReference implements ScriptureReference {
   @override
   int? get chapter;
   @override
-  String? get verse;
+  VerseReference? get verse;
   @override
   @JsonKey(ignore: true)
   _$$_ScriptureReferenceCopyWith<_$_ScriptureReference> get copyWith =>
