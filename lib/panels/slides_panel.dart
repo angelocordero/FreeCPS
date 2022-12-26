@@ -1,4 +1,3 @@
-import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
@@ -25,9 +24,7 @@ class SlidesPanel extends ConsumerWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              int windowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-              await DesktopMultiWindow.invokeMethod(windowID, 'verseSlide', slides[index].text);
+              ref.read(slideIndexProvider.notifier).project(index, slides[index]);
             },
             child: Card(
               child: Center(

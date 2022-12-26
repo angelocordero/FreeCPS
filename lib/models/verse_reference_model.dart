@@ -1,25 +1,23 @@
-import 'package:tuple/tuple.dart';
-
 import '../core/typedefs.dart';
 
 class VerseReference {
   String verseString = '1';
-  VerseRange verseRange = const Tuple2(1, null);
+  VerseRange verseRange = const VerseRange(1, null);
   VerseReference({
     required this.verseString,
   }) {
     List<String> num = verseString.split('-');
 
     if (num.length == 2) {
-      verseRange = Tuple2(int.parse(num[0]), int.tryParse(num[1]));
+      verseRange = VerseRange(int.parse(num[0]), int.tryParse(num[1]));
       return;
     }
 
-    verseRange = Tuple2(int.parse(num[0]), null);
+    verseRange = VerseRange(int.parse(num[0]), null);
   }
 
   VerseReference.defaultVerse() {
-    verseRange = const Tuple2(1, null);
+    verseRange = const VerseRange(1, null);
   }
 
   VerseReference copyWith({
