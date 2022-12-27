@@ -9,6 +9,8 @@ void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (args.isEmpty) {
+
+    // TODO: put minimum size in main window
     runApp(
       ProviderScope(
         child: MaterialApp(
