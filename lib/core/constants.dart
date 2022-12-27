@@ -1,3 +1,3 @@
 // TODO
 
-String blackBackgroundFilePath = '';
+String blackBackgroundFilePath = 'media/black.jpg';

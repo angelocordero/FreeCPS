@@ -10,8 +10,11 @@ void main(List<String> args) {
 
   if (args.isEmpty) {
     runApp(
-      const ProviderScope(
-        child: MainWindow(),
+      ProviderScope(
+        child: MaterialApp(
+          theme: ThemeData.dark(),
+          home: const MainWindow(),
+        ),
       ),
     );
   } else {
