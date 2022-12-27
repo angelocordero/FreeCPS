@@ -1,7 +1,11 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
+
+@Deprecated('not working')
 class SlideLayer extends StatefulWidget {
   const SlideLayer({super.key});
 
@@ -10,8 +14,8 @@ class SlideLayer extends StatefulWidget {
 }
 
 class _SlideLayerState extends State<SlideLayer> {
-  Widget first = Container();
-  Widget second = Container();
+  Widget first = Container(color: Colors.transparent,);
+  Widget second = Container(color: Colors.transparent,);
 
   bool showingFirst = false;
 
@@ -21,7 +25,8 @@ class _SlideLayerState extends State<SlideLayer> {
       if (call.method == 'verseSlide') {
         setState(() {
           if (showingFirst) {
-            second = SizedBox(
+            second = Container(
+              color: Colors.transparent.withOpacity(0.5),
               height: 1080,
               width: 1920,
               child: Center(
@@ -37,7 +42,8 @@ class _SlideLayerState extends State<SlideLayer> {
               ),
             );
           } else {
-            first = SizedBox(
+            first = Container(
+              color: Colors.transparent.withOpacity(0.5),
               height: 1080,
               width: 1920,
               child: Center(
@@ -68,13 +74,18 @@ class _SlideLayerState extends State<SlideLayer> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      alignment: Alignment.center,
-      firstChild: first,
-      secondChild: second,
-      crossFadeState: showingFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      duration: const Duration(milliseconds: 300),
-      sizeCurve: Curves.linear,
+    return Container(
+      color: Colors.transparent,
+      height: 1080,
+      width: 1920,
+      child: AnimatedCrossFade(
+        alignment: Alignment.center,
+        firstChild: first,
+        secondChild: second,
+        crossFadeState: showingFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 300),
+        sizeCurve: Curves.linear,
+      ),
     );
   }
 

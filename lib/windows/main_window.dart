@@ -2,6 +2,7 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
+import 'package:freecps/panels/playlist_panel.dart';
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
@@ -22,6 +23,12 @@ class MainWindow extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('FreeCPS'),
           actions: [
+            const Center(
+              child: Text(
+                'Live',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
             TapDebouncer(
               cooldown: const Duration(seconds: 3),
               onTap: () async {
@@ -59,11 +66,11 @@ class MainWindow extends ConsumerWidget {
           children: [
             ResizableWidget(
               isDisabledSmartHide: true,
-              percentages: const [0.175, 1 - 0.175 - 0.175, 0.175], // optional
+              percentages: const [0.175, 0.65, 0.175], // optional
               minPercentages: const [0.15, 0.0, 0.15],
               maxPercentages: const [0.2, double.infinity, 0.2],
               children: [
-                Container(),
+                const PlaylistPanel(),
                 const SlidesPanel(),
                 Container(),
               ],

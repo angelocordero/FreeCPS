@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 import '../core/constants.dart' as constants;
 
+@Deprecated('not working')
 class MediaLayer extends StatefulWidget {
   const MediaLayer({super.key});
 

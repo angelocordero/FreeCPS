@@ -7,14 +7,11 @@ import '../models/slide_model.dart';
 class SlidesNotifier extends StateNotifier<List<Slide>> {
   SlidesNotifier() : super([]);
 
-  //TODO needs to be redone
-
   generateScriptureSlides({
     required Scripture scripture,
   }) {
     int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
-
 
     if (endVerse != null) {
       state = scripture.verses!
