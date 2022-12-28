@@ -50,6 +50,9 @@ dependencies:
   tuple: ^2.0.1
   file_picker: ^5.2.4
   path_provider: ^2.0.11
+  path: ^1.8.2
+  image_compression: ^1.0.3
+
 
 
 dev_dependencies:

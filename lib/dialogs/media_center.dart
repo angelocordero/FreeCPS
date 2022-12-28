@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:freecps/core/file_utils.dart';
 
 import '../core/constants.dart' as constants;
 
@@ -65,10 +66,7 @@ class MediaCenter extends StatelessWidget {
                                   allowedExtensions: constants.importFileExtensions,
                                 );
 
-                                // if canceled by user
-                                if (result == null) return;
-
-                                //List<File> files = result.paths.map((path) => File(path!)).toList();
+                                FileUtils.importMedia(result);
 
                                 //TODO: do something with the files
                               },
