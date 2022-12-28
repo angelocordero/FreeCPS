@@ -30,22 +30,11 @@ class MediaCenter extends StatelessWidget {
                       'Media Center',
                       style: TextStyle(fontSize: 30),
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform.pickFiles(
-                          allowMultiple: true,
-                          type: FileType.custom,
-                          allowedExtensions: constants.importFileExtensions,
-                        );
-
-                        // if canceled by user
-                        if (result == null) return;
-
-                        //List<File> files = result.paths.map((path) => File(path!)).toList();
-
-                        //TODO: do something with the files
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
-                      child: const Text('Import'),
+                      icon: const Icon(Icons.close_rounded),
                     ),
                   ],
                 ),
@@ -57,16 +46,41 @@ class MediaCenter extends StatelessWidget {
                     Tab(text: 'Bibles'),
                   ],
                 ),
-                const Expanded(
+                Expanded(
                   child: TabBarView(
                     children: [
-                      Center(
-                        child: Text('Media'),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Center(
+                            child: Text('Media'),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                  allowMultiple: true,
+                                  type: FileType.custom,
+                                  allowedExtensions: constants.importFileExtensions,
+                                );
+
+                                // if canceled by user
+                                if (result == null) return;
+
+                                //List<File> files = result.paths.map((path) => File(path!)).toList();
+
+                                //TODO: do something with the files
+                              },
+                              child: const Text('Import'),
+                            ),
+                          ),
+                        ],
                       ),
-                      Center(
+                      const Center(
                         child: Text('Songs'),
                       ),
-                      Center(
+                      const Center(
                         child: Text('Bible'),
                       ),
                     ],
