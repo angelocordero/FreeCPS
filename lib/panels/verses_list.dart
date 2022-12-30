@@ -47,14 +47,19 @@ class VersesList extends ConsumerWidget {
                 selectedColor: Colors.black,
                 selectedTileColor: Colors.lightBlue.shade50,
                 title: Text(map[index].text),
-                subtitle: Text((index + 1).toString()),
+                leading: Text((index + 1).toString()),
                 onTap: () {
-                  if (ref.read(verseListKeyboardNotifier)) {
-                    VerseReference? verseRef = ref.read(scriptureProvider).scriptureRef.verse;
+                  VerseReference? verseRef = ref.read(scriptureProvider).scriptureRef.verse;
 
+                  if (ref.read(verseListKeyboardNotifier)) {
                     if (verseRef == null) return;
 
-                    if (verseRef.verseRange.item1 >= index + 1 && verseRef.verseRange.item2 != null) {
+                    if (verseRef.verseRange.item2 == null && verseRef.verseRange.item1 > index + 1) {
+                      ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.item1}';
+                      return;
+                    }
+
+                    if (verseRef.verseRange.item1 > index + 1 && verseRef.verseRange.item2 != null) {
                       ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.item2}';
                       return;
                     }

@@ -25,8 +25,6 @@ class TranslationPicker extends ConsumerWidget {
         style: const TextStyle(color: Colors.lightBlueAccent),
         onChanged: (String? value) {
           scriptureNotifer.translationRef = value;
-
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
         },
         items: scriptureNotifer.getAvailableBibles?.map<DropdownMenuItem<String>>(
               (String value) {
