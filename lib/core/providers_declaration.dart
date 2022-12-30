@@ -26,3 +26,7 @@ final slideIndexProvider = StateNotifierProvider<SlideIndexNotifier, int?>((ref)
 
   return SlideIndexNotifier();
 });
+
+final verseListKeyboardNotifier = StateProvider<bool>((ref) {
+  return false;
+});
