@@ -9,11 +9,11 @@ class VerseReference {
     List<String> num = verseString.split('-');
 
     if (num.length == 2) {
-      verseRange = VerseRange(int.parse(num[0]), int.tryParse(num[1]));
+      verseRange = VerseRange(int.tryParse(num[0]) ?? 1, int.tryParse(num[1]));
       return;
     }
 
-    verseRange = VerseRange(int.parse(num[0]), null);
+    verseRange = VerseRange(int.tryParse(num[0]) ?? 1, null);
   }
 
   VerseReference.defaultVerse() {

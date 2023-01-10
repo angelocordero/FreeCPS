@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/notifiers/slide_index_notifier.dart';
+import 'package:freecps/notifiers/verse_list_controller_notifier.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../models/scripture_model.dart';
 import '../models/slide_model.dart';
 import '../notifiers/scripture_model_notifier.dart';
@@ -29,4 +31,8 @@ final slideIndexProvider = StateNotifierProvider<SlideIndexNotifier, int?>((ref)
 
 final verseListKeyboardNotifier = StateProvider<bool>((ref) {
   return false;
+});
+
+final verseListControllerProvider = StateNotifierProvider<VerseListControllerNotifier, ItemScrollController>((ref) {
+  return VerseListControllerNotifier();
 });

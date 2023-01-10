@@ -24,6 +24,9 @@ class VerseField extends ConsumerWidget {
       () {
         if (_focusNode.hasFocus) {
           _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+        } else if (_controller.text.isEmpty) {
+          _controller.text = '1';
+          _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
         }
       },
     );
@@ -35,11 +38,13 @@ class VerseField extends ConsumerWidget {
         controller: _controller,
         enabled: scripture.scriptureRef.translation != null,
         onSubmitted: (value) {
-
           ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
         },
         onChanged: (value) {
           scriptureNotifer.verseRef = value;
+
+
+           ref.read(verseListControllerProvider.notifier).scrollToOffset(value);
         },
         inputFormatters: verseInputFormatters(max: scriptureNotifer.getVerseMax),
       ),

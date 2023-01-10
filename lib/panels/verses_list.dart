@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/models/verse_reference_model.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../models/verse_model.dart';
 
@@ -18,6 +19,7 @@ class VersesList extends ConsumerWidget {
 
     int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
+
 
     return RawKeyboardListener(
       focusNode: FocusNode(),
@@ -37,7 +39,8 @@ class VersesList extends ConsumerWidget {
       },
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: ListView.builder(
+        child: ScrollablePositionedList.builder(
+          itemScrollController: ref.watch(verseListControllerProvider),
           itemCount: map.length,
           itemBuilder: (context, index) {
             return Card(

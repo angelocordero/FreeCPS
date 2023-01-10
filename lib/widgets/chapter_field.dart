@@ -24,6 +24,10 @@ class ChapterField extends ConsumerWidget {
       () {
         if (_focusNode.hasFocus) {
           _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+          return;
+        } else if (_controller.text.isEmpty) {
+          _controller.text = '1';
+          _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
         }
       },
     );
