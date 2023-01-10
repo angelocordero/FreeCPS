@@ -20,13 +20,16 @@ class VerseListControllerNotifier extends StateNotifier<ItemScrollController> {
 
     if (verseRange.item2 == null) {
       state.scrollTo(index: verseRange.item1 - 1, duration: const Duration(milliseconds: 100), curve: Curves.linear);
+      return;
     } else {
       int index = verseRange.item2! - 4;
 
       if (index <= 0) {
         state.scrollTo(index: 0, duration: const Duration(milliseconds: 100), curve: Curves.linear);
+        return;
       } else {
         state.scrollTo(index: index, duration: const Duration(milliseconds: 100), curve: Curves.linear);
+        return;
       }
     }
   }
