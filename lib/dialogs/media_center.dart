@@ -18,7 +18,7 @@ class MediaCenter extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: DefaultTabController(
-            length: 3,
+            length: 4,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -42,7 +42,8 @@ class MediaCenter extends StatelessWidget {
                 const Divider(),
                 const TabBar(
                   tabs: [
-                    Tab(text: 'Media'),
+                    Tab(text: 'Photos'),
+                    Tab(text: 'Videos'),
                     Tab(text: 'Songs'),
                     Tab(text: 'Bibles'),
                   ],
@@ -54,7 +55,7 @@ class MediaCenter extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Center(
-                            child: Text('Media'),
+                            child: Text('Photos'),
                           ),
                           Align(
                             alignment: Alignment.bottomRight,
@@ -63,12 +64,39 @@ class MediaCenter extends StatelessWidget {
                                 FilePickerResult? result = await FilePicker.platform.pickFiles(
                                   allowMultiple: true,
                                   type: FileType.custom,
-                                  allowedExtensions: constants.importFileExtensions,
+                                  allowedExtensions: constants.photoFileExtensions,
                                 );
 
-                                FileUtils.importMedia(result);
+                                if (result == null) return;
 
-                                //TODO: do something with the files
+                                FileUtils.importPhotos(FileUtils.filePickerResultToFile(result));
+
+                              },
+                              child: const Text('Import'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Center(
+                            child: Text('Videos'),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                  allowMultiple: true,
+                                  type: FileType.custom,
+                                  allowedExtensions: constants.videoFileExtensions,
+                                );
+
+                                if (result == null) return;
+
+                                FileUtils.importVideos(FileUtils.filePickerResultToFile(result));
+
                               },
                               child: const Text('Import'),
                             ),

@@ -46,7 +46,7 @@ class _MediaLayerState extends State<MediaLayer> {
   }
 
   @override
-  void dispose() {
+    void dispose() {
     player.dispose();
     super.dispose();
     windowManager.close();

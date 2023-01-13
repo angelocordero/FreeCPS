@@ -41,10 +41,6 @@ dependencies:
   dart_vlc: ^0.4.0
   flutter_riverpod: ^2.1.1
   tap_debouncer: ^2.0.2
-
-  resizable_widget:
-        git:
-            url: https://github.com/angelocordero/resizable_widget.git
   flutter_typeahead: ^4.1.1
   freezed_annotation: ^2.2.0
   tuple: ^2.0.1
@@ -53,7 +49,11 @@ dependencies:
   path: ^1.8.2
   image_compression: ^1.0.3
   scrollable_positioned_list: ^0.3.5
+  mime: ^1.0.3
 
+  resizable_widget:
+        git:
+            url: https://github.com/angelocordero/resizable_widget.git
 
 
 dev_dependencies:

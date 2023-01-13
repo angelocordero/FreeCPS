@@ -5,22 +5,31 @@ import 'package:path_provider/path_provider.dart';
 
 String blackBackgroundFilePath = 'media/black.jpg';
 
-List<String> importFileExtensions = ['cspb', 'cpss', 'mp4', 'mov', 'jpg', 'jpeg', 'png'];
+List<String> videoFileExtensions = ['mp4', 'mov'];
+List<String> photoFileExtensions = ['jpg', 'jpeg', 'png'];
+String bibleFileExtenstion = 'cpsb';
+String songFileExtension = 'cpss';
+
+Future<String> appDirectory() async {
+  return await getApplicationSupportDirectory().then((value) => value.path);
+}
 
 Future<String> biblesDirectory() async {
-  String appDir = await getApplicationSupportDirectory().then((value) => value.path);
-
-  return p.join(appDir, 'bibles');
+  return p.join(await appDirectory(), 'bibles');
 }
 
 Future<String> songsDirectory() async {
-  String appDir = await getApplicationSupportDirectory().then((value) => value.path);
-
-  return p.join(appDir, 'songs');
+  return p.join(await appDirectory(), 'songs');
 }
 
 Future<String> mediaDirectory() async {
-  String appDir = await getApplicationSupportDirectory().then((value) => value.path);
+  return p.join(await appDirectory(), 'media');
+}
 
-  return p.join(appDir, 'media');
+Future<String> photosDirectory() async {
+  return p.join(await mediaDirectory(), 'photos');
+}
+
+Future<String> videosDirectory() async {
+  return p.join(await mediaDirectory(), 'videos');
 }

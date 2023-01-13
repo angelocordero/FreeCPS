@@ -7,9 +7,15 @@ import 'package:freecps/windows/projector_window.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) {
+
+// TODO: put in initialize window before main window?
+  FileUtils.initializeDirectories();
   WidgetsFlutterBinding.ensureInitialized();
+  DartVLC.initialize();
 
   if (args.isEmpty) {
+
+
     // TODO: put minimum size in main window
     runApp(
       ProviderScope(
@@ -20,9 +26,6 @@ void main(List<String> args) {
       ),
     );
 
-
-// TODO: put in initialize window?
-    FileUtils.initializeDirectories();
   } else {
     runProjectorWindow();
   }

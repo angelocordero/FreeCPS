@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:image_compression/image_compression.dart';
 import 'package:path/path.dart';
@@ -11,16 +12,15 @@ import 'constants.dart';
 class FileUtils {
   static importBible() {}
 
-  static importMedia(FilePickerResult? result) async {
-    if (result == null) return;
+  static initializeDirectories() async {
+    Directory('${await photosDirectory()}/thumbnails').create(recursive: true);
+    Directory('${await videosDirectory()}/thumbnails').create(recursive: true);
+  }
 
-    String dir = await constants.mediaDirectory();
-
-    List<File> files = result.paths.map((path) => File(path!)).toList();
+  static void importPhotos(List<File> files) async {
+    String dir = await constants.photosDirectory();
 
     for (File file in files) {
-      // copy files and generate thumbnails
-
       String filePath = p.join(dir, basename(file.path));
 
       await file.copy(filePath);
@@ -44,9 +44,54 @@ class FileUtils {
     }
   }
 
-  static initializeDirectories() async {
-    String mediaDir = await mediaDirectory();
+  //! TODO: make thumbnails
+  static void importVideos(List<File> files) async {
+    String dir = await constants.videosDirectory();
 
-    Directory('$mediaDir/thumbnails').create(recursive: true);
+    for (File file in files) {
+      String filePath = p.join(dir, basename(file.path));
+
+      await file.copy(filePath);
+    }
+  }
+
+  static List<File> filePickerResultToFile(FilePickerResult results) {
+    return results.paths.map((path) => File(path!)).toList();
   }
 }
+
+
+
+
+// void _importVideos(File file) async {
+//   String dir = await constants.mediaDirectory();
+
+//   String filePath = p.join(dir, basename(file.path));
+
+//   await file.copy(filePath);
+
+//   String thumbnailPath = p.join(dir, 'thumbnails', basename(file.path));
+
+//   final Thumbnail thumbnailBytes = await generateThumbnail(filePath: filePath);
+
+//   Uint8List? bytes = await thumbnailBytes.image.toByteData().then((value) {
+//     return value?.buffer.asUint8List();
+//   });
+
+//   if (bytes == null) return;
+
+//   final output = compress(
+//     ImageFileConfiguration(
+//       input: ImageFile(
+//         rawBytes: bytes,
+//         filePath: file.path,
+//       ),
+//       config: const Configuration(
+//         jpgQuality: 40,
+//         pngCompression: PngCompression.bestCompression,
+//       ),
+//     ),
+//   );
+
+//   File(thumbnailPath).writeAsBytesSync(output.rawBytes);
+// }
