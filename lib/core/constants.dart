@@ -30,6 +30,10 @@ Future<String> photosDirectory() async {
   return p.join(await mediaDirectory(), 'photos');
 }
 
+Future<String> photoThumbnailsDirectory() async {
+  return p.join(await mediaDirectory(), 'photos', 'thumbnails');
+}
+
 Future<String> videosDirectory() async {
   return p.join(await mediaDirectory(), 'videos');
 }

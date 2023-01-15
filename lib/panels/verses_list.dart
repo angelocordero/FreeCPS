@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/providers_declaration.dart';
-import 'package:freecps/models/scripture_model.dart';
-import 'package:freecps/models/verse_reference_model.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../core/providers_declaration.dart';
+import '../models/scripture_model.dart';
 import '../models/verse_model.dart';
+import '../widgets/verse_list_tile.dart';
 
 class VersesList extends ConsumerWidget {
   const VersesList({super.key});
@@ -15,11 +15,10 @@ class VersesList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Scripture scripture = ref.watch(scriptureProvider);
 
-    List<Verse>? map = scripture.verses ?? [];
+    List<Verse>? verseList = scripture.verses ?? [];
 
     int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
-
 
     return RawKeyboardListener(
       focusNode: FocusNode(),
@@ -41,39 +40,13 @@ class VersesList extends ConsumerWidget {
         padding: const EdgeInsets.all(10),
         child: ScrollablePositionedList.builder(
           itemScrollController: ref.watch(verseListControllerProvider),
-          itemCount: map.length,
+          itemCount: verseList.length,
           itemBuilder: (context, index) {
-            return Card(
-              child: ListTile(
-                visualDensity: VisualDensity.compact,
-                selected: endVerse != null ? ((index + 1) >= startVerse && (index + 1 <= endVerse)) : (index + 1) == startVerse,
-                selectedColor: Colors.black,
-                selectedTileColor: Colors.lightBlue.shade50,
-                title: Text(map[index].text),
-                leading: Text((index + 1).toString()),
-                onTap: () {
-                  VerseReference? verseRef = ref.read(scriptureProvider).scriptureRef.verse;
-
-                  if (ref.read(verseListKeyboardNotifier)) {
-                    if (verseRef == null) return;
-
-                    if (verseRef.verseRange.item2 == null && verseRef.verseRange.item1 > index + 1) {
-                      ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.item1}';
-                      return;
-                    }
-
-                    if (verseRef.verseRange.item1 > index + 1 && verseRef.verseRange.item2 != null) {
-                      ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.item2}';
-                      return;
-                    }
-
-                    ref.read(scriptureProvider.notifier).verseRef = '${verseRef.verseRange.item1}-${index + 1}';
-                    return;
-                  }
-
-                  ref.read(scriptureProvider.notifier).verseRef = (index + 1).toString();
-                },
-              ),
+            return VerseListTile(
+              endVerse: endVerse,
+              startVerse: startVerse,
+              verseList: verseList,
+              index: index,
             );
           },
         ),

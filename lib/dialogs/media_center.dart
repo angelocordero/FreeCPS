@@ -1,8 +1,17 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:freecps/core/file_utils.dart';
+import 'dart:io';
 
-import '../core/constants.dart' as constants;
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
+
+import 'tabs/media_center_photos_tab.dart';
+import 'tabs/media_center_videos_tab.dart';
+
+final photosProvider = FutureProvider<List<FileSystemEntity>>((ref) async {
+  String path = await photoThumbnailsDirectory();
+
+  return Directory(path).list().where((event) => event is File).toList();
+});
 
 class MediaCenter extends StatelessWidget {
   const MediaCenter({super.key});
@@ -48,65 +57,15 @@ class MediaCenter extends StatelessWidget {
                     Tab(text: 'Bibles'),
                   ],
                 ),
-                Expanded(
+                const Expanded(
                   child: TabBarView(
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Center(
-                            child: Text('Photos'),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                  allowMultiple: true,
-                                  type: FileType.custom,
-                                  allowedExtensions: constants.photoFileExtensions,
-                                );
-
-                                if (result == null) return;
-
-                                FileUtils.importPhotos(FileUtils.filePickerResultToFile(result));
-
-                              },
-                              child: const Text('Import'),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Center(
-                            child: Text('Videos'),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                  allowMultiple: true,
-                                  type: FileType.custom,
-                                  allowedExtensions: constants.videoFileExtensions,
-                                );
-
-                                if (result == null) return;
-
-                                FileUtils.importVideos(FileUtils.filePickerResultToFile(result));
-
-                              },
-                              child: const Text('Import'),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Center(
+                      MediaCenterPhotosTab(),
+                      MediaCenterVideosTab(),
+                      Center(
                         child: Text('Songs'),
                       ),
-                      const Center(
+                      Center(
                         child: Text('Bible'),
                       ),
                     ],
