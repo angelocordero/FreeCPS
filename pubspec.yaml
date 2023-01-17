@@ -54,6 +54,7 @@ dependencies:
   resizable_widget:
         git:
             url: https://github.com/angelocordero/resizable_widget.git
+  watcher: ^1.0.2
 
 
 dev_dependencies:
