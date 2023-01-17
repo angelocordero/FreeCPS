@@ -19,7 +19,7 @@ Future<String> biblesDirectory() async {
 }
 
 Future<String> songsDirectory() async {
-  return p.join(await appDirectory(), 'songs');
+  return p.join(await mediaDirectory(), 'songs');
 }
 
 Future<String> mediaDirectory() async {

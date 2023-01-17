@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/dialogs/media_center.dart';
+import 'package:freecps/panels/playlist_panel.dart';
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
@@ -83,7 +84,7 @@ class MainWindow extends ConsumerWidget {
             minPercentages: const [0.15, 0.0, 0.15],
             maxPercentages: const [0.2, double.infinity, 0.2],
             children: [
-              Container(),
+              const PlaylistPanel(),
               const SlidesPanel(),
               Container(),
             ],

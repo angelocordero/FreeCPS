@@ -15,6 +15,7 @@ class FileUtils {
   static initializeDirectories() async {
     Directory('${await photosDirectory()}/thumbnails').create(recursive: true);
     Directory('${await videosDirectory()}/thumbnails').create(recursive: true);
+    Directory(await songsDirectory()).create(recursive: false);
   }
 
   static Future<void> importPhotos(List<File> files) async {
