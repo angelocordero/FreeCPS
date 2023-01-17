@@ -2,15 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/constants.dart';
 
+import '../notifiers/media_center_photos_notifier.dart';
 import 'tabs/media_center_photos_tab.dart';
 import 'tabs/media_center_videos_tab.dart';
 
-final photosProvider = FutureProvider<List<FileSystemEntity>>((ref) async {
-  String path = await photoThumbnailsDirectory();
-
-  return Directory(path).list().where((event) => event is File).toList();
+final photosProvider = StateNotifierProvider.autoDispose<MediaCenterPhotosNotifier, List<File>>((ref) {
+  return MediaCenterPhotosNotifier();
 });
 
 class MediaCenter extends StatelessWidget {

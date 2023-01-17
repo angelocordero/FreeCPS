@@ -17,7 +17,7 @@ class FileUtils {
     Directory('${await videosDirectory()}/thumbnails').create(recursive: true);
   }
 
-  static void importPhotos(List<File> files) async {
+  static Future<void> importPhotos(List<File> files) async {
     String dir = await constants.photosDirectory();
 
     for (File file in files) {

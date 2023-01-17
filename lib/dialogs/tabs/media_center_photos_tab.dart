@@ -15,9 +15,7 @@ class MediaCenterPhotosTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<FileSystemEntity>? files = ref.watch(photosProvider).asData?.value;
-
-    if (files == null) return Container();
+    List<File> files = ref.watch(photosProvider);
 
     return Padding(
       padding: const EdgeInsets.all(30.0),
@@ -34,7 +32,7 @@ class MediaCenterPhotosTab extends ConsumerWidget {
                 mainAxisExtent: 200,
               ),
               itemBuilder: (context, index) {
-                return Image.file(files[index] as File);
+                return Image.file(files[index]);
               },
             ),
           ),
@@ -50,7 +48,9 @@ class MediaCenterPhotosTab extends ConsumerWidget {
 
                 if (result == null) return;
 
-                FileUtils.importPhotos(FileUtils.filePickerResultToFile(result));
+                await FileUtils.importPhotos(FileUtils.filePickerResultToFile(result));
+
+                //await ref.read(photosProvider.notifier).fetch();
               },
               child: const Text('Import'),
             ),
