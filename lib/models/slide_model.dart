@@ -8,7 +8,7 @@ class Slide {
   });
 
   @override
-  String toString() => 'Slide(text: $text, bibleRef: $reference)';
+  String toString() => 'Slide(text: $text, reference: $reference)';
 
   @override
   bool operator ==(covariant Slide other) {

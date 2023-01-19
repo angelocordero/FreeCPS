@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/models/scripture_model.dart';
 
 import '../models/slide_model.dart';
+import '../models/song_model.dart';
 
 /// Notifier that holds all the generated slides in the Slides Panel
 class SlidesNotifier extends StateNotifier<List<Slide>> {
@@ -9,12 +10,24 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
 
   //TODO needs to be redone
 
+  generateSongSlide({required Song song}) {
+    List<Slide> temp = [];
+
+    for (var entries in song.lyrics.entries) {
+      print(entries.toString());
+      for (var element in entries.value) {
+        temp.add(Slide(text: element));
+      }
+    }
+
+    state = List<Slide>.from(temp);
+  }
+
   generateScriptureSlides({
     required Scripture scripture,
   }) {
     int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
-
 
     if (endVerse != null) {
       state = scripture.verses!

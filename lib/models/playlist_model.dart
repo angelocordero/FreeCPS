@@ -20,6 +20,14 @@ class Playlist {
     required this.verses,
   });
 
+ factory Playlist.error() {
+    return Playlist(title: 'Error in loading playlist', songs: [], media: [], verses: []);
+  }
+
+  factory Playlist.empty() {
+    return Playlist(title: 'No playlist selected', songs: [], media: [], verses: []);
+  }
+
   Playlist copyWith({
     String? title,
     List<Song>? songs,

@@ -3,6 +3,11 @@
     "songs": [
      "test.json"
     ],
-    "media": [],
-    "verses": []
+    "media": [
+        "background0",
+        "background1",
+        "background2"
+    ],
+    "verses": [],
+    "custom_slides": []
 }
