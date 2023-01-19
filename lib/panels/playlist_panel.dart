@@ -27,10 +27,7 @@ class PlaylistPanel extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    print('tap');
-                
-                      ref.read(projectorSlidesProvider.notifier).generateSongSlide(song: playlist.songs[index]);
-                 
+                    ref.read(projectorSlidesProvider.notifier).generateSongSlide(song: playlist.songs[index]);
                   },
                   child: Card(
                     child: ListTile(

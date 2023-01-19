@@ -1,6 +1,6 @@
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
-import 'package:window_manager/window_manager.dart';
+// import 'package:window_manager/window_manager.dart';
 
 class SlideLayer extends StatefulWidget {
   const SlideLayer({super.key});
@@ -80,7 +80,7 @@ class _SlideLayerState extends State<SlideLayer> {
 
   @override
   void dispose() {
-    windowManager.close();
+    //windowManager.close();
     super.dispose();
   }
 }
