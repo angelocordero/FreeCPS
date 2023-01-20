@@ -18,4 +18,8 @@ class SlideIndexNotifier extends StateNotifier<int?> {
 //
     }
   }
+
+  void clearSlide() async {
+    state = null;
+  }
 }

@@ -7,7 +7,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-   
+
 //     return MaterialApp(
 //       debugShowCheckedModeBanner: true,
 //       theme: ThemeData.dark(),
@@ -49,7 +49,6 @@ class _ProjectorWindowState extends State<ProjectorWindow> {
 
   @override
   void initState() {
-
     player = Player(id: 1);
     player.setPlaylistMode(PlaylistMode.loop);
 
@@ -64,60 +63,104 @@ class _ProjectorWindowState extends State<ProjectorWindow> {
 
           player.open(file);
         } else if (call.method == 'clearBackground') {
-          Media file = Media.file(
-            File('/home/angelo/Dev/Flutter/multi_window_test/media/black.jpg'),
-          );
+          Media file = Media.asset('media/black.jpg');
 
           player.open(file);
+        } else if (call.method == 'clearSlide') {
+          setState(() {
+            if (showingFirst) {
+              second = Container(
+                color: Colors.transparent,
+                height: 1080,
+                width: 1920,
+                child: const Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Center(
+                    child: Text(
+                      '',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 80,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              first = Container(
+                color: Colors.transparent,
+                height: 1080,
+                width: 1920,
+                child: const Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Center(
+                    child: Text(
+                      '',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 80,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            showingFirst = !showingFirst;
+          });
         } else if (call.method == 'close') {
           dispose();
         } else if (call.method == 'showVerse') {
           //
         } else if (call.method == 'verseSlide') {
           setState(() {
-             if (showingFirst) {
-            second = Container(
-              color: Colors.transparent,
-              height: 1080,
-              width: 1920,
-              child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Center(
-                  child: Text(
-                    call.arguments.toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 80,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+            if (showingFirst) {
+              second = Container(
+                color: Colors.transparent,
+                height: 1080,
+                width: 1920,
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Center(
+                    child: Text(
+                      call.arguments.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 80,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          } else {
-            first = Container(
-              color: Colors.transparent,
-              height: 1080,
-              width: 1920,
-              child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Center(
-                  child: Text(
-                    call.arguments.toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 80,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              );
+            } else {
+              first = Container(
+                color: Colors.transparent,
+                height: 1080,
+                width: 1920,
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Center(
+                    child: Text(
+                      call.arguments.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 80,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          showingFirst = !showingFirst;
+            showingFirst = !showingFirst;
           });
         }
       },
@@ -134,12 +177,15 @@ class _ProjectorWindowState extends State<ProjectorWindow> {
         body: SizedBox.expand(
           child: Stack(
             children: [
-              Video(
-                player: player,
-                fit: BoxFit.cover,
+              ColorFiltered(
+                colorFilter: const ColorFilter.mode(Colors.black38, BlendMode.darken),
+                child: Video(
+                  player: player,
+                  fit: BoxFit.cover,
 
-                scale: 1.0, // default
-                showControls: false, // default
+                  scale: 1.0, // default
+                  showControls: false, // default
+                ),
               ),
               Center(
                 child: AnimatedCrossFade(
@@ -163,4 +209,3 @@ class _ProjectorWindowState extends State<ProjectorWindow> {
     super.dispose();
   }
 }
-
