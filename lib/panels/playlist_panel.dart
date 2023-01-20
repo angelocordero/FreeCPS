@@ -1,7 +1,7 @@
-import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/file_utils.dart';
+import 'package:freecps/core/projection_utils.dart';
 import 'package:freecps/core/providers_declaration.dart';
 
 import '../models/playlist_model.dart';
@@ -29,7 +29,7 @@ class PlaylistPanel extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    ref.read(projectorSlidesProvider.notifier).generateSongSlide(song: playlist.songs[index]);
+                    ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: playlist.songs[index]);
                   },
                   child: Card(
                     child: ListTile(
@@ -50,8 +50,7 @@ class PlaylistPanel extends ConsumerWidget {
                     try {
                       String filePath = await FileUtils.getVideoFilePath(playlist.media[index]);
 
-                      int windowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-                      await DesktopMultiWindow.invokeMethod(windowID, 'setBackground', filePath);
+                      ProjectionUtils.setBackground(filePath);
                     } catch (e) {
                       //
                     }

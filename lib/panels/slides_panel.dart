@@ -9,7 +9,7 @@ class SlidesPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Slide> slides = ref.watch(projectorSlidesProvider);
+    List<Slide> slides = ref.watch(projectionSlidesProvider);
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -24,7 +24,7 @@ class SlidesPanel extends ConsumerWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async {
-              ref.read(slideIndexProvider.notifier).project(index, slides[index]);
+              ref.read(projectedSlideNotifier.notifier).project(index, slides[index]);
             },
             child: Card(
               child: Center(

@@ -1,10 +1,10 @@
-import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/projection_utils.dart';
 import 'package:freecps/core/providers_declaration.dart';
 
-class ProjectorControls extends ConsumerWidget {
-  const ProjectorControls({super.key});
+class ProjectionControls extends ConsumerWidget {
+  const ProjectionControls({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,9 +14,7 @@ class ProjectorControls extends ConsumerWidget {
         children: [
           ElevatedButton(
             onPressed: () async {
-              int windowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-              await DesktopMultiWindow.invokeMethod(windowID, 'clearSlide', '');
-              ref.read(slideIndexProvider.notifier).clearSlide();
+              ref.read(projectedSlideNotifier.notifier).clearSlide();
             },
             child: const Text('Clear Slide'),
           ),
@@ -25,8 +23,7 @@ class ProjectorControls extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              int windowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-              await DesktopMultiWindow.invokeMethod(windowID, 'clearBackground', '');
+              ProjectionUtils.clearBackground();
             },
             child: const Text('Clear Background'),
           ),

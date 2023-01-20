@@ -25,7 +25,7 @@ class VersesList extends ConsumerWidget {
       autofocus: true,
       onKey: (event) {
         if (event is RawKeyDownEvent && event.isKeyPressed(LogicalKeyboardKey.enter) || event.isKeyPressed(LogicalKeyboardKey.numpadEnter)) {
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
+          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
           return;
         }
 

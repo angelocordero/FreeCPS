@@ -4,6 +4,8 @@ import 'package:path_provider/path_provider.dart';
 
 String blackBackgroundFilePath = 'media/black.jpg';
 
+int projectionWindowID = 1;
+
 List<String> videoFileExtensions = ['mp4', 'mov'];
 List<String> photoFileExtensions = ['jpg', 'jpeg', 'png'];
 String bibleFileExtenstion = 'cpsb';

@@ -38,7 +38,7 @@ class VerseField extends ConsumerWidget {
         controller: _controller,
         enabled: scripture.scriptureRef.translation != null,
         onSubmitted: (value) {
-          ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
+          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
         },
         onChanged: (value) {
           scriptureNotifer.verseRef = value;

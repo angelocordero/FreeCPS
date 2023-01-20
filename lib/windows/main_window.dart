@@ -1,11 +1,12 @@
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/projection_utils.dart';
 import 'package:freecps/core/providers_declaration.dart';
 
 import 'package:freecps/dialogs/media_center.dart';
 import 'package:freecps/panels/playlist_panel.dart';
-import 'package:freecps/panels/projector_controls.dart';
+import 'package:freecps/panels/projection_controls.dart';
 
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
@@ -23,7 +24,6 @@ class MainWindow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('FreeCPS'),
@@ -55,11 +55,9 @@ class MainWindow extends ConsumerWidget {
               ref.read(liveProvider.notifier).state = !live;
 
               if (!live) {
-                await DesktopMultiWindow.createWindow('Projector Window');
+                await DesktopMultiWindow.createWindow('Projection Window');
               } else {
-                int windowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-                await DesktopMultiWindow.invokeMethod(windowID, 'close');
+                ProjectionUtils.close();
               }
             },
             builder: (context, onTap) {
@@ -90,7 +88,7 @@ class MainWindow extends ConsumerWidget {
             children: const [
               PlaylistPanel(),
               SlidesPanel(),
-              ProjectorControls(),
+              ProjectionControls(),
             ],
           ),
           Row(
@@ -111,7 +109,7 @@ class MainWindow extends ConsumerWidget {
                   onPressed: () {
                     Scripture scripture = ref.read(scriptureProvider);
 
-                    ref.read(projectorSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
+                    ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
                   },
                   child: const Text('Generate'),
                 ),

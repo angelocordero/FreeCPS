@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/notifiers/playlist_notifier.dart';
-import 'package:freecps/notifiers/slide_index_notifier.dart';
+import 'package:freecps/notifiers/projected_slide_notifier.dart';
 import 'package:freecps/notifiers/verse_list_controller_notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../models/playlist_model.dart';
@@ -21,14 +21,14 @@ final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((r
   ));
 });
 
-final projectorSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {
+final projectionSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {
   return SlidesNotifier();
 });
 
-final slideIndexProvider = StateNotifierProvider<SlideIndexNotifier, int?>((ref) {
-  ref.watch(projectorSlidesProvider);
+final projectedSlideNotifier = StateNotifierProvider<ProjectedSlideNotifier, int?>((ref) {
+  ref.watch(projectionSlidesProvider);
 
-  return SlideIndexNotifier();
+  return ProjectedSlideNotifier();
 });
 
 final verseListKeyboardNotifier = StateProvider<bool>((ref) {

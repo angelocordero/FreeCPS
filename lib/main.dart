@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/file_utils.dart';
 import 'package:freecps/windows/main_window.dart';
-import 'package:freecps/windows/projector_window.dart';
+import 'package:freecps/windows/projection_window.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) {
@@ -27,11 +27,11 @@ void main(List<String> args) {
     );
 
   } else {
-    runProjectorWindow();
+    runProjectionWindow();
   }
 }
 
-void runProjectorWindow() {
+void runProjectionWindow() {
   windowManager.ensureInitialized();
   DartVLC.initialize();
 
@@ -50,6 +50,6 @@ void runProjectorWindow() {
   );
   windowManager.setAsFrameless();
   windowManager.setClosable(false);
-  runApp(const ProjectorWindow());
+  runApp(const ProjectionWindow());
   windowManager.show();
 }
