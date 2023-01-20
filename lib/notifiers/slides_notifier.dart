@@ -22,6 +22,7 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     state = List<Slide>.from(temp);
   }
 
+
   generateScriptureSlides({
     required Scripture scripture,
   }) {

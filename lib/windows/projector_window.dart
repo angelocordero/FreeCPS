@@ -9,7 +9,7 @@
 //   Widget build(BuildContext context) {
 
 //     return MaterialApp(
-//       debugShowCheckedModeBanner: true,
+//       debugShowCheckedModeBanner: false,
 //       theme: ThemeData.dark(),
 //       home: Scaffold(
 //         body: SizedBox.expand(
@@ -186,6 +186,7 @@ class _ProjectorWindowState extends State<ProjectorWindow> {
                   scale: 1.0, // default
                   showControls: false, // default
                 ),
+
               ),
               Center(
                 child: AnimatedCrossFade(
@@ -209,3 +210,4 @@ class _ProjectorWindowState extends State<ProjectorWindow> {
     super.dispose();
   }
 }
+

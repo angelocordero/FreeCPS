@@ -2,9 +2,11 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/providers_declaration.dart';
+
 import 'package:freecps/dialogs/media_center.dart';
 import 'package:freecps/panels/playlist_panel.dart';
 import 'package:freecps/panels/projector_controls.dart';
+
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
@@ -21,6 +23,7 @@ class MainWindow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('FreeCPS'),
