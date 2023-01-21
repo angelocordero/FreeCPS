@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -20,22 +19,7 @@ class VersesList extends ConsumerWidget {
     int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
 
-    return RawKeyboardListener(
-      focusNode: FocusNode(),
-      autofocus: true,
-      onKey: (event) {
-        if (event is RawKeyDownEvent && event.isKeyPressed(LogicalKeyboardKey.enter) || event.isKeyPressed(LogicalKeyboardKey.numpadEnter)) {
-          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
-          return;
-        }
-
-        if (event is RawKeyDownEvent && event.isKeyPressed(LogicalKeyboardKey.controlLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftLeft)) {
-          ref.read(verseListKeyboardNotifier.notifier).state = true;
-          return;
-        }
-
-        ref.read(verseListKeyboardNotifier.notifier).state = false;
-      },
+    return FocusScope(
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: ScrollablePositionedList.builder(

@@ -32,7 +32,7 @@ class VerseListTile extends ConsumerWidget {
         onTap: () {
           VerseReference? verseRef = ref.read(scriptureProvider).scriptureRef.verse;
 
-          if (ref.read(verseListKeyboardNotifier)) {
+          if (ref.read(verseListCtrlKeyNotifier)) {
             if (verseRef == null) return;
 
             if (verseRef.verseRange.item2 == null && verseRef.verseRange.item1 > index + 1) {

@@ -4,22 +4,73 @@ import 'package:freecps/core/projection_utils.dart';
 import '../models/slide_model.dart';
 
 class ProjectedSlideNotifier extends StateNotifier<int?> {
-  ProjectedSlideNotifier() : super(null);
+  ProjectedSlideNotifier(this.slides, this.isLive) : super(null);
 
-  void project(int index, Slide slide) {
+  List<Slide> slides;
+  bool isLive;
+
+  void project(int index) {
     if (index == state) return;
 
-    try {
-      state = index;
+    state = index;
 
-      ProjectionUtils.showSlide(slide.text);
-    } catch (e) {
-//
-    }
+    ProjectionUtils.showSlide(slides[index].text, isLive);
   }
 
-  void clearSlide() {
+  void clearSlide(isLive) {
     state = null;
-    ProjectionUtils.clearSlide();
+    ProjectionUtils.clearSlide(isLive);
+  }
+
+  void up() {
+    if (state == null) return;
+
+    int index = state! - 4;
+
+    if (index < 0) {
+      return;
+    }
+
+    state = index;
+    ProjectionUtils.showSlide(slides[index].text, isLive);
+  }
+
+  void down() {
+    if (state == null) return;
+
+    int index = state! + 4;
+
+    if (index > slides.length) {
+      return;
+    }
+
+    state = index;
+    ProjectionUtils.showSlide(slides[index].text, isLive);
+  }
+
+  void left() {
+    if (state == null) return;
+
+    int index = state! - 1;
+
+    if (index < 0) {
+      return;
+    }
+
+    state = index;
+    ProjectionUtils.showSlide(slides[index].text, isLive);
+  }
+
+  void right() {
+    if (state == null) return;
+
+    int index = state! + 1;
+
+    if (index > slides.length - 1) {
+      return;
+    }
+
+    state = index;
+    ProjectionUtils.showSlide(slides[index].text, isLive);
   }
 }

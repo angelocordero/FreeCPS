@@ -13,8 +13,10 @@ class ProjectionControls extends ConsumerWidget {
       child: Column(
         children: [
           ElevatedButton(
-            onPressed: () async {
-              ref.read(projectedSlideNotifier.notifier).clearSlide();
+            onPressed: () {
+              bool isLive = ref.read(liveProvider);
+
+              ref.read(projectedSlideNotifier.notifier).clearSlide(isLive);
             },
             child: const Text('Clear Slide'),
           ),
@@ -22,8 +24,10 @@ class ProjectionControls extends ConsumerWidget {
             height: 50,
           ),
           ElevatedButton(
-            onPressed: () async {
-              ProjectionUtils.clearBackground();
+            onPressed: () {
+              bool isLive = ref.read(liveProvider);
+
+              ProjectionUtils.clearBackground(isLive);
             },
             child: const Text('Clear Background'),
           ),

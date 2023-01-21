@@ -49,8 +49,8 @@ class PlaylistPanel extends ConsumerWidget {
                   onTap: () async {
                     try {
                       String filePath = await FileUtils.getVideoFilePath(playlist.media[index]);
-
-                      ProjectionUtils.setBackground(filePath);
+                      bool isLive = ref.read(liveProvider);
+                      ProjectionUtils.setBackground(filePath, isLive);
                     } catch (e) {
                       //
                     }

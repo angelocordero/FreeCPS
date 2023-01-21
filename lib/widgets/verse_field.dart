@@ -43,8 +43,7 @@ class VerseField extends ConsumerWidget {
         onChanged: (value) {
           scriptureNotifer.verseRef = value;
 
-
-           ref.read(verseListControllerProvider.notifier).scrollToOffset(value);
+          ref.read(verseListControllerProvider.notifier).scrollToOffset(value);
         },
         inputFormatters: verseInputFormatters(max: scriptureNotifer.getVerseMax),
       ),

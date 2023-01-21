@@ -26,12 +26,13 @@ final projectionSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slid
 });
 
 final projectedSlideNotifier = StateNotifierProvider<ProjectedSlideNotifier, int?>((ref) {
-  ref.watch(projectionSlidesProvider);
+  List<Slide> slides = ref.watch(projectionSlidesProvider);
+  bool isLive = ref.watch(liveProvider);
 
-  return ProjectedSlideNotifier();
+  return ProjectedSlideNotifier(slides, isLive);
 });
 
-final verseListKeyboardNotifier = StateProvider<bool>((ref) {
+final verseListCtrlKeyNotifier = StateProvider<bool>((ref) {
   return false;
 });
 
@@ -39,6 +40,6 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
   return VerseListControllerNotifier();
 });
 
-final playlistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref){
+final playlistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
   return PlaylistNotifier();
 });

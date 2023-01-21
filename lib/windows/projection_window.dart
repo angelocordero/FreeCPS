@@ -29,13 +29,11 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
           child: Stack(
             children: [
               ColorFiltered(
-                colorFilter: const ColorFilter.mode(Colors.black38, BlendMode.darken),
+                colorFilter: const ColorFilter.mode(Colors.black12, BlendMode.darken),
                 child: Video(
                   player: player,
                   fit: BoxFit.cover,
-
-                  scale: 1.0, // default
-                  showControls: false, // default
+                  showControls: false, 
                 ),
               ),
               Center(

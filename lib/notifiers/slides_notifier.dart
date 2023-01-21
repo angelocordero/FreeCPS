@@ -8,8 +8,6 @@ import '../models/song_model.dart';
 class SlidesNotifier extends StateNotifier<List<Slide>> {
   SlidesNotifier() : super([]);
 
-  //TODO needs to be redone
-
   generateSongSlide({required Song song}) {
     List<Slide> temp = [];
 
