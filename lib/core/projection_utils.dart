@@ -17,12 +17,12 @@ class ProjectionUtils {
     DesktopMultiWindow.invokeMethod(projectionWindowID, 'clearSlide');
   }
 
-  static Future<void> showSlide(String text, bool isLive) async {
+  static Future<void> showSlide(String arguments, bool isLive) async {
     if (!isLive) return;
 
     int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
 
-    DesktopMultiWindow.invokeMethod(projectionWindowID, 'showSlide', text);
+    DesktopMultiWindow.invokeMethod(projectionWindowID, 'showSlide', arguments);
   }
 
   static Future<void> setBackground(String filePath, bool isLive) async {

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
 import 'package:freecps/core/projection_utils.dart';
 
 import '../models/slide_model.dart';
@@ -6,15 +7,13 @@ import '../models/slide_model.dart';
 class ProjectedSlideNotifier extends StateNotifier<int?> {
   ProjectedSlideNotifier(this.slides, this.isLive) : super(null);
 
-  List<Slide> slides;
   bool isLive;
+  List<Slide> slides;
 
-  void project(int index) {
+  void click(int index) {
     if (index == state) return;
 
-    state = index;
-
-    ProjectionUtils.showSlide(slides[index].text, isLive);
+    _project(index);
   }
 
   void clearSlide(isLive) {
@@ -31,8 +30,7 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
       return;
     }
 
-    state = index;
-    ProjectionUtils.showSlide(slides[index].text, isLive);
+    _project(index);
   }
 
   void down() {
@@ -44,8 +42,7 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
       return;
     }
 
-    state = index;
-    ProjectionUtils.showSlide(slides[index].text, isLive);
+    _project(index);
   }
 
   void left() {
@@ -57,8 +54,7 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
       return;
     }
 
-    state = index;
-    ProjectionUtils.showSlide(slides[index].text, isLive);
+    _project(index);
   }
 
   void right() {
@@ -69,8 +65,19 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
     if (index > slides.length - 1) {
       return;
     }
+    _project(index);
+  }
 
+  void _project(int index) {
     state = index;
-    ProjectionUtils.showSlide(slides[index].text, isLive);
+
+    Slide slide = slides[index];
+
+    if (slide.slideType == SlideType.song) {
+      ProjectionUtils.showSlide(slide.text, isLive);
+    } else {
+      String arguments = '${slide.text}<split>${slide.reference}';
+      ProjectionUtils.showSlide(arguments, isLive);
+    }
   }
 }

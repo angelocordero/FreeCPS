@@ -45,7 +45,7 @@ class SlidesPanel extends ConsumerWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  ref.read(projectedSlideNotifier.notifier).project(index);
+                  ref.read(projectedSlideNotifier.notifier).click(index);
                 },
                 child: slides[index].slideType == SlideType.scripture
                     ? Card(

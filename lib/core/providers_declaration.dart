@@ -15,6 +15,10 @@ final liveProvider = StateProvider<bool>((ref) {
   return false;
 });
 
+final verseListCtrlKeyNotifier = StateProvider<bool>((ref) {
+  return false;
+});
+
 final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((ref) {
   return ScriptureNotifier(const Scripture(
     scriptureRef: ScriptureReference(),
@@ -30,10 +34,6 @@ final projectedSlideNotifier = StateNotifierProvider<ProjectedSlideNotifier, int
   bool isLive = ref.watch(liveProvider);
 
   return ProjectedSlideNotifier(slides, isLive);
-});
-
-final verseListCtrlKeyNotifier = StateProvider<bool>((ref) {
-  return false;
 });
 
 final verseListControllerProvider = StateNotifierProvider<VerseListControllerNotifier, ItemScrollController>((ref) {

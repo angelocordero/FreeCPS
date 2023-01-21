@@ -33,7 +33,7 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
                 child: Video(
                   player: player,
                   fit: BoxFit.cover,
-                  showControls: false, 
+                  showControls: false,
                 ),
               ),
               Center(
@@ -67,7 +67,17 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
         } else if (call.method == 'close') {
           dispose();
         } else if (call.method == 'showSlide') {
-          showNextSlide(call.arguments.toString());
+          List<String> args = (call.arguments as String).split('<split>');
+
+          if (args.length == 1) {
+            showNextSlide(args.first, '');
+            return;
+          }
+
+          showNextSlide(
+            args[0],
+            args[1],
+          );
         }
       },
     );
@@ -96,12 +106,18 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     player.open(file);
   }
 
-  void showNextSlide(String text) {
+  void showNextSlide(String text, String reference) {
     setState(() {
       if (showingFirst) {
-        second = ProjectionSlideTextWidget(text: text);
+        second = ProjectionSlideTextWidget(
+          text: text,
+          reference: reference,
+        );
       } else {
-        first = ProjectionSlideTextWidget(text: text);
+        first = ProjectionSlideTextWidget(
+          text: text,
+          reference: reference,
+        );
       }
 
       showingFirst = !showingFirst;
@@ -111,9 +127,9 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   void clearSlide() {
     setState(() {
       if (showingFirst) {
-        second = const ProjectionSlideTextWidget(text: '');
+        second = Container();
       } else {
-        first = const ProjectionSlideTextWidget(text: '');
+        first = Container();
       }
 
       showingFirst = !showingFirst;
