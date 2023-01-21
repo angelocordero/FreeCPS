@@ -1,49 +1,55 @@
-import 'dart:convert';
-
 import 'package:desktop_multi_window/desktop_multi_window.dart';
-import 'package:freecps/core/constants.dart';
 
 class ProjectionUtils {
-  static void methodChannel({required String methodName, required String arguments, required bool isLive}) {
+  static Future<void> methodChannel({required String methodName, required String arguments, required bool isLive}) async {
     if (!isLive) return;
+
+    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
 
     DesktopMultiWindow.invokeMethod(projectionWindowID, methodName, arguments);
   }
 
-  static void clearSlide(bool isLive) {
+  static Future<void> clearSlide(bool isLive) async {
     if (!isLive) return;
+
+    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
+
     DesktopMultiWindow.invokeMethod(projectionWindowID, 'clearSlide');
   }
 
-  static void showSlide(String text, bool isLive) {
+  static Future<void> showSlide(String text, bool isLive) async {
     if (!isLive) return;
+
+    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
+
     DesktopMultiWindow.invokeMethod(projectionWindowID, 'showSlide', text);
   }
 
-  static void setBackground(String filePath, bool isLive) {
+  static Future<void> setBackground(String filePath, bool isLive) async {
     if (!isLive) return;
+
+    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
 
     DesktopMultiWindow.invokeMethod(projectionWindowID, 'setBackground', filePath);
   }
 
-  static void clearBackground(bool isLive) {
+  static Future<void> clearBackground(bool isLive) async {
     if (!isLive) return;
+
+    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
 
     DesktopMultiWindow.invokeMethod(projectionWindowID, 'clearBackground');
   }
 
-  static void close() {
+  static Future<void> close() async {
+    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
+
     DesktopMultiWindow.invokeMethod(projectionWindowID, 'close');
   }
 
   static void open() {
     DesktopMultiWindow.createWindow(
-      jsonEncode(
-        {
-          'args1': 'Projection Window',
-          'args2': projectionWindowID,
-        },
-      ),
+      'Projection Window',
     );
   }
 }

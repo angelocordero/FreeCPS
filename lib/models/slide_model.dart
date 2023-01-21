@@ -1,10 +1,14 @@
+import 'package:freecps/core/constants.dart';
+
 class Slide {
   String text;
   String? reference;
+  SlideType slideType;
 
   Slide({
     required this.text,
     this.reference,
+    required this.slideType,
   });
 
   @override

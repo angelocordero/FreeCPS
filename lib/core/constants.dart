@@ -1,10 +1,27 @@
 // TODO
+import 'dart:ui';
+
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 String blackBackgroundFilePath = 'media/black.jpg';
 
-int projectionWindowID = 1;
+Map<String, Color> catpuccinColorsSample = {
+  'Verse 1': const Color(0xffdd7878),
+  'Verse 2': const Color(0xffea76cb),
+  'Chorus': const Color(0xff8839ef),
+  'Pre Chorus': const Color(0xffe64553),
+  'Pre Chorus 1': const Color(0xffe64553),
+  'Pre Chorus 2': const Color(0xfffe640b),
+  'Bridge': const Color(0xff04a5e5),
+  'Tag': const Color(0xff7287fd),
+  'Default': const Color(0xff40a02b),
+};
+
+enum SlideType {
+  scripture,
+  song,
+}
 
 List<String> videoFileExtensions = ['mp4', 'mov'];
 List<String> photoFileExtensions = ['jpg', 'jpeg', 'png'];

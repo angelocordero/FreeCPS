@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
 import 'package:freecps/models/scripture_model.dart';
 
 import '../models/slide_model.dart';
@@ -12,14 +13,15 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     List<Slide> temp = [];
 
     for (var entries in song.lyrics.entries) {
+      String ref = entries.key;
+
       for (var element in entries.value) {
-        temp.add(Slide(text: element));
+        temp.add(Slide(text: element, reference: ref, slideType: SlideType.song));
       }
     }
 
     state = List<Slide>.from(temp);
   }
-
 
   generateScriptureSlides({
     required Scripture scripture,
@@ -38,6 +40,7 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
           return Slide(
             text: verse.text,
             reference: scripture.scriptureRef.toString(),
+            slideType: SlideType.scripture,
           );
         },
       ).toList();
@@ -45,10 +48,7 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     }
 
     state = [
-      Slide(
-        text: scripture.verses![startVerse - 1].text,
-        reference: scripture.scriptureRef.toString(),
-      ),
+      Slide(text: scripture.verses![startVerse - 1].text, reference: scripture.scriptureRef.toString(), slideType: SlideType.scripture),
     ];
   }
 }

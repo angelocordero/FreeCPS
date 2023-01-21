@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
 import 'package:freecps/core/providers_declaration.dart';
+import 'package:freecps/widgets/song_slide_widget.dart';
 
 import '../models/slide_model.dart';
 
@@ -38,22 +40,23 @@ class SlidesPanel extends ConsumerWidget {
               crossAxisCount: 4,
               mainAxisSpacing: 50,
               crossAxisSpacing: 50,
-              mainAxisExtent: 150,
+              mainAxisExtent: 170,
             ),
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
                   ref.read(projectedSlideNotifier.notifier).project(index);
-                 
                 },
-                child: Card(
-                  child: Center(
-                    child: Text(
-                      slides[index].text,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                child: slides[index].slideType == SlideType.scripture
+                    ? Card(
+                        child: Center(
+                          child: Text(
+                            slides[index].text,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    : SongSlideWidget(text: slides[index].text, ref: slides[index].reference!),
               );
             },
           ),

@@ -54,7 +54,7 @@ class MainWindow extends ConsumerWidget {
               if (!isLive) {
                 ProjectionUtils.open();
               } else {
-                ProjectionUtils.close();
+                await ProjectionUtils.close();
               }
 
               ref.read(liveProvider.notifier).state = !isLive;
