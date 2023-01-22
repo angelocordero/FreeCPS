@@ -58,6 +58,10 @@ Future<String> videosDirectory() async {
   return p.join(await mediaDirectory(), 'videos');
 }
 
+Future<String> playlistsDirectory() async {
+  return p.join(await mediaDirectory(), 'playlists');
+}
+
 List<String> superscriptMap = [
   '\u2070',
   '\u00B9',

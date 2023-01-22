@@ -2,18 +2,26 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
+import 'package:freecps/dialogs/tabs/media_center_playlists_tab.dart';
 
+import '../models/playlist_model.dart';
 import '../notifiers/media_center_photos_notifier.dart';
+import '../notifiers/media_center_playlists_notifier.dart';
 import '../notifiers/media_center_videos_notifier.dart';
 import 'tabs/media_center_photos_tab.dart';
 import 'tabs/media_center_videos_tab.dart';
 
 final photosProvider = StateNotifierProvider.autoDispose<MediaCenterPhotosNotifier, List<File>>((ref) {
-  return MediaCenterPhotosNotifier();
+  return MediaCenterPhotosNotifier(photoThumbnailsDirectory());
 });
 
 final videosProvider = StateNotifierProvider.autoDispose<MediaCenterVideosNotifier, List<VideoData>>((ref) {
-  return MediaCenterVideosNotifier();
+  return MediaCenterVideosNotifier(videosDirectory());
+});
+
+final playlistsProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylistsNotifier, List<Playlist>>((ref) {
+  return MediaCenterPlaylistsNotifier(playlistsDirectory());
 });
 
 class MediaCenter extends StatelessWidget {
@@ -64,9 +72,7 @@ class MediaCenter extends StatelessWidget {
                 const Expanded(
                   child: TabBarView(
                     children: [
-                      Center(
-                        child: Text('Playlists'),
-                      ),
+                      MediaCenterPlaylistsTab(),
                       MediaCenterPhotosTab(),
                       MediaCenterVideosTab(),
                       Center(
