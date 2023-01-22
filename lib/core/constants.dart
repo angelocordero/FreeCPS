@@ -10,6 +10,7 @@ Map<String, Color> catpuccinColorsSample = {
   'Verse 1': const Color(0xffdd7878),
   'Verse 2': const Color(0xffea76cb),
   'Chorus': const Color(0xff8839ef),
+  'Chorus 2': const Color(0xff40a02b),
   'Pre Chorus': const Color(0xffe64553),
   'Pre Chorus 1': const Color(0xffe64553),
   'Pre Chorus 2': const Color(0xfffe640b),

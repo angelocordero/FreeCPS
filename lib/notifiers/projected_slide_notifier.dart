@@ -71,6 +71,7 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
   void _project(int index) {
     state = index;
 
+
     Slide slide = slides[index];
 
     if (slide.slideType == SlideType.song) {

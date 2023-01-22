@@ -30,23 +30,24 @@ class ProjectionSlideTextWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  reference,
-                  style: GoogleFonts.raleway(
-                    textStyle: const TextStyle(
-                      fontSize: 50,
-                      color: Colors.white,
+            if (reference.isNotEmpty)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    reference,
+                    style: GoogleFonts.raleway(
+                      textStyle: const TextStyle(
+                        fontSize: 50,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 50,
-                ),
-              ],
-            ),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                ],
+              ),
             const SizedBox(
               height: 50,
             ),

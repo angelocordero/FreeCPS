@@ -26,7 +26,9 @@ final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((r
 });
 
 final projectionSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {
-  return SlidesNotifier();
+  
+
+  return SlidesNotifier(ref);
 });
 
 final projectedSlideNotifier = StateNotifierProvider<ProjectedSlideNotifier, int?>((ref) {
@@ -43,3 +45,9 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
 final playlistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
   return PlaylistNotifier();
 });
+
+final slidePanelTitleProvider = StateProvider<String>(
+  (ref) {
+    return '';
+  },
+);

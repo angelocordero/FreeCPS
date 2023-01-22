@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
+import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/models/scripture_model.dart';
 import 'package:freecps/models/scripture_reference_model.dart';
 
@@ -10,10 +11,14 @@ import '../models/verse_model.dart';
 
 /// Notifier that holds all the generated slides in the Slides Panel
 class SlidesNotifier extends StateNotifier<List<Slide>> {
-  SlidesNotifier() : super([]);
+  SlidesNotifier(this.ref) : super([]);
+
+  StateNotifierProviderRef<SlidesNotifier, List<Slide>> ref;
 
   generateSongSlide({required Song song}) {
     List<Slide> temp = [];
+
+    ref.read(slidePanelTitleProvider.notifier).state = song.title;
 
     for (var entries in song.lyrics.entries) {
       String ref = entries.key;
@@ -31,6 +36,9 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
   }) {
     int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
+
+    ref.read(slidePanelTitleProvider.notifier).state =
+        '${scripture.scriptureRef.translation} ${scripture.scriptureRef.book} ${scripture.scriptureRef.chapter}:${scripture.scriptureRef.verse!.verseString}';
 
     if (endVerse != null) {
       _setMultipleScriptureSlides(scripture, startVerse, endVerse);
