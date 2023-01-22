@@ -22,46 +22,52 @@ class PlaylistPanel extends ConsumerWidget {
           children: [
             Text(playlist.title),
             const Divider(),
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: playlist.songs.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: playlist.songs[index]);
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: const Text('Songs'),
+              children: [
+                ...playlist.songs.map(
+                  (song) {
+                    return GestureDetector(
+                      onTap: () {
+                        ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: song);
+                      },
+                      child: Card(
+                        child: ListTile(
+                          title: Text(song.title),
+                        ),
+                      ),
+                    );
                   },
-                  child: Card(
-                    child: ListTile(
-                      title: Text(playlist.songs[index].title),
-                    ),
-                  ),
-                );
-              },
+                )
+              ],
             ),
             const Divider(),
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: playlist.media.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () async {
-                    try {
-                      String filePath = await FileUtils.getVideoFilePath(playlist.media[index]);
-                      bool isLive = ref.read(liveProvider);
-                      await ProjectionUtils.setBackground(filePath, isLive);
-                    } catch (e) {
-                      //
-                    }
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: const Text('Media'),
+              children: [
+                ...playlist.media.map(
+                  (media) {
+                    return GestureDetector(
+                      onTap: () async {
+                        try {
+                          String filePath = await FileUtils.getVideoFilePath(media);
+                          bool isLive = ref.read(liveProvider);
+                          await ProjectionUtils.setBackground(filePath, isLive);
+                        } catch (e) {
+                          //
+                        }
+                      },
+                      child: Card(
+                        child: ListTile(
+                          title: Text(media),
+                        ),
+                      ),
+                    );
                   },
-                  child: Card(
-                    child: ListTile(
-                      title: Text(playlist.media[index]),
-                    ),
-                  ),
-                );
-              },
+                )
+              ],
             ),
           ],
         ),
