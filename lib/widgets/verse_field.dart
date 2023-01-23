@@ -17,7 +17,7 @@ class VerseField extends ConsumerWidget {
     Scripture scripture = ref.watch(scriptureProvider);
     ScriptureNotifier scriptureNotifer = ref.watch(scriptureProvider.notifier);
 
-    _controller.text = scripture.scriptureRef.verse.toString();
+    _controller.text = scripture.scriptureRef.verse?.toDisplayString() ?? '1';
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
     _focusNode.addListener(

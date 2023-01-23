@@ -1,4 +1,7 @@
-import '../core/typedefs.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
+import '../core/constants.dart';
 
 class VerseReference {
   String verseString = '1';
@@ -28,8 +31,7 @@ class VerseReference {
     );
   }
 
-  @override
-  String toString() => verseString;
+  String? toDisplayString() => verseString;
 
   @override
   bool operator ==(covariant VerseReference other) {
@@ -40,4 +42,23 @@ class VerseReference {
 
   @override
   int get hashCode => verseString.hashCode;
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'verseString': verseString,
+    };
+  }
+
+  factory VerseReference.fromMap(Map<String, dynamic> map) {
+    return VerseReference(
+      verseString: map['verseString'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory VerseReference.fromJson(String source) => VerseReference.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'VerseReference(verseString: $verseString)';
 }

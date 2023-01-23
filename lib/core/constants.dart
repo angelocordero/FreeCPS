@@ -3,8 +3,12 @@ import 'dart:ui';
 
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:tuple/tuple.dart';
 
 String blackBackgroundFilePath = 'media/black.jpg';
+
+
+typedef VerseRange = Tuple2<int, int?>;
 
 Map<String, Color> catpuccinColorsSample = {
   'Verse 1': const Color(0xffdd7878),

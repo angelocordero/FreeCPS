@@ -5,13 +5,14 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 
+import 'package:freecps/models/saved_verse_slides.dart';
 import 'package:freecps/models/song_model.dart';
 
 class Playlist {
   String title;
   List<Song> songs;
   List<String> media;
-  List<String> verses;
+  List<SavedVerseSlides> verses;
 
   Playlist({
     required this.title,
@@ -28,19 +29,7 @@ class Playlist {
     return Playlist(title: 'No playlist selected', songs: [], media: [], verses: []);
   }
 
-  Playlist copyWith({
-    String? title,
-    List<Song>? songs,
-    List<String>? media,
-    List<String>? verses,
-  }) {
-    return Playlist(
-      title: title ?? this.title,
-      songs: songs ?? this.songs,
-      media: media ?? this.media,
-      verses: verses ?? this.verses,
-    );
-  }
+ 
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -66,7 +55,7 @@ class Playlist {
         ).toList(),
       ),
       media: List<String>.from(map['media']),
-      verses: List<String>.from(map['verses']),
+      verses: List<SavedVerseSlides>.from(map['verses']),
     );
   }
 
@@ -89,5 +78,19 @@ class Playlist {
   @override
   int get hashCode {
     return title.hashCode ^ songs.hashCode ^ media.hashCode ^ verses.hashCode;
+  }
+
+  Playlist copyWith({
+    String? title,
+    List<Song>? songs,
+    List<String>? media,
+    List<SavedVerseSlides>? verses,
+  }) {
+    return Playlist(
+      title: title ?? this.title,
+      songs: songs ?? this.songs,
+      media: media ?? this.media,
+      verses: verses ?? this.verses,
+    );
   }
 }

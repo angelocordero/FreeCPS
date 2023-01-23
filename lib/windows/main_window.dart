@@ -7,13 +7,13 @@ import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/media_center/media_center.dart';
 import 'package:freecps/panels/playlist_panel.dart';
 import 'package:freecps/panels/projection_controls.dart';
+import 'package:freecps/panels/scripture_settings.dart';
 
 import 'package:freecps/panels/slides_panel.dart';
 import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 
-import '../models/scripture_model.dart';
 import '../panels/scripture_picker.dart';
 import '../core/custom_popup_route.dart';
 
@@ -105,27 +105,20 @@ class MainWindow extends ConsumerWidget {
               ],
             ),
             Row(
-              children: [
-                const Expanded(
+              children: const [
+                Expanded(
                   flex: 1,
                   child: ScripturePickerPanel(),
                 ),
-                const VerticalDivider(),
-                const Expanded(
+                VerticalDivider(),
+                Expanded(
                   flex: 4,
                   child: VersesList(),
                 ),
-                const VerticalDivider(),
+                VerticalDivider(),
                 Expanded(
                   flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Scripture scripture = ref.read(scriptureProvider);
-
-                      ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
-                    },
-                    child: const Text('Generate'),
-                  ),
+                  child: ScriptureSettings(),
                 ),
               ],
             ),

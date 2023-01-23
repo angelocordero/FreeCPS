@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../core/typedefs.dart';
+import '../core/constants.dart';
 
 class VerseListControllerNotifier extends StateNotifier<ItemScrollController> {
   VerseListControllerNotifier() : super(ItemScrollController());
