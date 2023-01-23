@@ -4,7 +4,7 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freecps/widgets/projection_text_slide_widget.dart';
+import 'package:freecps/widgets/projection_slide_widget.dart';
 import 'package:window_manager/window_manager.dart';
 
 class ProjectionWindow extends StatefulWidget {
@@ -109,12 +109,12 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   void showNextSlide(String text, String reference) {
     setState(() {
       if (showingFirst) {
-        second = ProjectionSlideTextWidget(
+        second = ProjectionTextWidget(
           text: text,
           reference: reference,
         );
       } else {
-        first = ProjectionSlideTextWidget(
+        first = ProjectionTextWidget(
           text: text,
           reference: reference,
         );

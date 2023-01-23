@@ -1,19 +1,21 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/dialogs/media_center.dart';
-import 'package:freecps/notifiers/media_center_videos_notifier.dart';
+
 import '../../core/constants.dart' as constants;
 import '../../core/file_utils.dart';
+import '../media_center_providers.dart';
 
-class MediaCenterVideosTab extends ConsumerWidget {
-  const MediaCenterVideosTab({
+class MediaCenterPhotosTab extends ConsumerWidget {
+  const MediaCenterPhotosTab({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<VideoData> files = ref.watch(videosProvider);
+    List<File> files = ref.watch(photosProvider);
 
     return Padding(
       padding: const EdgeInsets.all(30.0),
@@ -30,11 +32,7 @@ class MediaCenterVideosTab extends ConsumerWidget {
                 mainAxisExtent: 200,
               ),
               itemBuilder: (context, index) {
-                return Card(
-                  child: Center(
-                    child: Text(files[index].item2),
-                  ),
-                );
+                return Image.file(files[index]);
               },
             ),
           ),
@@ -45,12 +43,14 @@ class MediaCenterVideosTab extends ConsumerWidget {
                 FilePickerResult? result = await FilePicker.platform.pickFiles(
                   allowMultiple: true,
                   type: FileType.custom,
-                  allowedExtensions: constants.videoFileExtensions,
+                  allowedExtensions: constants.photoFileExtensions,
                 );
 
                 if (result == null) return;
 
-                FileUtils.importVideos(FileUtils.filePickerResultToFile(result));
+                await FileUtils.importPhotos(FileUtils.filePickerResultToFile(result));
+
+                //await ref.read(photosProvider.notifier).fetch();
               },
               child: const Text('Import'),
             ),

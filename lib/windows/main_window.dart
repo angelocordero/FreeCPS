@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/projection_utils.dart';
 import 'package:freecps/core/providers_declaration.dart';
 
-import 'package:freecps/dialogs/media_center.dart';
+import 'package:freecps/media_center/media_center.dart';
 import 'package:freecps/panels/playlist_panel.dart';
 import 'package:freecps/panels/projection_controls.dart';
 

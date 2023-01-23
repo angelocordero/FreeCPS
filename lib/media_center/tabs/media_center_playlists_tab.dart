@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/playlist_model.dart';
-import '../media_center.dart';
+import '../media_center_providers.dart';
 
 class MediaCenterPlaylistsTab extends ConsumerWidget {
   const MediaCenterPlaylistsTab({

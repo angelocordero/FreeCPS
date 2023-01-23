@@ -26,7 +26,6 @@ final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((r
 });
 
 final projectionSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {
-  
 
   return SlidesNotifier(ref);
 });
