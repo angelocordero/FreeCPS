@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/models/playlist_model.dart';
 
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
@@ -27,7 +28,9 @@ class ScriptureSettings extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              ref.read(projectionSlidesProvider.notifier).saveScriptureSlideToPlaylist();
+              Playlist playlist = ref.read(playlistProvider);
+
+              ref.read(projectionSlidesProvider.notifier).saveScriptureSlideToPlaylist(playlist);
             },
             child: const Text('Save Verses To Playlist'),
           ),

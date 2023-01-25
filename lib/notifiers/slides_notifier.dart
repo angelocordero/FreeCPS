@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/constants.dart';
 import '../core/helper_functions.dart';
 import '../core/providers_declaration.dart';
+import '../models/playlist_model.dart';
 import '../models/saved_verse_slides.dart';
 import '../models/scripture_model.dart';
 import '../models/scripture_reference_model.dart';
@@ -53,12 +56,10 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     _setSingleScriptureSlide(scripture, startVerse);
   }
 
-  void saveScriptureSlideToPlaylist() {
+  void saveScriptureSlideToPlaylist(Playlist playlist) {
     if (_scriptureReference == null) return;
 
     SavedVerseSlides savedVerseSlides = SavedVerseSlides(verseSlides: state, scriptureRef: _scriptureReference!);
-
-    print(savedVerseSlides.toString());
   }
 
   void _setMultipleScriptureSlides(Scripture scripture, int startVerse, int endVerse) {

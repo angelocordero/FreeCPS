@@ -36,14 +36,14 @@ class SavedVerseSlides {
         'book': scriptureRef.book,
         'chapter': scriptureRef.chapter,
         'verseReference': scriptureRef.verse?.toMap(),
-      }
+      },
     };
   }
 
   factory SavedVerseSlides.fromMap(Map<String, dynamic> map) {
     return SavedVerseSlides(
       verseSlides: List<Slide>.from(
-        (map['verseSlides'] as List<int>).map<Slide>(
+        (map['verseSlides'] as List<dynamic>).map<Slide>(
           (x) => Slide.fromMap(x as Map<String, dynamic>),
         ),
       ),
