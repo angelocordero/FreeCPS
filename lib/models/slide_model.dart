@@ -14,7 +14,6 @@ class Slide {
     required this.slideType,
   });
 
-
   Slide copyWith({
     String? text,
     String? reference,
@@ -31,14 +30,15 @@ class Slide {
     return <String, dynamic>{
       'text': text,
       'reference': reference,
+      'slideTypeInt': slideType.index,
     };
   }
 
   factory Slide.fromMap(Map<String, dynamic> map) {
     return Slide(
       text: map['text'] as String,
+      slideType: SlideType.values[map['slideTypeInt'] as int],
       reference: map['reference'] != null ? map['reference'] as String : null,
-      slideType: map['slideType'] as SlideType,
     );
   }
 
@@ -52,10 +52,8 @@ class Slide {
   @override
   bool operator ==(covariant Slide other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.text == text &&
-      other.reference == reference;
+
+    return other.text == text && other.reference == reference;
   }
 
   @override

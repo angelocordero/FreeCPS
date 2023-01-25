@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/file_utils.dart';
 
 import '../core/constants.dart';
 import '../core/helper_functions.dart';
@@ -37,6 +38,12 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     _scriptureReference = null;
   }
 
+  generateSavedVerseSlides(SavedVerseSlides slides) {
+    state = slides.verseSlides;
+
+    _setSlidesPanelTitle(scriptureRefToRefString(slides.scriptureRef));
+  }
+
   generateScriptureSlides({
     required Scripture scripture,
   }) {
@@ -58,6 +65,10 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     if (_scriptureReference == null) return;
 
     SavedVerseSlides savedVerseSlides = SavedVerseSlides(verseSlides: state, scriptureRef: _scriptureReference!);
+
+    List<SavedVerseSlides> playlistVerses = [...playlist.verses, savedVerseSlides];
+
+    FileUtils.savePlaylist(playlist.copyWith(verses: playlistVerses));
   }
 
   void _setMultipleScriptureSlides(Scripture scripture, int startVerse, int endVerse) {

@@ -28,7 +28,7 @@ class ScriptureSettings extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Playlist playlist = ref.read(playlistProvider);
+              Playlist playlist = ref.read(activePlaylistProvider);
 
               ref.read(projectionSlidesProvider.notifier).saveScriptureSlideToPlaylist(playlist);
             },

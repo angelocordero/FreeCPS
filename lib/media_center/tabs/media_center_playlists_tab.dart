@@ -5,20 +5,7 @@ import '../../core/providers_declaration.dart';
 import '../../models/playlist_model.dart';
 import '../media_center_providers.dart';
 
-final selectedPlaylistProvider = StateProvider.autoDispose<String>((ref) {
-  List<String> playlist = ref.watch(playlistsProvider).map((e) => e.fileName).toList();
-  String currentPlaylist = ref.watch(playlistProvider).fileName;
 
-  if (playlist.isNotEmpty) {
-    if (playlist.contains(currentPlaylist)) {
-      return currentPlaylist;
-    }
-
-    return playlist.first;
-  } else {
-    return '';
-  }
-});
 
 class MediaCenterPlaylistsTab extends ConsumerWidget {
   const MediaCenterPlaylistsTab({
@@ -71,11 +58,11 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
           Align(
             alignment: Alignment.bottomRight,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 String fileName = ref.read(selectedPlaylistProvider);
 
                 try {
-                  ref.read(playlistProvider.notifier).select(fileName);
+                  ref.read(activePlaylistProvider.notifier).select(fileName);
                   Navigator.pop(context);
                 } catch (e) {
                   //

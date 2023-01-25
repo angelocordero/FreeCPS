@@ -41,7 +41,7 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
   return VerseListControllerNotifier();
 });
 
-final playlistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
+final activePlaylistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
   return PlaylistNotifier();
 });
 

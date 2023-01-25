@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_compression/image_compression.dart';
 import 'package:path/path.dart';
 
+import '../models/playlist_model.dart';
 import 'constants.dart' as constants;
 import 'package:path/path.dart' as p;
 
@@ -69,5 +70,11 @@ class FileUtils {
 
   static Future<String> getPlaylistPath(String fileName) async {
     return p.join(await playlistsDirectory(), fileName);
+  }
+
+  static void savePlaylist(Playlist playlist) async {
+    String filePath = await getPlaylistPath(playlist.fileName);
+
+    File(filePath).writeAsStringSync(playlist.toJson());
   }
 }

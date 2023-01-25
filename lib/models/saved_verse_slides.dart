@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:freecps/models/verse_reference_model.dart';
 
 import 'scripture_reference_model.dart';
 import 'slide_model.dart';
@@ -51,7 +52,7 @@ class SavedVerseSlides {
         translationName: map['scriptureRef']['translationName'],
         book: map['scriptureRef']['book'],
         chapter: map['scriptureRef']['chapter'],
-        verse: (map['scriptureRef'] as ScriptureReference).verse,
+        verse: VerseReference(verseString: map['scriptureRef']['verseReference']['verseString']),
       ),
     );
   }
