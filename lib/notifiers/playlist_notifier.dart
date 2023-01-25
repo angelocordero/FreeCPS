@@ -55,10 +55,9 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
   select(String fileName) async {
     String fileDir = await FileUtils.getPlaylistPath(fileName);
 
-    //save selected playlist filename to hive database
-
     try {
       state = Playlist.fromJson(File(fileDir).readAsStringSync(), songsDir);
+      //save selected playlist filename to hive database
     } catch (e) {
       debugPrint(e.toString());
       state = Playlist.error();

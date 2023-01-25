@@ -58,23 +58,14 @@ class Song {
   }
 
   @override
-  int get hashCode {
-    return title.hashCode ^
-      artist.hashCode ^
-      lyrics.hashCode ^
-      fileName.hashCode;
-  }
-
-  
-
-  @override
   bool operator ==(covariant Song other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.title == title &&
-      other.artist == artist &&
-      mapEquals(other.lyrics, lyrics) &&
-      other.fileName == fileName;
+
+    return other.title == title && other.artist == artist && mapEquals(other.lyrics, lyrics) && other.fileName == fileName;
+  }
+
+  @override
+  int get hashCode {
+    return title.hashCode ^ artist.hashCode ^ lyrics.hashCode ^ fileName.hashCode;
   }
 }
