@@ -1,37 +1,71 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
+import 'package:freecps/core/file_utils.dart';
 
 import '../models/playlist_model.dart';
 
 class PlaylistNotifier extends StateNotifier<Playlist> {
   PlaylistNotifier() : super(Playlist.empty()) {
-    initPlaylist();
+    _init();
   }
 
-  initPlaylist() {
-    // get already selected playlist from hive database\
-    testPlaylist();
+  late String playlistDir;
+  late String songsDir;
+
+  _init() async {
+    playlistDir = await playlistsDirectory();
+    songsDir = await songsDirectory();
+
+    await testPlaylist();
+
+    // get already selected playlist from hive database
+    String? playlistFileName;
+
+    if (playlistFileName != null) {
+      await select(await FileUtils.getPlaylistPath(playlistFileName));
+    }
+
+    await _listen();
   }
 
-  changeCurrentPlaylist(String playlistPath) async {
-    String songsDir = await songsDirectory();
+  _listen() async {
+    String currentPlaylistPath = await FileUtils.getPlaylistPath(state.fileName);
 
-    state = Playlist.fromJson(jsonDecode(File(playlistPath).readAsStringSync()), songsDir);
+    Directory(playlistDir).watch().listen((event) async {
+      if (event is FileSystemDeleteEvent) {
+        if (event.path == await FileUtils.getPlaylistPath(state.fileName)) {
+          // handle if playlist is deleted
+          state = Playlist.empty();
+          // TODO reset playlist selected options indicator
+        }
+      }
+
+      if (event is FileSystemModifyEvent) {
+        if (event.path == currentPlaylistPath) {
+          //handle if playlist is modified
+          await select(state.fileName);
+        }
+      }
+    });
   }
 
-  testPlaylist() async {
+  select(String fileName) async {
+    String fileDir = await FileUtils.getPlaylistPath(fileName);
+
+    //save selected playlist filename to hive database
+
     try {
-      String songsDir = await songsDirectory();
-
-      Playlist playlist = Playlist.fromJson(File('/home/angelo/Dev/Flutter/freecps/media/playlist_template.json').readAsStringSync(), songsDir);
-      state = playlist;
+      state = Playlist.fromJson(File(fileDir).readAsStringSync(), songsDir);
     } catch (e) {
       debugPrint(e.toString());
       state = Playlist.error();
     }
+  }
+
+  testPlaylist() async {
+    await select(await FileUtils.getPlaylistPath('playlist_template.json'));
   }
 }

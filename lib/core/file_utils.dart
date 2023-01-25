@@ -66,5 +66,8 @@ class FileUtils {
 
     return p.join(dir, fileName);
   }
-}
 
+  static Future<String> getPlaylistPath(String fileName) async {
+    return p.join(await playlistsDirectory(), fileName);
+  }
+}

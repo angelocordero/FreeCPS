@@ -4,8 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:freecps/models/scripture_reference_model.dart';
-
+import 'scripture_reference_model.dart';
 import 'slide_model.dart';
 
 /// model for verses saved in playlist

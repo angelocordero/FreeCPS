@@ -7,7 +7,6 @@ import 'package:tuple/tuple.dart';
 
 String blackBackgroundFilePath = 'media/black.jpg';
 
-
 typedef VerseRange = Tuple2<int, int?>;
 
 Map<String, Color> catpuccinColorsSample = {
@@ -64,6 +63,10 @@ Future<String> videosDirectory() async {
 
 Future<String> playlistsDirectory() async {
   return p.join(await mediaDirectory(), 'playlists');
+}
+
+Future<String> getPlaylistPath(String fileName) async {
+  return p.join(await playlistsDirectory(), fileName);
 }
 
 List<String> superscriptMap = [
