@@ -17,7 +17,7 @@ class CustomPopupRoute<T> extends PageRoute<T> {
   bool get barrierDismissible => false;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => const Duration(milliseconds: 100);
 
   @override
   bool get maintainState => true;

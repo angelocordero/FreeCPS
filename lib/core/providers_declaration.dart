@@ -15,7 +15,7 @@ final liveProvider = StateProvider<bool>((ref) {
   return false;
 });
 
-final verseListCtrlKeyNotifier = StateProvider<bool>((ref) {
+final ctrlKeyNotifier = StateProvider<bool>((ref) {
   return false;
 });
 

@@ -77,4 +77,10 @@ class FileUtils {
 
     File(filePath).writeAsStringSync(playlist.toJson());
   }
+
+  static void addPhotoToPlaylist(Set<String> photos, Playlist playlist) async {
+    Set<String> list = {...playlist.media, ...photos};
+
+    savePlaylist(playlist.copyWith(media: list.toList()));
+  }
 }

@@ -5,8 +5,6 @@ import '../../core/providers_declaration.dart';
 import '../../models/playlist_model.dart';
 import '../media_center_providers.dart';
 
-
-
 class MediaCenterPlaylistsTab extends ConsumerWidget {
   const MediaCenterPlaylistsTab({
     Key? key,
@@ -14,7 +12,7 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Playlist> files = ref.watch(playlistsProvider);
+    List<Playlist> playlists = ref.watch(playlistsProvider);
 
     return Padding(
       padding: const EdgeInsets.all(30.0),
@@ -23,7 +21,7 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
         children: [
           Expanded(
             child: GridView.builder(
-              itemCount: files.length,
+              itemCount: playlists.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 mainAxisSpacing: 50,
@@ -32,7 +30,7 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
               ),
               itemBuilder: (context, index) {
                 String selectedFileName = ref.watch(selectedPlaylistProvider);
-                Playlist playlist = files[index];
+                Playlist playlist = playlists[index];
 
                 return GestureDetector(
                   onTap: () {
@@ -55,21 +53,30 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: ElevatedButton(
-              onPressed: () async {
-                String fileName = ref.read(selectedPlaylistProvider);
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  String fileName = ref.read(selectedPlaylistProvider);
 
-                try {
-                  ref.read(activePlaylistProvider.notifier).select(fileName);
-                  Navigator.pop(context);
-                } catch (e) {
-                  //
-                }
-              },
-              child: const Text('Select'),
-            ),
+                  try {
+                    ref.read(activePlaylistProvider.notifier).select(fileName);
+                    Navigator.pop(context);
+                  } catch (e) {
+                    //
+                  }
+                },
+                child: const Text('Select'),
+              ),
+              const SizedBox(
+                width: 50,
+              ),
+              ElevatedButton(
+                onPressed: () async {},
+                child: const Text('Import'),
+              ),
+            ],
           ),
         ],
       ),

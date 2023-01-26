@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/providers_declaration.dart';
+import 'package:path/path.dart';
 
 import '../../core/constants.dart' as constants;
 import '../../core/file_utils.dart';
@@ -15,16 +17,17 @@ class MediaCenterPhotosTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<File> files = ref.watch(photosProvider);
+    List<File> photos = ref.watch(photosProvider);
+    Set<String> selectedPhotos = ref.watch(selectedPhotoProvider);
 
-    return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
             child: GridView.builder(
-              itemCount: files.length,
+              itemCount: photos.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 mainAxisSpacing: 50,
@@ -32,13 +35,51 @@ class MediaCenterPhotosTab extends ConsumerWidget {
                 mainAxisExtent: 200,
               ),
               itemBuilder: (context, index) {
-                return Image.file(files[index]);
+                File photo = photos[index];
+                String fileName = basename(photo.path);
+
+                return GestureDetector(
+                  onTap: () {
+                    bool ctrlKey = ref.read(mediaCenterCtrlKeyNotifier);
+
+                    if (!ctrlKey) {
+                      ref.read(selectedPhotoProvider.notifier).state = {fileName};
+                    } else {
+                      ref.read(selectedPhotoProvider.notifier).update((state) => {...state, fileName});
+                    }
+                  },
+                  child: Card(
+                    shape: selectedPhotos.contains(fileName)
+                        ? const RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: Color(0xff1e66f5),
+                              width: 1.5,
+                            ),
+                          )
+                        : null,
+                    child: Image.file(
+                      photo,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: ElevatedButton(
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                FileUtils.addPhotoToPlaylist(selectedPhotos, ref.read(activePlaylistProvider));
+              },
+              child: const Text('Add To Playlist'),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
               onPressed: () async {
                 FilePickerResult? result = await FilePicker.platform.pickFiles(
                   allowMultiple: true,
@@ -49,14 +90,13 @@ class MediaCenterPhotosTab extends ConsumerWidget {
                 if (result == null) return;
 
                 await FileUtils.importPhotos(FileUtils.filePickerResultToFile(result));
-
-                //await ref.read(photosProvider.notifier).fetch();
               },
               child: const Text('Import'),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+        ref.watch(mediaCenterCtrlKeyNotifier) ? Container() : Container(),
+      ],
     );
   }
 }

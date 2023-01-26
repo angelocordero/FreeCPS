@@ -80,10 +80,10 @@ class MainWindow extends ConsumerWidget {
             ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: ref.read(scriptureProvider));
           } else if (event is RawKeyDownEvent && event.isKeyPressed(LogicalKeyboardKey.controlLeft) ||
               event.isKeyPressed(LogicalKeyboardKey.shiftLeft)) {
-            ref.read(verseListCtrlKeyNotifier.notifier).state = true;
+            ref.read(ctrlKeyNotifier.notifier).state = true;
             return;
           } else {
-            ref.read(verseListCtrlKeyNotifier.notifier).state = false;
+            ref.read(ctrlKeyNotifier.notifier).state = false;
           }
         },
         child: ResizableWidget(

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
 import 'package:freecps/core/file_utils.dart';
+import 'package:path/path.dart';
 
 import '../models/playlist_model.dart';
 
@@ -19,22 +20,19 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
     playlistDir = await playlistsDirectory();
     songsDir = await songsDirectory();
 
-    await testPlaylist();
+    //await testPlaylist();
 
     // get already selected playlist from hive database
-    String? playlistFileName;
+    String? playlistFileName = 'playlist_template.json';
 
-    if (playlistFileName != null) {
-      await select(await FileUtils.getPlaylistPath(playlistFileName));
-    }
+    await select(await FileUtils.getPlaylistPath(playlistFileName));
 
     await _listen();
   }
 
   _listen() async {
-    String currentPlaylistPath = await FileUtils.getPlaylistPath(state.fileName);
-
     Directory(playlistDir).watch().listen((event) async {
+
       if (event is FileSystemDeleteEvent) {
         if (event.path == await FileUtils.getPlaylistPath(state.fileName)) {
           // handle if playlist is deleted
@@ -44,7 +42,7 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
       }
 
       if (event is FileSystemModifyEvent) {
-        if (event.path == currentPlaylistPath) {
+        if (basename(event.path) == state.fileName) {
           //handle if playlist is modified
           await select(state.fileName);
         }

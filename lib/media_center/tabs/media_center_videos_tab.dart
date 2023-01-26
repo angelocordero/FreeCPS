@@ -16,12 +16,12 @@ class MediaCenterVideosTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<VideoData> files = ref.watch(videosProvider);
 
-    return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
             child: GridView.builder(
               itemCount: files.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -39,9 +39,20 @@ class MediaCenterVideosTab extends ConsumerWidget {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: ElevatedButton(
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+               
+              },
+              child: const Text('Add To Playlist'),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
               onPressed: () async {
                 FilePickerResult? result = await FilePicker.platform.pickFiles(
                   allowMultiple: true,
@@ -55,9 +66,9 @@ class MediaCenterVideosTab extends ConsumerWidget {
               },
               child: const Text('Import'),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 }

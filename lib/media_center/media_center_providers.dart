@@ -23,6 +23,14 @@ final playlistsProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylists
   return MediaCenterPlaylistsNotifier(playlistsDirectory(), songsDirectory());
 });
 
+final selectedPhotoProvider = StateProvider.autoDispose<Set<String>>((ref) {
+  return {};
+});
+
+final mediaCenterCtrlKeyNotifier = StateProvider.autoDispose<bool>((ref) {
+  return false;
+});
+
 final selectedPlaylistProvider = StateProvider.autoDispose<String>((ref) {
   List<String> playlist = ref.watch(playlistsProvider).map((e) => e.fileName).toList();
   String currentPlaylist = ref.watch(activePlaylistProvider).fileName;
