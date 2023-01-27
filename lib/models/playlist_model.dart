@@ -49,9 +49,13 @@ class Playlist {
       songs: List<Song>.from(
         fileNames.map(
           (fileName) {
-            return Song.fromJson(
-              File(p.join(songsDir, fileName)).readAsStringSync(),
-            );
+            try {
+              return Song.fromJson(
+                File(p.join(songsDir, fileName)).readAsStringSync(),
+              );
+            } catch (e) {
+              return Song.error();
+            }
           },
         ).toList(),
       ),
@@ -64,8 +68,6 @@ class Playlist {
   String toJson() => json.encode(toMap());
 
   factory Playlist.fromJson(String source, String songsDir) => Playlist.fromMap(json.decode(source) as Map<String, dynamic>, songsDir);
-
-  
 
   Playlist copyWith({
     String? title,
@@ -91,21 +93,16 @@ class Playlist {
   @override
   bool operator ==(covariant Playlist other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.title == title &&
-      other.fileName == fileName &&
-      listEquals(other.songs, songs) &&
-      listEquals(other.media, media) &&
-      listEquals(other.verses, verses);
+
+    return other.title == title &&
+        other.fileName == fileName &&
+        listEquals(other.songs, songs) &&
+        listEquals(other.media, media) &&
+        listEquals(other.verses, verses);
   }
 
   @override
   int get hashCode {
-    return title.hashCode ^
-      fileName.hashCode ^
-      songs.hashCode ^
-      media.hashCode ^
-      verses.hashCode;
+    return title.hashCode ^ fileName.hashCode ^ songs.hashCode ^ media.hashCode ^ verses.hashCode;
   }
 }

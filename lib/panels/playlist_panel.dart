@@ -5,6 +5,7 @@ import 'package:freecps/core/helper_functions.dart';
 import 'package:freecps/core/projection_utils.dart';
 import 'package:freecps/core/providers_declaration.dart';
 import 'package:freecps/models/saved_verse_slides.dart';
+import 'package:freecps/models/song_model.dart';
 
 import '../models/playlist_model.dart';
 
@@ -32,7 +33,9 @@ class PlaylistPanel extends ConsumerWidget {
                   (song) {
                     return GestureDetector(
                       onTap: () {
-                        ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: song);
+                        if (song.title != Song.error().title) {
+                          ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: song);
+                        }
                       },
                       child: Card(
                         child: ListTile(

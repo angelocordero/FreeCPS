@@ -16,6 +16,15 @@ class Song {
     required this.artist,
   });
 
+    factory Song.error() {
+    return Song(
+      title: 'Error in loading song',
+      lyrics: {},
+      fileName: '',
+      artist: '',
+    );
+  }
+
   Song copyWith({
     String? title,
     Map<String, List<dynamic>>? lyrics,

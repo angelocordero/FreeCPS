@@ -5,6 +5,7 @@ import 'package:image_compression/image_compression.dart';
 import 'package:path/path.dart';
 
 import '../models/playlist_model.dart';
+import '../models/song_model.dart';
 import 'constants.dart' as constants;
 import 'package:path/path.dart' as p;
 
@@ -58,6 +59,17 @@ class FileUtils {
     }
   }
 
+  static void importSongs(List<File> files) async {
+    String dir = await constants.songsDirectory();
+
+    for (File file in files) {
+      String filePath = p.join(dir, basename(file.path));
+
+      await file.copy(filePath);
+    }
+  }
+
+
   static List<File> filePickerResultToFile(FilePickerResult results) {
     return results.paths.map((path) => File(path!)).toList();
   }
@@ -78,9 +90,15 @@ class FileUtils {
     File(filePath).writeAsStringSync(playlist.toJson());
   }
 
-  static void addPhotoToPlaylist(Set<String> photos, Playlist playlist) async {
-    Set<String> list = {...playlist.media, ...photos};
+  static void addMediaToPlaylist(Set<String> media, Playlist playlist) async {
+    Set<String> list = {...playlist.media, ...media};
 
     savePlaylist(playlist.copyWith(media: list.toList()));
+  }
+
+  static void addSongToPlaylist(Set<Song> songs, Playlist playlist) {
+    Set<Song> list = {...playlist.songs, ...songs};
+
+    savePlaylist(playlist.copyWith(songs: list.toList()));
   }
 }

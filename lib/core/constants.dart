@@ -29,9 +29,9 @@ enum SlideType {
 
 List<String> videoFileExtensions = ['mp4', 'mov'];
 List<String> photoFileExtensions = ['jpg', 'jpeg', 'png'];
-String bibleFileExtenstion = 'cpsb';
-String songFileExtension = 'cpss';
-String playlistFileExtension = 'cpsp';
+List<String> bibleFileExtenstion = ['cpsb'];
+List<String> songFileExtension = ['cpss'];
+List<String> playlistFileExtension = ['cpsp'];
 
 Future<String> appDirectory() async {
   return await getApplicationSupportDirectory().then((value) => value.path);

@@ -31,7 +31,7 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
   }
 
   _listen() async {
-    Directory(playlistDir).watch().listen((event) async {
+    Directory(playlistDir).watch(recursive: true).listen((event) async {
 
       if (event is FileSystemDeleteEvent) {
         if (event.path == await FileUtils.getPlaylistPath(state.fileName)) {

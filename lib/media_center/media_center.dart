@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/media_center/tabs/media_center_playlists_tab.dart';
 
 import 'media_center_providers.dart';
 import 'tabs/media_center_photos_tab.dart';
+import 'tabs/media_center_playlists_tab.dart';
+import 'tabs/media_center_songs_tab.dart';
 import 'tabs/media_center_videos_tab.dart';
 
 class MediaCenter extends ConsumerWidget {
@@ -37,6 +38,7 @@ class MediaCenter extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  ref.watch(mediaCenterCtrlKeyNotifier) ? Container() : Container(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -68,9 +70,7 @@ class MediaCenter extends ConsumerWidget {
                         MediaCenterPlaylistsTab(),
                         MediaCenterPhotosTab(),
                         MediaCenterVideosTab(),
-                        Center(
-                          child: Text('Songs'),
-                        ),
+                        MediaCenterSongsTab(),
                         Center(
                           child: Text('Bible'),
                         ),
