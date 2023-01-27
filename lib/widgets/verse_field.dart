@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/providers_declaration.dart';
-import 'package:freecps/models/scripture_model.dart';
 
 import '../core/input_formatters.dart';
+import '../core/providers_declaration.dart';
+import '../models/scripture_model.dart';
 import '../notifiers/scripture_model_notifier.dart';
 
 class VerseField extends ConsumerWidget {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/projection_utils.dart';
-import 'package:freecps/core/providers_declaration.dart';
+
+import '../core/projection_utils.dart';
+import '../core/providers_declaration.dart';
 
 class ProjectionControls extends ConsumerWidget {
   const ProjectionControls({super.key});

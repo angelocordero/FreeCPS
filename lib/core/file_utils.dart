@@ -2,13 +2,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:image_compression/image_compression.dart';
+import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
 import '../models/playlist_model.dart';
 import '../models/song_model.dart';
 import 'constants.dart' as constants;
-import 'package:path/path.dart' as p;
-
 import 'constants.dart';
 
 class FileUtils {
@@ -68,7 +67,6 @@ class FileUtils {
       await file.copy(filePath);
     }
   }
-
 
   static List<File> filePickerResultToFile(FilePickerResult results) {
     return results.paths.map((path) => File(path!)).toList();

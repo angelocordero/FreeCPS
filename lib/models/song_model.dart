@@ -2,13 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Song {
-  String title;
-  String artist;
-  Map<String, List<dynamic>> lyrics;
-  String fileName;
-
   Song({
     required this.title,
     required this.lyrics,
@@ -16,13 +10,46 @@ class Song {
     required this.artist,
   });
 
-    factory Song.error() {
+  String artist;
+  String fileName;
+  Map<String, List<dynamic>> lyrics;
+  String title;
+
+  factory Song.error() {
     return Song(
       title: 'Error in loading song',
       lyrics: {},
       fileName: '',
       artist: '',
     );
+  }
+
+  factory Song.fromJson(String source) => Song.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory Song.fromMap(Map<String, dynamic> map) {
+    return Song(
+      title: map['title'] as String,
+      lyrics: Map<String, List<dynamic>>.from(map['lyrics']),
+      fileName: map['fileName'] as String,
+      artist: map['artist'] as String,
+    );
+  }
+
+  @override
+  bool operator ==(covariant Song other) {
+    if (identical(this, other)) return true;
+
+    return other.title == title && other.artist == artist && mapEquals(other.lyrics, lyrics) && other.fileName == fileName;
+  }
+
+  @override
+  int get hashCode {
+    return title.hashCode ^ artist.hashCode ^ lyrics.hashCode ^ fileName.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Song(title: $title, artist: $artist, lyrics: $lyrics, fileName: $fileName)';
   }
 
   Song copyWith({
@@ -48,33 +75,5 @@ class Song {
     };
   }
 
-  factory Song.fromMap(Map<String, dynamic> map) {
-    return Song(
-      title: map['title'] as String,
-      lyrics: Map<String, List<dynamic>>.from(map['lyrics']),
-      fileName: map['fileName'] as String,
-      artist: map['artist'] as String,
-    );
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory Song.fromJson(String source) => Song.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'Song(title: $title, artist: $artist, lyrics: $lyrics, fileName: $fileName)';
-  }
-
-  @override
-  bool operator ==(covariant Song other) {
-    if (identical(this, other)) return true;
-
-    return other.title == title && other.artist == artist && mapEquals(other.lyrics, lyrics) && other.fileName == fileName;
-  }
-
-  @override
-  int get hashCode {
-    return title.hashCode ^ artist.hashCode ^ lyrics.hashCode ^ fileName.hashCode;
-  }
 }

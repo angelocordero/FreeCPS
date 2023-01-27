@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/notifiers/scripture_model_notifier.dart';
 
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
+import '../notifiers/scripture_model_notifier.dart';
 
 class TranslationPicker extends ConsumerWidget {
   const TranslationPicker({Key? key}) : super(key: key);

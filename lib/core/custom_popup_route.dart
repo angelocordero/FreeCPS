@@ -20,7 +20,7 @@ class CustomPopupRoute<T> extends PageRoute<T> {
   Duration get transitionDuration => const Duration(milliseconds: 100);
 
   @override
-  bool get maintainState => true;
+  bool get maintainState => false;
 
   @override
   Color get barrierColor => Colors.black54;

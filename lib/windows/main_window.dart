@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/projection_utils.dart';
-import 'package:freecps/core/providers_declaration.dart';
-
-import 'package:freecps/media_center/media_center.dart';
-import 'package:freecps/panels/playlist_panel.dart';
-import 'package:freecps/panels/projection_controls.dart';
-import 'package:freecps/panels/scripture_settings.dart';
-
-import 'package:freecps/panels/slides_panel.dart';
-import 'package:freecps/panels/verses_list.dart';
 import 'package:resizable_widget/resizable_widget.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 
-import '../panels/scripture_picker.dart';
 import '../core/custom_popup_route.dart';
+import '../core/projection_utils.dart';
+import '../core/providers_declaration.dart';
+import '../media_center/media_center.dart';
+import '../panels/playlist_panel.dart';
+import '../panels/projection_controls.dart';
+import '../panels/scripture_picker.dart';
+import '../panels/scripture_settings.dart';
+import '../panels/slides_panel.dart';
+import '../panels/verses_list.dart';
 
 class MainWindow extends ConsumerWidget {
   const MainWindow({super.key});

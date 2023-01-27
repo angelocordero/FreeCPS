@@ -15,9 +15,9 @@ class VerseListTile extends ConsumerWidget {
   }) : super(key: key);
 
   final int? endVerse;
+  final int index;
   final int startVerse;
   final List<Verse> verseList;
-  final int index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

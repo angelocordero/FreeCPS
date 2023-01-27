@@ -1,7 +1,7 @@
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 
 class ProjectionUtils {
-  static Future<void> methodChannel({required String methodName, required String arguments, required bool isLive}) async {
+  static Future<void> methodChannel({required String methodName, String? arguments, required bool isLive}) async {
     if (!isLive) return;
 
     int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
@@ -12,39 +12,29 @@ class ProjectionUtils {
   static Future<void> clearSlide(bool isLive) async {
     if (!isLive) return;
 
-    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-    DesktopMultiWindow.invokeMethod(projectionWindowID, 'clearSlide');
+    await methodChannel(methodName: 'clearSlide', isLive: isLive);
   }
 
   static Future<void> showSlide(String arguments, bool isLive) async {
     if (!isLive) return;
 
-    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-    DesktopMultiWindow.invokeMethod(projectionWindowID, 'showSlide', arguments);
+    await methodChannel(methodName: 'showSlide', arguments: arguments, isLive: isLive);
   }
 
   static Future<void> setBackground(String filePath, bool isLive) async {
     if (!isLive) return;
 
-    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-    DesktopMultiWindow.invokeMethod(projectionWindowID, 'setBackground', filePath);
+    await methodChannel(methodName: 'setBackground', arguments: filePath, isLive: isLive);
   }
 
   static Future<void> clearBackground(bool isLive) async {
     if (!isLive) return;
 
-    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-    DesktopMultiWindow.invokeMethod(projectionWindowID, 'clearBackground');
+    await methodChannel(methodName: 'clearBackground', isLive: isLive);
   }
 
   static Future<void> close() async {
-    int projectionWindowID = await DesktopMultiWindow.getAllSubWindowIds().then((value) => value.first);
-
-    DesktopMultiWindow.invokeMethod(projectionWindowID, 'close');
+    await methodChannel(methodName: 'showSlide', isLive: true);
   }
 
   static void open() {

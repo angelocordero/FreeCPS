@@ -4,8 +4,9 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freecps/widgets/projection_slide_widget.dart';
 import 'package:window_manager/window_manager.dart';
+
+import '../widgets/projection_slide_widget.dart';
 
 class ProjectionWindow extends StatefulWidget {
   const ProjectionWindow({super.key});
@@ -52,6 +53,13 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   }
 
   @override
+  void dispose() {
+    player.dispose();
+    windowManager.close();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     player = Player(id: 1);
     player.setPlaylistMode(PlaylistMode.loop);
@@ -83,13 +91,6 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     );
 
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    player.dispose();
-    windowManager.close();
-    super.dispose();
   }
 
   void clearBackground() {

@@ -2,21 +2,15 @@
 import 'dart:convert';
 
 class Verse {
-  String text;
-  int num;
-
-  
   Verse({
     required this.text,
     required this.num,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'text': text,
-      'num': num,
-    };
-  }
+  int num;
+  String text;
+
+  factory Verse.fromJson(String source) => Verse.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory Verse.fromMap(Map<String, dynamic> map) {
     return Verse(
@@ -25,7 +19,12 @@ class Verse {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'text': text,
+      'num': num,
+    };
+  }
 
-  factory Verse.fromJson(String source) => Verse.fromMap(json.decode(source) as Map<String, dynamic>);
+  String toJson() => json.encode(toMap());
 }

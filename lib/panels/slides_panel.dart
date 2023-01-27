@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/constants.dart';
-import 'package:freecps/core/providers_declaration.dart';
-import 'package:freecps/widgets/scripture_slide_widget.dart';
-import 'package:freecps/widgets/song_slide_widget.dart';
 
+import '../core/constants.dart';
+import '../core/providers_declaration.dart';
 import '../models/slide_model.dart';
+import '../widgets/scripture_slide_widget.dart';
+import '../widgets/song_slide_widget.dart';
 
 class SlidesPanel extends ConsumerWidget {
   const SlidesPanel({super.key});
@@ -52,7 +52,7 @@ class SlidesPanel extends ConsumerWidget {
                   ),
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: ()  {
+                      onTap: () {
                         ref.read(projectedSlideNotifier.notifier).click(index);
                         focusNode.requestFocus();
                       },

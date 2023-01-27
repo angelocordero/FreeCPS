@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/constants.dart';
-import 'package:freecps/core/file_utils.dart';
 import 'package:path/path.dart';
 
+import '../core/constants.dart';
+import '../core/file_utils.dart';
 import '../models/playlist_model.dart';
 
 class PlaylistNotifier extends StateNotifier<Playlist> {
@@ -16,11 +16,21 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
   late String playlistDir;
   late String songsDir;
 
+  select(String fileName) async {
+    String fileDir = await FileUtils.getPlaylistPath(fileName);
+
+    try {
+      state = Playlist.fromJson(File(fileDir).readAsStringSync(), songsDir);
+      //TODO save selected playlist filename to hive database
+    } catch (e) {
+      debugPrint(e.toString());
+      state = Playlist.error();
+    }
+  }
+
   _init() async {
     playlistDir = await playlistsDirectory();
     songsDir = await songsDirectory();
-
-    //await testPlaylist();
 
     // get already selected playlist from hive database
     String? playlistFileName = 'playlist_template.json';
@@ -32,7 +42,6 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
 
   _listen() async {
     Directory(playlistDir).watch(recursive: true).listen((event) async {
-
       if (event is FileSystemDeleteEvent) {
         if (event.path == await FileUtils.getPlaylistPath(state.fileName)) {
           // handle if playlist is deleted
@@ -48,21 +57,5 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
         }
       }
     });
-  }
-
-  select(String fileName) async {
-    String fileDir = await FileUtils.getPlaylistPath(fileName);
-
-    try {
-      state = Playlist.fromJson(File(fileDir).readAsStringSync(), songsDir);
-      //save selected playlist filename to hive database
-    } catch (e) {
-      debugPrint(e.toString());
-      state = Playlist.error();
-    }
-  }
-
-  testPlaylist() async {
-    await select(await FileUtils.getPlaylistPath('playlist_template.json'));
   }
 }

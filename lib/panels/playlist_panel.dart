@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/file_utils.dart';
-import 'package:freecps/core/helper_functions.dart';
-import 'package:freecps/core/projection_utils.dart';
-import 'package:freecps/core/providers_declaration.dart';
-import 'package:freecps/models/saved_verse_slides.dart';
-import 'package:freecps/models/song_model.dart';
 
+import '../core/providers_declaration.dart';
 import '../models/playlist_model.dart';
+import '../widgets/playlist_media_expansion_tile.dart';
+import '../widgets/playlist_songs_expansion_tile.dart';
+import '../widgets/playlist_verses_expansion_tile.dart';
 
 class PlaylistPanel extends ConsumerWidget {
   const PlaylistPanel({super.key});
@@ -25,78 +23,11 @@ class PlaylistPanel extends ConsumerWidget {
           children: [
             Text(playlist.title),
             const Divider(),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: const Text('Songs'),
-              children: [
-                ...playlist.songs.map(
-                  (song) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (song.title != Song.error().title) {
-                          ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: song);
-                        }
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(song.title),
-                        ),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
+            const PlaylistSongsExpansionTile(),
             const Divider(),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: const Text('Verses'),
-              children: [
-                ...playlist.verses.map(
-                  (SavedVerseSlides savedVerseSlides) {
-                    String displayString = scriptureRefToRefString(savedVerseSlides.scriptureRef);
-
-                    return GestureDetector(
-                      onTap: () async {
-                        ref.read(projectionSlidesProvider.notifier).generateSavedVerseSlides(savedVerseSlides);
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(displayString),
-                        ),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
+            const PlaylistVersesExpansionTile(),
             const Divider(),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: const Text('Media'),
-              children: [
-                ...playlist.media.map(
-                  (media) {
-                    return GestureDetector(
-                      onTap: () async {
-                        try {
-                          String filePath = await FileUtils.getVideoFilePath(media);
-                          bool isLive = ref.read(liveProvider);
-                          await ProjectionUtils.setBackground(filePath, isLive);
-                        } catch (e) {
-                          //
-                        }
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(media),
-                        ),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
+            const PlaylistMediaExpansionTile(),
           ],
         ),
       ),

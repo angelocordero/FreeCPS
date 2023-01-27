@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 class ProjectionTextWidget extends StatelessWidget {
   const ProjectionTextWidget({super.key, required this.text, required this.reference});
 
-  final String text;
   final String reference;
+  final String text;
 
   @override
   Widget build(BuildContext context) {

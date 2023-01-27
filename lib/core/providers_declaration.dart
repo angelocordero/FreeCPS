@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/notifiers/playlist_notifier.dart';
-import 'package:freecps/notifiers/projected_slide_notifier.dart';
-import 'package:freecps/notifiers/verse_list_controller_notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
 import '../models/playlist_model.dart';
 import '../models/scripture_model.dart';
-import '../models/slide_model.dart';
-import '../notifiers/scripture_model_notifier.dart';
-
 import '../models/scripture_reference_model.dart';
+import '../models/slide_model.dart';
+import '../notifiers/playlist_notifier.dart';
+import '../notifiers/projected_slide_notifier.dart';
+import '../notifiers/scripture_model_notifier.dart';
 import '../notifiers/slides_notifier.dart';
+import '../notifiers/verse_list_controller_notifier.dart';
 
 final liveProvider = StateProvider<bool>((ref) {
   return false;
@@ -26,7 +26,6 @@ final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((r
 });
 
 final projectionSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {
-
   return SlidesNotifier(ref);
 });
 

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/providers_declaration.dart';
 
+import '../core/providers_declaration.dart';
+
+
+/// Slide widget for scripture in slide panel
 class ScriptureSlideWidget extends ConsumerWidget {
   const ScriptureSlideWidget({super.key, required this.text, required this.index});
 
-  final String text;
   final int index;
+  final String text;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

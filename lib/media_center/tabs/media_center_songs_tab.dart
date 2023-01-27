@@ -1,10 +1,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/providers_declaration.dart';
 
 import '../../core/constants.dart' as constants;
 import '../../core/file_utils.dart';
+import '../../core/providers_declaration.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
 
@@ -85,7 +85,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
 
                 if (result == null) return;
 
-                 FileUtils.importSongs(FileUtils.filePickerResultToFile(result));
+                FileUtils.importSongs(FileUtils.filePickerResultToFile(result));
               },
               child: const Text('Import'),
             ),

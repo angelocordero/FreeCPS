@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/scripture_model.dart';
-import 'package:freecps/models/verse_reference_model.dart';
 
+import '../models/scripture_model.dart';
 import '../models/verse_model.dart';
+import '../models/verse_reference_model.dart';
 
 /// Notifier that holds all data of the selected scripture
 class ScriptureNotifier extends StateNotifier<Scripture> {
@@ -17,7 +17,6 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
   List<Map<String, dynamic>>? _bookData;
   Set<String>? _books;
   int? _chapterMax;
-
   Map<String, dynamic>? _translationData;
   int? _verseMax;
 

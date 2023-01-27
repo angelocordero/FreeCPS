@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/playlist_model.dart';
 
 import '../core/providers_declaration.dart';
+import '../models/playlist_model.dart';
 import '../models/scripture_model.dart';
 
 class ScriptureSettings extends ConsumerWidget {

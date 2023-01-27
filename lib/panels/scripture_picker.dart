@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:freecps/widgets/chapter_field.dart';
-import 'package:freecps/widgets/verse_field.dart';
 
 import '../widgets/book_autocomplete_field.dart';
+import '../widgets/chapter_field.dart';
 import '../widgets/translation_picker.dart';
+import '../widgets/verse_field.dart';
 
 class ScripturePickerPanel extends StatelessWidget {
   const ScripturePickerPanel({super.key});

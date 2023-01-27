@@ -4,8 +4,6 @@ import 'dart:convert';
 import '../core/constants.dart';
 
 class VerseReference {
-  String verseString = '1';
-  VerseRange verseRange = const VerseRange(1, null);
   VerseReference({
     required this.verseString,
   }) {
@@ -19,19 +17,20 @@ class VerseReference {
     verseRange = VerseRange(int.tryParse(num[0]) ?? 1, null);
   }
 
+  VerseRange verseRange = const VerseRange(1, null);
+  String verseString = '1';
+
   VerseReference.defaultVerse() {
     verseRange = const VerseRange(1, null);
   }
 
-  VerseReference copyWith({
-    String? verseString,
-  }) {
+  factory VerseReference.fromJson(String source) => VerseReference.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory VerseReference.fromMap(Map<String, dynamic> map) {
     return VerseReference(
-      verseString: verseString ?? this.verseString,
+      verseString: map['verseString'] as String,
     );
   }
-
-  String? toDisplayString() => verseString;
 
   @override
   bool operator ==(covariant VerseReference other) {
@@ -43,22 +42,24 @@ class VerseReference {
   @override
   int get hashCode => verseString.hashCode;
 
+  @override
+  String toString() => 'VerseReference(verseString: $verseString)';
+
+  VerseReference copyWith({
+    String? verseString,
+  }) {
+    return VerseReference(
+      verseString: verseString ?? this.verseString,
+    );
+  }
+
+  String? toDisplayString() => verseString;
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'verseString': verseString,
     };
   }
 
-  factory VerseReference.fromMap(Map<String, dynamic> map) {
-    return VerseReference(
-      verseString: map['verseString'] as String,
-    );
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory VerseReference.fromJson(String source) => VerseReference.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() => 'VerseReference(verseString: $verseString)';
 }

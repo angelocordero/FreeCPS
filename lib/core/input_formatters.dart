@@ -69,20 +69,3 @@ class VerseInputFormatter extends TextInputFormatter {
     }
   }
 }
-
-/*
- kung 1 verse lng
- return verse
-
-  first should be greater than 0
-  first should be less than max
-  
-  if may second, first should be less than second
-  second should be greater than first
-
-second should be less than max
-
-
-
-
-*/
