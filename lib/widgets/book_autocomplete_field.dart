@@ -4,22 +4,25 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
-import '../notifiers/scripture_model_notifier.dart';
+import '../notifiers/scripture_notifier.dart';
 
 class BookAutocompleteField extends ConsumerWidget {
   const BookAutocompleteField({super.key});
-  
+
   static final TextEditingController _controller = TextEditingController();
   static final FocusNode _focusNode = FocusNode();
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Scripture scripture = ref.watch(scriptureProvider);
     final ScriptureNotifier scriptureNotifier = ref.watch(scriptureProvider.notifier);
 
-    _controller.text = scripture.scriptureRef.book.toString();
-    _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+    if (scripture.scriptureRef.book == null) {
+      _controller.text = '';
+    } else {
+      _controller.text = scripture.scriptureRef.book.toString();
+      _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+    }
 
     _focusNode.addListener(
       () {

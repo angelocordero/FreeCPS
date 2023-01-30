@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/input_formatters.dart';
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
-import '../notifiers/scripture_model_notifier.dart';
+import '../notifiers/scripture_notifier.dart';
 
 class VerseField extends ConsumerWidget {
   const VerseField({super.key});
@@ -17,7 +17,7 @@ class VerseField extends ConsumerWidget {
     Scripture scripture = ref.watch(scriptureProvider);
     ScriptureNotifier scriptureNotifer = ref.watch(scriptureProvider.notifier);
 
-    _controller.text = scripture.scriptureRef.verse?.toDisplayString() ?? '1';
+    _controller.text = scripture.scriptureRef.verse?.toDisplayString() ?? '';
     _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
 
     _focusNode.addListener(

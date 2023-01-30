@@ -3,11 +3,10 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../models/playlist_model.dart';
 import '../models/scripture_model.dart';
-import '../models/scripture_reference_model.dart';
 import '../models/slide_model.dart';
 import '../notifiers/playlist_notifier.dart';
 import '../notifiers/projected_slide_notifier.dart';
-import '../notifiers/scripture_model_notifier.dart';
+import '../notifiers/scripture_notifier.dart';
 import '../notifiers/slides_notifier.dart';
 import '../notifiers/verse_list_controller_notifier.dart';
 
@@ -20,9 +19,11 @@ final ctrlKeyNotifier = StateProvider<bool>((ref) {
 });
 
 final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((ref) {
-  return ScriptureNotifier(const Scripture(
-    scriptureRef: ScriptureReference(),
-  ));
+  return ScriptureNotifier(ref);
+});
+
+final biblesDirectoryProvider = StateProvider<String?>((ref) {
+  return null;
 });
 
 final projectionSlidesProvider = StateNotifierProvider<SlidesNotifier, List<Slide>>((ref) {

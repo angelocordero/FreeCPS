@@ -4,22 +4,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/input_formatters.dart';
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
-import '../notifiers/scripture_model_notifier.dart';
+import '../notifiers/scripture_notifier.dart';
 
 class ChapterField extends ConsumerWidget {
   const ChapterField({super.key});
-  
+
   static final TextEditingController _controller = TextEditingController();
   static final FocusNode _focusNode = FocusNode();
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Scripture scripture = ref.watch(scriptureProvider);
     ScriptureNotifier scriptureNotifier = ref.watch(scriptureProvider.notifier);
 
-    _controller.text = scripture.scriptureRef.chapter.toString();
-    _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+    if (scripture.scriptureRef.chapter == null) {
+      _controller.text = '';
+    } else {
+      _controller.text = scripture.scriptureRef.chapter.toString();
+      _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+    }
 
     _focusNode.addListener(
       () {

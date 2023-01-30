@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
-import '../notifiers/scripture_model_notifier.dart';
+import '../notifiers/scripture_notifier.dart';
 
 class TranslationPicker extends ConsumerWidget {
   const TranslationPicker({Key? key}) : super(key: key);

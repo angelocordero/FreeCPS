@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/media_center/notifiers/bibles_notifier.dart';
 
 import '../core/constants.dart';
 import '../core/providers_declaration.dart';
@@ -27,6 +28,10 @@ final playlistsProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylists
 
 final songsProvider = StateNotifierProvider.autoDispose<SongsNotifier, List<Song>>((ref) {
   return SongsNotifier(songsDirectory());
+});
+
+final biblesProvider = StateNotifierProvider.autoDispose<BiblesNotifier, List<BibleData>>((ref) {
+  return BiblesNotifier(biblesDirectory());
 });
 
 final mediaCenterCtrlKeyNotifier = StateProvider.autoDispose<bool>((ref) {

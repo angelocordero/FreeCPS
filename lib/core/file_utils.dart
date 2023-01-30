@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:freecps/core/bible_parser.dart';
 import 'package:image_compression/image_compression.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
@@ -11,13 +12,12 @@ import 'constants.dart' as constants;
 import 'constants.dart';
 
 class FileUtils {
-  static importBible() {}
-
   static initializeDirectories() async {
     Directory('${await photosDirectory()}/thumbnails').create(recursive: true);
     Directory('${await videosDirectory()}/thumbnails').create(recursive: true);
     Directory(await songsDirectory()).create(recursive: false);
     Directory(await playlistsDirectory()).create(recursive: false);
+    Directory(await biblesDirectory()).create(recursive: false);
   }
 
   static Future<void> importPhotos(List<File> files) async {
@@ -65,6 +65,12 @@ class FileUtils {
       String filePath = p.join(dir, basename(file.path));
 
       await file.copy(filePath);
+    }
+  }
+
+  static void importBibles(List<File> files) async {
+    for (File file in files) {
+      BibleParser(file.path).parse();
     }
   }
 

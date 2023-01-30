@@ -8,13 +8,12 @@ import 'windows/projection_window.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) {
-// TODO: put in initialize window before main window?
-  FileUtils.initializeDirectories();
   WidgetsFlutterBinding.ensureInitialized();
-  DartVLC.initialize();
 
   if (args.isEmpty) {
     // TODO: put minimum size in main window
+    // TODO: put in initialize window before main window?
+    FileUtils.initializeDirectories();
     runApp(
       ProviderScope(
         child: MaterialApp(

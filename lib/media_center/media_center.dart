@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/media_center/tabs/media_center_bibles_tab.dart';
 
 import 'media_center_providers.dart';
 import 'tabs/media_center_photos_tab.dart';
@@ -71,9 +72,7 @@ class MediaCenter extends ConsumerWidget {
                         MediaCenterPhotosTab(),
                         MediaCenterVideosTab(),
                         MediaCenterSongsTab(),
-                        Center(
-                          child: Text('Bible'),
-                        ),
+                        MediaCenterBiblesTab(),
                       ],
                     ),
                   ),
