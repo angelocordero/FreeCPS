@@ -55,6 +55,7 @@ dependencies:
   resizable_widget:
         git:
             url: https://github.com/angelocordero/resizable_widget.git
+  nanoid: ^1.0.0
 
 
 dev_dependencies:

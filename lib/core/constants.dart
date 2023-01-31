@@ -8,6 +8,8 @@ String blackBackgroundFilePath = 'media/black.jpg';
 
 typedef VerseRange = Tuple2<int, int?>;
 
+const String customIdAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
 Map<String, Color> catpuccinColorsSample = {
   'Verse 1': const Color(0xffdd7878),
   'Verse 2': const Color(0xffea76cb),

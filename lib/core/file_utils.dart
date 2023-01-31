@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:freecps/core/bible_parser.dart';
 import 'package:image_compression/image_compression.dart';
+import 'package:nanoid/nanoid.dart';
 import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
@@ -91,7 +92,11 @@ class FileUtils {
   static void savePlaylist(Playlist playlist) async {
     String filePath = await getPlaylistPath(playlist.fileName);
 
-    File(filePath).writeAsStringSync(playlist.toJson());
+    try {
+      File(filePath).writeAsStringSync(playlist.toJson());
+    } catch (e) {
+      //
+    }
   }
 
   static void addMediaToPlaylist(Set<String> media, Playlist playlist) async {
@@ -104,5 +109,11 @@ class FileUtils {
     Set<Song> list = {...playlist.songs, ...songs};
 
     savePlaylist(playlist.copyWith(songs: list.toList()));
+  }
+
+  static void addNewPlaylist() async {
+    String fileName = '${customAlphabet(customIdAlphabet, 30)}.cpss';
+
+    File(p.join(await playlistsDirectory(), fileName)).writeAsStringSync(Playlist.addNew(fileName).toJson());
   }
 }

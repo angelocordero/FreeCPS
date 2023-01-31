@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/media_center/notifiers/bibles_notifier.dart';
+import 'package:freecps/media_center/notifiers/media_center_playlist_preview_notifier.dart';
 
 import '../core/constants.dart';
 import '../core/providers_declaration.dart';
@@ -50,9 +52,9 @@ final selectedSongProvider = StateProvider.autoDispose<Set<Song>>((ref) {
   return {};
 });
 
-final selectedPlaylistProvider = StateProvider.autoDispose<String>((ref) {
-  List<String> playlist = ref.watch(playlistsProvider).map((e) => e.fileName).toList();
-  String currentPlaylist = ref.watch(activePlaylistProvider).fileName;
+final selectedPlaylistProvider = StateProvider.autoDispose<Playlist>((ref) {
+  List<Playlist> playlist = ref.watch(playlistsProvider);
+  Playlist currentPlaylist = ref.watch(activePlaylistProvider);
 
   if (playlist.isNotEmpty) {
     if (playlist.contains(currentPlaylist)) {
@@ -61,6 +63,16 @@ final selectedPlaylistProvider = StateProvider.autoDispose<String>((ref) {
 
     return playlist.first;
   } else {
-    return '';
+    return Playlist.empty();
+  }
+});
+
+final playlistPreviewProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylistPreviewNotifier, Widget>((ref) {
+  List<Song> songs = ref.watch(selectedPlaylistProvider).songs;
+
+  if (songs.isEmpty) {
+    return MediaCenterPlaylistPreviewNotifier(null);
+  } else {
+    return MediaCenterPlaylistPreviewNotifier(songs.first);
   }
 });

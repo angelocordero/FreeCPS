@@ -34,7 +34,7 @@ class ProjectionUtils {
   }
 
   static Future<void> close() async {
-    await methodChannel(methodName: 'showSlide', isLive: true);
+    await methodChannel(methodName: 'close', isLive: true);
   }
 
   static void open() {

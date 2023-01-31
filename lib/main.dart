@@ -9,7 +9,7 @@ import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
-
+  DartVLC.initialize();
   if (args.isEmpty) {
     // TODO: put minimum size in main window
     // TODO: put in initialize window before main window?
@@ -29,7 +29,6 @@ void main(List<String> args) {
 
 void runProjectionWindow() {
   windowManager.ensureInitialized();
-  DartVLC.initialize();
 
   WindowOptions windowOptions = const WindowOptions(
     fullScreen: true,

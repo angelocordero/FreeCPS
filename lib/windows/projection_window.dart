@@ -26,6 +26,8 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        floatingActionButton: FloatingActionButton(onPressed: () {}),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
         body: SizedBox.expand(
           child: Stack(
             children: [

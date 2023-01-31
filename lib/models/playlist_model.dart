@@ -26,6 +26,10 @@ class Playlist {
     return Playlist(title: 'No playlist selected', songs: [], media: [], verses: [], fileName: '');
   }
 
+  factory Playlist.addNew(String fileName) {
+    return Playlist(title: 'New Playlist', songs: [], media: [], verses: [], fileName: fileName);
+  }
+
   factory Playlist.error() {
     return Playlist(title: 'Error in loading playlist', songs: [], media: [], verses: [], fileName: '');
   }
