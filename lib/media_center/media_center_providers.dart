@@ -80,7 +80,7 @@ final playlistPreviewProvider = StateNotifierProvider.autoDispose<MediaCenterPla
 });
 
 final playlistPreviewSelectedObjectProvider = StateProvider.autoDispose<dynamic>((ref) {
-  List<Song> songs = ref.read(previewedPlaylistProvider.select((value) => value.songs));
+  List<Song> songs = ref.watch(previewedPlaylistProvider.select((value) => value.songs));
   if (songs.isNotEmpty) {
     return songs.first;
   }

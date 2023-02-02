@@ -20,6 +20,7 @@ class SongsNotifier extends StateNotifier<List<Song>> {
         );
       },
     ).toList();
+     state.sort((a, b) => a.title.compareTo(b.title));
   }
 
   _listen() async {
@@ -35,6 +36,8 @@ class SongsNotifier extends StateNotifier<List<Song>> {
               );
             },
           ).toList();
+
+          state.sort((a, b) => a.title.compareTo(b.title));
         } catch (e) {
 //
         }

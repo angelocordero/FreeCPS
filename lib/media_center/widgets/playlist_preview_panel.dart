@@ -19,51 +19,26 @@ class PlaylistPreviewPanel extends ConsumerWidget {
     return ListView(
       children: [
         const Text('Songs'),
-        ReorderableListView(
-            shrinkWrap: true,
-            children: [
-              ...playlist.songs
-                  .map(
-                    (e) => ListTile(
-                      key: ValueKey(e.hashCode),
-                      onTap: () {
-                        ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
-                      },
-                      selected:  selected is Song && selected == e ,
-                      title: Text(e.title),
-                    ),
-                  )
-                  .toList(),
-            ],
-            onReorder: (oldIndex, newIndex) {
-              List<Song> state = playlist.songs;
-
-              if (newIndex > oldIndex) newIndex--;
-
-              final Song song = state.removeAt(oldIndex);
-              state.insert(newIndex, song);
-
-              Playlist newPlaylist = playlist.copyWith(songs: state);
-
-              ref.read(previewedPlaylistProvider.notifier).state = newPlaylist;
-
-              FileUtils.savePlaylist(newPlaylist);
-            }),
+        songsList(playlist, ref, selected),
         const Divider(),
         const Text('Verses'),
-        ...playlist.verses.map(
-          (e) => ListTile(
-              onTap: () {
-                ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
-              },
-              selected:  selected is SavedVerseSlides && selected == e ,
-              title: Text(scriptureRefToRefString(e.scriptureRef))),
-        ),
+        versesList(playlist, ref, selected),
         const Divider(),
         const Text('Media'),
+        mediaList(playlist, selected, ref)
+      ],
+    );
+  }
+
+  ReorderableListView mediaList(Playlist playlist, selected, WidgetRef ref) {
+    return ReorderableListView(
+      shrinkWrap: true,
+      buildDefaultDragHandles: playlist.media.length > 1,
+      children: [
         ...playlist.media.map(
           (e) => ListTile(
-            selected:  selected is String && selected == e ,
+            key: ValueKey(e.hashCode),
+            selected: selected is String && selected == e,
             onTap: () {
               ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
             },
@@ -71,6 +46,87 @@ class PlaylistPreviewPanel extends ConsumerWidget {
           ),
         ),
       ],
+      onReorder: (oldIndex, newIndex) {
+        List<String> state = playlist.media;
+
+        if (newIndex > oldIndex) newIndex--;
+
+        final String media = state.removeAt(oldIndex);
+        state.insert(newIndex, media);
+
+        Playlist newPlaylist = playlist.copyWith(media: state);
+
+        ref.read(previewedPlaylistProvider.notifier).state = newPlaylist;
+
+        FileUtils.savePlaylist(newPlaylist);
+      },
+    );
+  }
+
+  ReorderableListView versesList(Playlist playlist, WidgetRef ref, selected) {
+    return ReorderableListView(
+      buildDefaultDragHandles: playlist.verses.length > 1,
+      shrinkWrap: true,
+      children: [
+        ...playlist.verses.map(
+          (e) => ListTile(
+              key: ValueKey(e.hashCode),
+              onTap: () {
+                ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
+              },
+              selected: selected is SavedVerseSlides && selected == e,
+              title: Text(scriptureRefToRefString(e.scriptureRef))),
+        ),
+      ],
+      onReorder: (oldIndex, newIndex) {
+        List<SavedVerseSlides> state = playlist.verses;
+
+        if (newIndex > oldIndex) newIndex--;
+
+        final SavedVerseSlides slide = state.removeAt(oldIndex);
+        state.insert(newIndex, slide);
+
+        Playlist newPlaylist = playlist.copyWith(verses: state);
+
+        ref.read(previewedPlaylistProvider.notifier).state = newPlaylist;
+
+        FileUtils.savePlaylist(newPlaylist);
+      },
+    );
+  }
+
+  ReorderableListView songsList(Playlist playlist, WidgetRef ref, selected) {
+    return ReorderableListView(
+      buildDefaultDragHandles: playlist.songs.length > 1,
+      shrinkWrap: true,
+      children: [
+        ...playlist.songs
+            .map(
+              (e) => ListTile(
+                key: ValueKey(e.hashCode),
+                onTap: () {
+                  ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
+                },
+                selected: selected is Song && selected == e,
+                title: Text(e.title),
+              ),
+            )
+            .toList(),
+      ],
+      onReorder: (oldIndex, newIndex) {
+        List<Song> state = playlist.songs;
+
+        if (newIndex > oldIndex) newIndex--;
+
+        final Song song = state.removeAt(oldIndex);
+        state.insert(newIndex, song);
+
+        Playlist newPlaylist = playlist.copyWith(songs: state);
+
+        ref.read(previewedPlaylistProvider.notifier).state = newPlaylist;
+
+        FileUtils.savePlaylist(newPlaylist);
+      },
     );
   }
 }

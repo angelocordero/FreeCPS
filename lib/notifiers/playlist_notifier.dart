@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:path/path.dart';
 
 import '../core/constants.dart';
@@ -18,10 +19,13 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
 
   select(String fileName) async {
     String fileDir = await FileUtils.getPlaylistPath(fileName);
+ 
 
     try {
       state = Playlist.fromJson(File(fileDir).readAsStringSync(), songsDir);
-      //TODO save selected playlist filename to hive database
+
+      // save selected playlist filename to hive database
+      Hive.box('settings').put('playlist', fileName);
     } catch (e) {
       debugPrint(e.toString());
       state = Playlist.error();
@@ -33,9 +37,11 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
     songsDir = await songsDirectory();
 
     // get already selected playlist from hive database
-    String? playlistFileName = 'playlist_template.json';
+    String? playlistFileName = Hive.box('settings').get('playlist');
 
-    await select(await FileUtils.getPlaylistPath(playlistFileName));
+    if (playlistFileName != null) {
+      await select( playlistFileName);
+    }
 
     await _listen();
   }
@@ -46,7 +52,6 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
         if (event.path == await FileUtils.getPlaylistPath(state.fileName)) {
           // handle if playlist is deleted
           state = Playlist.empty();
-          // TODO reset playlist selected options indicator
         }
       }
 
