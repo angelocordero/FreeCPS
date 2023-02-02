@@ -6,34 +6,48 @@ import '../../models/playlist_model.dart';
 
 class MediaCenterPlaylistsNotifier extends StateNotifier<List<Playlist>> {
   MediaCenterPlaylistsNotifier(this.playlistPath, this.songsPath) : super([]) {
-    _fetch();
-    _listen();
+    init();
   }
 
   Future<String> playlistPath;
   Future<String> songsPath;
 
+  init() {
+    _fetch();
+    _listen();
+  }
+
   void _fetch() async {
     String path = await songsPath;
 
-    state = Directory(await playlistPath).listSync(recursive: false).whereType<File>().toList().map((file) {
-      return Playlist.fromJson(file.readAsStringSync(), path);
-    }).toList();
+    try {
+      await setState(path);
+    } catch (e) {
+      //
+    }
   }
 
   void _listen() async {
     String path = await songsPath;
 
-    Directory(await playlistPath).watch().listen((event) async {
+    Directory(await playlistPath).watch().listen((FileSystemEvent event) async {
       if (!mounted) return;
 
+      if (event is FileSystemModifyEvent) return;
+
       try {
-        state = Directory(await playlistPath).listSync(recursive: false).whereType<File>().toList().map((file) {
-          return Playlist.fromJson(file.readAsStringSync(), path);
-        }).toList();
+        await setState(path);
       } catch (e) {
         //
       }
     });
+  }
+
+  Future<void> setState(String path) async {
+    state = Directory(await playlistPath).listSync(recursive: false).whereType<File>().toList().map((file) {
+      return Playlist.fromJson(file.readAsStringSync(), path);
+    }).toList();
+
+    state.sort((a, b) => a.title.compareTo(b.title));
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
 import 'package:freecps/core/helper_functions.dart';
+import 'package:freecps/media_center/widgets/song_preview.dart';
 import 'package:freecps/media_center/widgets/video_preview.dart';
 import 'package:path/path.dart';
 
@@ -11,13 +12,11 @@ import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
 
 class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
-  MediaCenterPlaylistPreviewNotifier(Song? song) : super(Container()) {
-    if (song != null) {
-      preview(song);
-    }
+  MediaCenterPlaylistPreviewNotifier(dynamic args) : super(Container()) {
+      _preview(args);
   }
 
-  void preview(dynamic args) {
+  void _preview(dynamic args) {
     if (args is Song) {
       _previewSong(args);
     } else if (args is SavedVerseSlides) {
@@ -73,38 +72,6 @@ class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
   }
 
   void _previewSong(Song args) {
-    List<Column> list = args.lyrics.entries.map((entry) {
-      return Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(entry.key),
-          ),
-          ...entry.value.map(
-            (e) => Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  e.toString(),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    }).toList();
-
-    state = ListView(
-      children: [
-        Text('TITLE: ${args.title}'),
-        const Divider(),
-        Text('ARTIST: ${args.artist}'),
-        const Divider(),
-        ...list,
-      ],
-    );
+    state = SongPreview(song: args);
   }
 }

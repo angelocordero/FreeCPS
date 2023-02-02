@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/media_center/notifiers/bibles_notifier.dart';
-import 'package:freecps/media_center/notifiers/media_center_playlist_preview_notifier.dart';
 
 import '../core/constants.dart';
 import '../core/providers_declaration.dart';
 import '../models/playlist_model.dart';
 import '../models/song_model.dart';
+import 'notifiers/bibles_notifier.dart';
 import 'notifiers/media_center_photos_notifier.dart';
+import 'notifiers/media_center_playlist_preview_notifier.dart';
 import 'notifiers/media_center_playlists_notifier.dart';
 import 'notifiers/media_center_videos_notifier.dart';
 import 'notifiers/songs_notifier.dart';
@@ -48,16 +48,22 @@ final selectedVideoProvider = StateProvider.autoDispose<Set<String>>((ref) {
   return {};
 });
 
-final selectedSongProvider = StateProvider.autoDispose<Set<Song>>((ref) {
-  return {};
+final selectedSongProvider = StateProvider.autoDispose<Song>((ref) {
+  List<Song> songs = ref.watch(songsProvider);
+
+  if (songs.isEmpty) {
+    return Song.empty();
+  }
+
+  return songs.first;
 });
 
-final selectedPlaylistProvider = StateProvider.autoDispose<Playlist>((ref) {
+final previewedPlaylistProvider = StateProvider.autoDispose<Playlist>((ref) {
   List<Playlist> playlist = ref.watch(playlistsProvider);
   Playlist currentPlaylist = ref.watch(activePlaylistProvider);
 
   if (playlist.isNotEmpty) {
-    if (playlist.contains(currentPlaylist)) {
+    if (playlist.map((e) => e.fileName).contains(currentPlaylist.fileName)) {
       return currentPlaylist;
     }
 
@@ -68,11 +74,16 @@ final selectedPlaylistProvider = StateProvider.autoDispose<Playlist>((ref) {
 });
 
 final playlistPreviewProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylistPreviewNotifier, Widget>((ref) {
-  List<Song> songs = ref.watch(selectedPlaylistProvider).songs;
+  dynamic selected = ref.watch(playlistPreviewSelectedObjectProvider);
 
-  if (songs.isEmpty) {
-    return MediaCenterPlaylistPreviewNotifier(null);
-  } else {
-    return MediaCenterPlaylistPreviewNotifier(songs.first);
+  return MediaCenterPlaylistPreviewNotifier(selected);
+});
+
+final playlistPreviewSelectedObjectProvider = StateProvider.autoDispose<dynamic>((ref) {
+  List<Song> songs = ref.read(previewedPlaylistProvider.select((value) => value.songs));
+  if (songs.isNotEmpty) {
+    return songs.first;
   }
+
+  return null;
 });

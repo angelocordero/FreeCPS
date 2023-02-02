@@ -24,6 +24,15 @@ class Song {
     );
   }
 
+  factory Song.empty() {
+    return Song(
+      title: '',
+      lyrics: {},
+      fileName: '',
+      artist: '',
+    );
+  }
+
   factory Song.fromJson(String source) => Song.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory Song.fromMap(Map<String, dynamic> map) {

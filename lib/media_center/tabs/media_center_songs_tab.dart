@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/media_center/widgets/song_preview.dart';
+import 'package:freecps/media_center/widgets/song_slide_preview.dart';
 
 import '../../core/constants.dart' as constants;
 import '../../core/file_utils.dart';
@@ -16,7 +18,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Song> songs = ref.watch(songsProvider);
-    Set<Song> selectedSongs = ref.watch(selectedSongProvider);
+    Song selectedSong = ref.watch(selectedSongProvider);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,42 +26,46 @@ class MediaCenterSongsTab extends ConsumerWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: GridView.builder(
-              itemCount: songs.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                mainAxisSpacing: 50,
-                crossAxisSpacing: 50,
-                mainAxisExtent: 200,
-              ),
-              itemBuilder: (context, index) {
-                Song song = songs[index];
+            child: Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: ListView.builder(
+                    itemCount: songs.length,
+                    itemBuilder: (context, index) {
+                      Song song = songs[index];
 
-                return GestureDetector(
-                  onTap: () {
-                    bool ctrlKey = ref.read(mediaCenterCtrlKeyNotifier);
+                      return GestureDetector(
+                        onTap: () {
+                          if (selectedSong == song) return;
 
-                    if (!ctrlKey) {
-                      ref.read(selectedSongProvider.notifier).state = {song};
-                    } else {
-                      ref.read(selectedSongProvider.notifier).update((state) => {...state, song});
-                    }
-                  },
-                  child: Card(
-                    shape: selectedSongs.contains(song)
-                        ? const RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: Color(0xff1e66f5),
-                              width: 1.5,
-                            ),
-                          )
-                        : null,
-                    child: Center(
-                      child: Text(song.title),
-                    ),
+                          ref.read(selectedSongProvider.notifier).state = song;
+                        },
+                        child: ListTile(
+                          selected: selectedSong == song,
+                          title: Text(song.title),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                const VerticalDivider(),
+                Flexible(
+                  flex: 2,
+                  child: selectedSong == Song.empty()
+                      ? Container()
+                      : SongPreview(
+                          song: selectedSong,
+                        ),
+                ),
+                const VerticalDivider(),
+                Flexible(
+                  flex: 2,
+                  child: SongSlidePreview(
+                    song: selectedSong,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -68,7 +74,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                FileUtils.addSongToPlaylist(selectedSongs, ref.read(activePlaylistProvider));
+                FileUtils.addSongToPlaylist(selectedSong, ref.read(activePlaylistProvider));
               },
               child: const Text('Add To Playlist'),
             ),

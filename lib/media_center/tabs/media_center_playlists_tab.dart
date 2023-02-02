@@ -29,15 +29,22 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
                   child: ListView.builder(
                     itemCount: playlists.length,
                     itemBuilder: (context, index) {
-                      String selectedFileName = ref.watch(selectedPlaylistProvider).fileName;
+                      String selectedFileName = ref.watch(previewedPlaylistProvider).fileName;
                       Playlist playlist = playlists[index];
+
+                      String title = playlist.title;
+
+                      if (playlist.fileName == ref.watch(activePlaylistProvider).fileName) {
+                        title = '${playlist.title} (Active)';
+                      }
+
                       return GestureDetector(
                         onTap: () {
-                          ref.read(selectedPlaylistProvider.notifier).state = playlist;
+                          ref.read(previewedPlaylistProvider.notifier).state = playlist;
                         },
                         child: ListTile(
                           selected: playlist.fileName == selectedFileName,
-                          title: Text(playlist.title),
+                          title: Text(title),
                         ),
                       );
                     },
@@ -77,7 +84,7 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
         ),
         ElevatedButton(
           onPressed: () async {
-            String fileName = ref.read(selectedPlaylistProvider).fileName;
+            String fileName = ref.read(previewedPlaylistProvider).fileName;
 
             try {
               ref.read(activePlaylistProvider.notifier).select(fileName);

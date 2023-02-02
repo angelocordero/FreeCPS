@@ -105,10 +105,8 @@ class FileUtils {
     savePlaylist(playlist.copyWith(media: list.toList()));
   }
 
-  static void addSongToPlaylist(Set<Song> songs, Playlist playlist) {
-    Set<Song> list = {...playlist.songs, ...songs};
-
-    savePlaylist(playlist.copyWith(songs: list.toList()));
+  static void addSongToPlaylist(Song song, Playlist playlist) {
+    savePlaylist(playlist.copyWith(songs: [...playlist.songs, song]));
   }
 
   static void addNewPlaylist() async {
