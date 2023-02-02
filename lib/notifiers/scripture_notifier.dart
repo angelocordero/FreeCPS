@@ -139,18 +139,22 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
     }
 
     File(_biblesDirectory).watch().listen((event) {
-      _availableBibles.clear();
+      try {
+        _availableBibles.clear();
 
-      List<FileSystemEntity> bibleFileEntities = Directory(_biblesDirectory).listSync().whereType<Directory>().toList();
+        List<FileSystemEntity> bibleFileEntities = Directory(_biblesDirectory).listSync().whereType<Directory>().toList();
 
-      if (bibleFileEntities.isNotEmpty) {
-        for (var element in bibleFileEntities) {
-          _availableBibles.add(
-            basenameWithoutExtension(element.path),
-          );
+        if (bibleFileEntities.isNotEmpty) {
+          for (var element in bibleFileEntities) {
+            _availableBibles.add(
+              basenameWithoutExtension(element.path),
+            );
+          }
+
+          translationRef = _availableBibles.first;
         }
-
-        translationRef = _availableBibles.first;
+      } catch (e) {
+        //
       }
     });
   }

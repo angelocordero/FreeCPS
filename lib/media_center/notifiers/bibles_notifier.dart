@@ -32,15 +32,19 @@ class BiblesNotifier extends StateNotifier<List<BibleData>> {
       (event) async {
         if (!mounted) return;
 
-       state = Directory(await path).listSync(recursive: false).whereType<Directory>().map(
-      (Directory dir) {
-        String name = basenameWithoutExtension(dir.path);
+        try {
+          state = Directory(await path).listSync(recursive: false).whereType<Directory>().map(
+            (Directory dir) {
+              String name = basenameWithoutExtension(dir.path);
 
-        String translationName = jsonDecode(File(join(dir.path, '$name.metadata.json')).readAsStringSync())['translationName'];
+              String translationName = jsonDecode(File(join(dir.path, '$name.metadata.json')).readAsStringSync())['translationName'];
 
-        return BibleData(name, translationName);
-      },
-    ).toList();
+              return BibleData(name, translationName);
+            },
+          ).toList();
+        } catch (e) {
+          //
+        }
       },
     );
   }

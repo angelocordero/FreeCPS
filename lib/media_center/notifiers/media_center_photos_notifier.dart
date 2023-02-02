@@ -18,7 +18,11 @@ class MediaCenterPhotosNotifier extends StateNotifier<List<File>> {
     Directory(await path).watch().listen((event) async {
       if (!mounted) return;
 
-      state = Directory(await path).listSync(recursive: false).whereType<File>().toList();
+      try {
+        state = Directory(await path).listSync(recursive: false).whereType<File>().toList();
+      } catch (e) {
+        //
+      }
     });
   }
 }

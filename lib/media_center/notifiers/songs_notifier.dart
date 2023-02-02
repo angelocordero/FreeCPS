@@ -27,13 +27,17 @@ class SongsNotifier extends StateNotifier<List<Song>> {
       (event) async {
         if (!mounted) return;
 
-        state = Directory(await path).listSync(recursive: false).whereType<File>().map(
-          (file) {
-            return Song.fromJson(
-              file.readAsStringSync(),
-            );
-          },
-        ).toList();
+        try {
+          state = Directory(await path).listSync(recursive: false).whereType<File>().map(
+            (file) {
+              return Song.fromJson(
+                file.readAsStringSync(),
+              );
+            },
+          ).toList();
+        } catch (e) {
+//
+        }
       },
     );
   }
