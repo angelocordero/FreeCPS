@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
 import 'package:freecps/core/helper_functions.dart';
 import 'package:freecps/media_center/widgets/song_preview.dart';
-import 'package:freecps/media_center/widgets/video_preview.dart';
 import 'package:path/path.dart';
 
 import '../../models/saved_verse_slides.dart';
@@ -13,7 +12,7 @@ import '../../models/song_model.dart';
 
 class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
   MediaCenterPlaylistPreviewNotifier(dynamic args) : super(Container()) {
-      _preview(args);
+    _preview(args);
   }
 
   void _preview(dynamic args) {
@@ -40,9 +39,13 @@ class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
 
     for (var e in videoFileExtensions) {
       if (args.toLowerCase().contains(e)) {
-        String filePath = join(await videosDirectory(), args);
+        //String filePath = join(await videosDirectory(), args);
 
-        state = VideoPreview(filePath: filePath);
+        // TODO show thumbnail
+        state = const Center(
+          child: Text('Video Preview is currently not supported\n https://github.com/alexmercerind/dart_vlc/issues/357'),
+        );
+        //state = VideoPreview(filePath: filePath);
 
         return;
       }

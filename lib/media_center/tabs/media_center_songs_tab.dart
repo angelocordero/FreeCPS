@@ -1,14 +1,14 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/media_center/widgets/song_preview.dart';
-import 'package:freecps/media_center/widgets/song_slide_preview.dart';
 
 import '../../core/constants.dart' as constants;
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
+import '../widgets/song_preview.dart';
+import '../widgets/song_slide_preview.dart';
 
 class MediaCenterSongsTab extends ConsumerWidget {
   const MediaCenterSongsTab({

@@ -26,8 +26,8 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: () {}),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+        // floatingActionButton: FloatingActionButton(onPressed: () {}),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
         body: SizedBox.expand(
           child: Stack(
             children: [
@@ -63,7 +63,7 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
 
   @override
   void initState() {
-    player = Player(id: 1);
+    player = Player(id: 9999);
     player.setPlaylistMode(PlaylistMode.loop);
 
     DesktopMultiWindow.setMethodHandler(

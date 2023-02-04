@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _VideoPreviewState extends State<VideoPreview> {
 
   @override
   void initState() {
-    player = Player(id: 3445);
+    player = Player(id: Random().nextInt(999));
     player.setPlaylistMode(PlaylistMode.loop);
     player.open(Media.file(File(widget.filePath)));
     super.initState();

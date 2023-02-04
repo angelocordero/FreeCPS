@@ -69,6 +69,16 @@ class FileUtils {
     }
   }
 
+  static void importPlaylist(List<File> files) async {
+    String dir = await constants.playlistsDirectory();
+
+    for (File file in files) {
+      String filePath = p.join(dir, basename(file.path));
+
+      await file.copy(filePath);
+    }
+  }
+
   static void importBibles(List<File> files) async {
     for (File file in files) {
       BibleParser(file.path).parse();
