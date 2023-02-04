@@ -4,7 +4,6 @@ import '../core/constants.dart';
 import '../core/projection_utils.dart';
 import '../models/slide_model.dart';
 
-
 /// Project the slides when selected either by clicking or using arrow keys
 // TODO add feature to project slides based on hotkeys
 // for example, pressing "1" could jump to the first verse
@@ -42,7 +41,7 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
 
     int index = state! + 4;
 
-    if (index > slides.length) {
+    if (index > slides.length - 1) {
       return;
     }
 
