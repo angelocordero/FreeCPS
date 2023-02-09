@@ -78,7 +78,7 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
 
     if (slide.slideType == SlideType.song) {
       ProjectionUtils.showSlide(slide.text, isLive);
-    } else {
+    } else if (slide.slideType == SlideType.scripture) {
       String arguments = '${slide.text}<split>${slide.reference}';
       ProjectionUtils.showSlide(arguments, isLive);
     }

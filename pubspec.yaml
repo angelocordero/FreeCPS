@@ -104,6 +104,10 @@ flutter:
         - asset: fonts/LEMONMILK-Regular.otf
         - asset: fonts/LEMONMILK-Bold.otf
           weight: 700
+    - family: SegoeUI
+      fonts:
+        - asset: fonts/SEGOEUI.TTF
+        
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

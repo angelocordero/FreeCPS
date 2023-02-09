@@ -4,6 +4,7 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:freecps/core/constants.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../widgets/projection_slide_widget.dart';
@@ -26,8 +27,6 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        // floatingActionButton: FloatingActionButton(onPressed: () {}),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
         body: SizedBox.expand(
           child: Stack(
             children: [
@@ -80,14 +79,11 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
           List<String> args = (call.arguments as String).split('<split>');
 
           if (args.length == 1) {
-            showNextSlide(args.first, '');
+            showNextSlide(args.first, '', SlideType.song);
             return;
           }
 
-          showNextSlide(
-            args[0],
-            args[1],
-          );
+          showNextSlide(args[0], args[1], SlideType.scripture);
         }
       },
     );
@@ -109,17 +105,19 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     player.open(file);
   }
 
-  void showNextSlide(String text, String reference) {
+  void showNextSlide(String text, String reference, SlideType slideType) {
     setState(() {
       if (showingFirst) {
         second = ProjectionTextWidget(
           text: text,
           reference: reference,
+          slideType: slideType,
         );
       } else {
         first = ProjectionTextWidget(
           text: text,
           reference: reference,
+          slideType: slideType,
         );
       }
 

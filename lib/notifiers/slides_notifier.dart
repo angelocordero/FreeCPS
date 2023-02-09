@@ -72,32 +72,105 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
   }
 
   void _setMultipleScriptureSlides(Scripture scripture, int startVerse, int endVerse) {
-    state = scripture.verses!
+    List<Slide> temp = [];
+
+    scripture.verses!
         .getRange(
       startVerse - 1,
       endVerse,
     )
-        .map(
+        .forEach(
       (verse) {
-        return Slide(
-          text: _getTextWithSuperscript(verse.num, verse.text),
-          reference: _scriptureRefToString(scripture.scriptureRef),
-          slideType: SlideType.scripture,
+        String text = _getTextWithSuperscript(verse.num, verse.text);
+
+        int maxChars = maxCharacters(
+          text,
+          const TextStyle(
+            fontFamily: 'LemonMilk',
+            fontSize: 80,
+            color: Colors.white,
+          ),
         );
+
+        if (text.length > maxChars) {
+          splitSlides(text, maxChars, scripture);
+
+          temp.addAll(splitSlides(text, maxChars, scripture));
+        } else {
+          temp.add(
+            Slide(
+              text: text,
+              reference: _scriptureRefToString(scripture.scriptureRef),
+              slideType: SlideType.scripture,
+            ),
+          );
+        }
       },
-    ).toList();
+    );
+
+    state = temp;
   }
 
   void _setSingleScriptureSlide(Scripture scripture, int startVerse) {
     Verse verse = scripture.verses![startVerse - 1];
 
-    state = [
-      Slide(
-        text: _getTextWithSuperscript(verse.num, verse.text),
-        reference: _scriptureRefToString(scripture.scriptureRef),
-        slideType: SlideType.scripture,
+    String text = _getTextWithSuperscript(verse.num, verse.text).trim();
+
+    int maxChars = maxCharacters(
+      text,
+      const TextStyle(
+        fontFamily: 'LemonMilk',
+        fontSize: 80,
+        color: Colors.white,
       ),
-    ];
+    );
+
+    if (text.length > maxChars) {
+      state = splitSlides(text, maxChars, scripture);
+    } else {
+      state = [
+        Slide(
+          text: text,
+          reference: _scriptureRefToString(scripture.scriptureRef),
+          slideType: SlideType.scripture,
+        ),
+      ];
+    }
+  }
+
+  List<Slide> splitSlides(String text, int maxChars, Scripture scripture) {
+    int slideCount = text.length ~/ maxChars;
+
+    int charsPerSlide = text.length ~/ slideCount;
+
+    // split verse into slide count
+
+    List<Slide> temp = [];
+
+    int offset = 0;
+    for (var i = 0; i < slideCount; i++) {
+      int start = (i * charsPerSlide) - offset;
+      int end = start + charsPerSlide;
+
+      while (text[end - 1] != ' ') {
+        end--;
+        offset++;
+      }
+
+      if (i == slideCount - 1) end = text.length;
+
+      String slideText = text.substring(start, end);
+
+      temp.add(
+        Slide(
+          text: slideText,
+          reference: _scriptureRefToString(scripture.scriptureRef),
+          slideType: SlideType.scripture,
+        ),
+      );
+    }
+
+    return temp;
   }
 
   String _getTextWithSuperscript(int number, String text) {

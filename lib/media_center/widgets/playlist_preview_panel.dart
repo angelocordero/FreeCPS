@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/helper_functions.dart';
-import 'package:freecps/media_center/media_center_providers.dart';
-import 'package:freecps/models/saved_verse_slides.dart';
 
 import '../../core/file_utils.dart';
+import '../../core/helper_functions.dart';
 import '../../models/playlist_model.dart';
+import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
+import '../media_center_providers.dart';
 
 class PlaylistPreviewPanel extends ConsumerWidget {
   const PlaylistPreviewPanel({super.key});
@@ -70,12 +70,15 @@ class PlaylistPreviewPanel extends ConsumerWidget {
       children: [
         ...playlist.verses.map(
           (e) => ListTile(
-              key: ValueKey(e.hashCode),
-              onTap: () {
-                ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
-              },
-              selected: selected is SavedVerseSlides && selected == e,
-              title: Text(scriptureRefToRefString(e.scriptureRef))),
+            key: ValueKey(e.hashCode),
+            onTap: () {
+              ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
+            },
+            selected: selected is SavedVerseSlides && selected == e,
+            title: Text(
+              scriptureRefToRefString(e.scriptureRef),
+            ),
+          ),
         ),
       ],
       onReorder: (oldIndex, newIndex) {

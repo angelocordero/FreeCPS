@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../core/constants.dart';
+
 class ProjectionTextWidget extends StatelessWidget {
-  const ProjectionTextWidget({super.key, required this.text, required this.reference});
+  const ProjectionTextWidget({super.key, required this.text, required this.reference, required this.slideType});
 
   final String reference;
   final String text;
+  final SlideType slideType;
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +22,31 @@ class ProjectionTextWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'LemonMilk',
-                    fontSize: 80,
-                    color: Colors.white,
-                  ),
-                ),
+                child: slideType == SlideType.song
+                    ? Text(
+                        text,
+                        maxLines: 10,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                        style: const TextStyle(
+                          fontFamily: 'LemonMilk',
+                          fontSize: 80,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        text,
+                        maxLines: 10,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                        style: const TextStyle(
+                          fontFamily: 'SegoeUI',
+                          fontSize: 80,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
             if (reference.isNotEmpty)
