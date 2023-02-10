@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart';
 
 import 'saved_verse_slides.dart';
 import 'song_model.dart';
@@ -46,7 +46,7 @@ class Playlist {
           (fileName) {
             try {
               return Song.fromJson(
-                File(p.join(songsDir, fileName)).readAsStringSync(),
+                File(join(songsDir, fileName)).readAsStringSync(),
               );
             } catch (e) {
               return Song.error();

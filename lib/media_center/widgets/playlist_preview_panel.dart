@@ -76,7 +76,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
             },
             selected: selected is SavedVerseSlides && selected == e,
             title: Text(
-              scriptureRefToRefString(e.scriptureRef),
+              scriptureRefToString(e.scriptureRef),
             ),
           ),
         ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 
-import '../../core/constants.dart' as constants;
+import '../../core/constants.dart';
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../media_center_providers.dart';
@@ -70,7 +70,7 @@ class MediaCenterVideosTab extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 FileUtils.addMediaToPlaylist(selectedVideos, ref.read(activePlaylistProvider));
               },
               child: const Text('Add To Playlist'),
@@ -83,7 +83,7 @@ class MediaCenterVideosTab extends ConsumerWidget {
                 FilePickerResult? result = await FilePicker.platform.pickFiles(
                   allowMultiple: true,
                   type: FileType.custom,
-                  allowedExtensions: constants.videoFileExtensions,
+                  allowedExtensions: videoFileExtensions,
                 );
 
                 if (result == null) return;

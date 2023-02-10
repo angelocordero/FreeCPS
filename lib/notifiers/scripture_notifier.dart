@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/constants.dart';
 import 'package:path/path.dart';
 
 import '../models/scripture_model.dart';
@@ -12,13 +11,13 @@ import '../models/verse_reference_model.dart';
 
 /// Notifier that holds all data of the selected scripture
 class ScriptureNotifier extends StateNotifier<Scripture> {
-  ScriptureNotifier(this.ref) : super(const Scripture(scriptureRef: ScriptureReference())) {
+  ScriptureNotifier(this.ref, this.biblesDirectory) : super(const Scripture(scriptureRef: ScriptureReference())) {
     _init();
   }
 
   StateNotifierProviderRef<ScriptureNotifier, Scripture> ref;
 
-  String _biblesDirectory = '';
+  String biblesDirectory;
   final Set<String> _availableBibles = <String>{};
   List<Map<String, dynamic>>? _bookData;
   Set<String>? _books;
@@ -115,16 +114,14 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
     return state.verses ?? [];
   }
 
-  void _init() async {
-    _biblesDirectory = await biblesDirectory();
-
+  void _init() {
     _setAvailableBibles();
   }
 
   void _setAvailableBibles() {
     _availableBibles.clear();
 
-    List<FileSystemEntity> bibleFileEntities = Directory(_biblesDirectory).listSync();
+    List<FileSystemEntity> bibleFileEntities = Directory(biblesDirectory).listSync();
 
     if (bibleFileEntities.isNotEmpty) {
       for (var element in bibleFileEntities) {
@@ -138,11 +135,11 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
       translationRef = _availableBibles.first;
     }
 
-    File(_biblesDirectory).watch().listen((event) {
+    File(biblesDirectory).watch().listen((event) {
       try {
         _availableBibles.clear();
 
-        List<FileSystemEntity> bibleFileEntities = Directory(_biblesDirectory).listSync().whereType<Directory>().toList();
+        List<FileSystemEntity> bibleFileEntities = Directory(biblesDirectory).listSync().whereType<Directory>().toList();
 
         if (bibleFileEntities.isNotEmpty) {
           for (var element in bibleFileEntities) {
@@ -162,7 +159,7 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
   void _setTranslationData() {
     if (state.scriptureRef.translation == null) return;
 
-    String path = '$_biblesDirectory/${state.scriptureRef.translation}/${state.scriptureRef.translation}.metadata.json';
+    String path = '$biblesDirectory/${state.scriptureRef.translation}/${state.scriptureRef.translation}.metadata.json';
 
     _translationData = jsonDecode(File(path).readAsStringSync());
 
@@ -176,7 +173,7 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
 
     String book = state.scriptureRef.book != null ? state.scriptureRef.book.toString() : _books!.first;
 
-    String bookPath = '$_biblesDirectory/${state.scriptureRef.translation}/books/${state.scriptureRef.translation}.$book.json';
+    String bookPath = '$biblesDirectory/${state.scriptureRef.translation}/books/${state.scriptureRef.translation}.$book.json';
 
     _bookData = List<Map<String, dynamic>>.from(jsonDecode(File(bookPath).readAsStringSync())['chapters']);
   }

@@ -19,7 +19,7 @@ class PlaylistVersesExpansionTile extends ConsumerWidget {
       children: [
         ...playlist.verses.map(
           (SavedVerseSlides savedVerseSlides) {
-            String displayString = scriptureRefToRefString(savedVerseSlides.scriptureRef);
+            String displayString = scriptureRefToString(savedVerseSlides.scriptureRef);
 
             return GestureDetector(
               onTap: () async {

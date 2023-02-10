@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants.dart' as constants;
+import '../../core/constants.dart';
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../../models/song_model.dart';
@@ -86,7 +86,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
                 FilePickerResult? result = await FilePicker.platform.pickFiles(
                   allowMultiple: true,
                   type: FileType.custom,
-                  allowedExtensions: constants.songFileExtension,
+                  allowedExtensions: songFileExtension,
                 );
 
                 if (result == null) return;

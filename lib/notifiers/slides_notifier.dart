@@ -41,7 +41,7 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
   generateSavedVerseSlides(SavedVerseSlides slides) {
     state = slides.verseSlides;
 
-    _setSlidesPanelTitle(scriptureRefToRefString(slides.scriptureRef));
+    _setSlidesPanelTitle(scriptureRefToString(slides.scriptureRef));
   }
 
   generateScriptureSlides({
@@ -51,20 +51,14 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
 
     _scriptureReference = scripture.scriptureRef;
-    _setSlidesPanelTitle(scriptureRefToRefString(scripture.scriptureRef));
+    _setSlidesPanelTitle(scriptureRefToString(scripture.scriptureRef));
 
-    bool breakOnNewVerse = _ref.read(settingsProvider.select((value) => value['break_on_new_verse'])) == 'true' ? true : false;
-
-    if (endVerse != null) {
-      if (breakOnNewVerse == false) {
-        stitchVerses(scripture, startVerse, endVerse);
-        return;
-      }
-      _setMultipleScriptureSlides(scripture, startVerse, endVerse);
+    if (endVerse == null) {
+      _setSingleVerseScriptureSlide(scripture, startVerse);
       return;
     }
 
-    _setSingleScriptureSlide(scripture, startVerse);
+    _setMultipleVerseScriptureSlides(scripture, startVerse, endVerse);
   }
 
   void saveScriptureSlideToPlaylist(Playlist playlist) {
@@ -77,36 +71,33 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     FileUtils.savePlaylist(playlist.copyWith(verses: playlistVerses));
   }
 
-  void _setMultipleScriptureSlides(Scripture scripture, int startVerse, int endVerse) {
+  bool _breakOnNewVerse() {
+    return _ref.read(settingsProvider.select((value) => value['break_on_new_verse'])) == 'true' ? true : false;
+  }
+
+  void _setMultipleVerseScriptureSlides(Scripture scripture, int startVerse, int endVerse) {
+    if (!_breakOnNewVerse()) {
+      _stitchVerses(scripture, startVerse, endVerse);
+      return;
+    }
+
     List<Slide> temp = [];
 
-    scripture.verses!
-        .getRange(
-      startVerse - 1,
-      endVerse,
-    )
-        .forEach(
+    scripture.verses!.getRange(startVerse - 1, endVerse).forEach(
       (verse) {
         String text = _getTextWithSuperscript(verse.num, verse.text);
-
-        int maxChars = maxCharacters(
-          text,
-          const TextStyle(
-            fontFamily: 'LemonMilk',
-            fontSize: 80,
-            color: Colors.white,
-          ),
-        );
+        int maxChars = maxCharacters(text, songSlideTextStyle);
 
         if (text.length > maxChars) {
-          splitSlides(text, maxChars, scripture);
+          
+          _splitSlides(text, maxChars, scripture);
+          temp.addAll(_splitSlides(text, maxChars, scripture));
 
-          temp.addAll(splitSlides(text, maxChars, scripture));
         } else {
           temp.add(
             Slide(
               text: text,
-              reference: _scriptureRefToString(scripture.scriptureRef),
+              reference: scriptureRefToString(scripture.scriptureRef),
               slideType: SlideType.scripture,
             ),
           );
@@ -117,34 +108,25 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     state = temp;
   }
 
-  void _setSingleScriptureSlide(Scripture scripture, int startVerse) {
+  void _setSingleVerseScriptureSlide(Scripture scripture, int startVerse) {
     Verse verse = scripture.verses![startVerse - 1];
-
     String text = _getTextWithSuperscript(verse.num, verse.text).trim();
-
-    int maxChars = maxCharacters(
-      text,
-      const TextStyle(
-        fontFamily: 'LemonMilk',
-        fontSize: 80,
-        color: Colors.white,
-      ),
-    );
+    int maxChars = maxCharacters(text, songSlideTextStyle);
 
     if (text.length > maxChars) {
-      state = splitSlides(text, maxChars, scripture);
+      state = _splitSlides(text, maxChars, scripture);
     } else {
       state = [
         Slide(
           text: text,
-          reference: _scriptureRefToString(scripture.scriptureRef),
+          reference: scriptureRefToString(scripture.scriptureRef),
           slideType: SlideType.scripture,
         ),
       ];
     }
   }
 
-  List<Slide> splitSlides(String text, int maxChars, Scripture scripture) {
+  List<Slide> _splitSlides(String text, int maxChars, Scripture scripture) {
     int slideCount = text.length ~/ maxChars;
 
     int charsPerSlide = text.length ~/ slideCount;
@@ -170,7 +152,7 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
       temp.add(
         Slide(
           text: slideText,
-          reference: _scriptureRefToString(scripture.scriptureRef),
+          reference: scriptureRefToString(scripture.scriptureRef),
           slideType: SlideType.scripture,
         ),
       );
@@ -195,46 +177,28 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     }
   }
 
-  String _scriptureRefToString(ScriptureReference ref) {
-    return '${ref.translation} ${ref.book} ${ref.chapter}:${ref.verse!.verseString}';
-  }
 
   void _setSlidesPanelTitle(String title) {
     _ref.read(slidePanelTitleProvider.notifier).state = title;
   }
 
-  void stitchVerses(Scripture scripture, int startVerse, int endVerse) {
+  void _stitchVerses(Scripture scripture, int startVerse, int endVerse) {
     String passage = '';
 
-    scripture.verses!
-        .getRange(
-      startVerse - 1,
-      endVerse,
-    )
-        .forEach(
-      (verse) {
-        String text = _getTextWithSuperscript(verse.num, verse.text);
+    scripture.verses!.getRange(startVerse - 1, endVerse).forEach((verse) {
+      String text = _getTextWithSuperscript(verse.num, verse.text);
+      passage = '$passage $text';
+    });
 
-        passage = '$passage $text';
-      },
-    );
-
-    int maxChars = maxCharacters(
-      passage,
-      const TextStyle(
-        fontFamily: 'LemonMilk',
-        fontSize: 80,
-        color: Colors.white,
-      ),
-    );
+    int maxChars = maxCharacters(passage, songSlideTextStyle);
 
     if (passage.length > maxChars) {
-      state = splitSlides(passage, maxChars, scripture);
+      state = _splitSlides(passage, maxChars, scripture);
     } else {
       state = [
         Slide(
           text: passage,
-          reference: _scriptureRefToString(scripture.scriptureRef),
+          reference: scriptureRefToString(scripture.scriptureRef),
           slideType: SlideType.scripture,
         ),
       ];

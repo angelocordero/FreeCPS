@@ -11,9 +11,11 @@ import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
 
 class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
-  MediaCenterPlaylistPreviewNotifier(dynamic args) : super(Container()) {
+  MediaCenterPlaylistPreviewNotifier({required dynamic args, required this.photosDir}) : super(Container()) {
     _preview(args);
   }
+
+  String photosDir;
 
   void _preview(dynamic args) {
     if (args is Song) {
@@ -22,16 +24,13 @@ class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
       _previewVerses(args);
     } else if (args is String) {
       _previewMedia(args);
-    } else {
-      state = Container();
     }
   }
 
-  void _previewMedia(String args) async {
+  void _previewMedia(String args) {
     for (var e in photoFileExtensions) {
       if (args.toLowerCase().contains(e)) {
-        String filePath = join(await photosDirectory(), args);
-
+        String filePath = join(photosDir, args);
         state = Image.file(File(filePath));
         return;
       }
@@ -55,7 +54,7 @@ class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
   void _previewVerses(SavedVerseSlides args) {
     state = ListView(
       children: [
-        Text(scriptureRefToRefString(args.scriptureRef)),
+        Text(scriptureRefToString(args.scriptureRef)),
         const Divider(
           height: 30,
         ),

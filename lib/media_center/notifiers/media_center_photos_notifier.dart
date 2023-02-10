@@ -4,25 +4,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MediaCenterPhotosNotifier extends StateNotifier<List<File>> {
   MediaCenterPhotosNotifier(this.path) : super([]) {
-    _fetch();
+    _setState();
     _listen();
   }
 
-  Future<String> path;
+  String path;
 
-  _fetch() async {
-    state = Directory(await path).listSync(recursive: false).whereType<File>().toList();
-  }
-
-  _listen() async {
-    Directory(await path).watch().listen((event) async {
+  _listen() {
+    Directory(path).watch().listen((event) {
       if (!mounted) return;
 
       try {
-        state = Directory(await path).listSync(recursive: false).whereType<File>().toList();
+        _setState();
       } catch (e) {
         //
       }
     });
+  }
+
+  void _setState() {
+    state = Directory(path).listSync(recursive: false).whereType<File>().toList();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/constants.dart';
 import '../core/file_utils.dart';
 import '../core/projection_utils.dart';
 import '../core/providers_declaration.dart';
@@ -22,7 +23,20 @@ class PlaylistMediaExpansionTile extends ConsumerWidget {
             return GestureDetector(
               onTap: () async {
                 try {
-                  String filePath = await FileUtils.getVideoFilePath(media);
+                  String filePath = '';
+
+                  for (var element in videoFileExtensions) {
+                    if (media.toLowerCase().contains(element)) {
+                      filePath = await FileUtils.getVideoFilePath(media);
+                    } 
+                  }
+
+                  for (var element in photoFileExtensions) {
+                    if (media.toLowerCase().contains(element)) {
+                      filePath = await FileUtils.getPhotoFilePath(media);
+                    } 
+                  }
+
                   bool isLive = ref.read(liveProvider);
                   await ProjectionUtils.setBackground(filePath, isLive);
                 } catch (e) {

@@ -2,21 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:freecps/core/bible_parser.dart';
 import 'package:image_compression/image_compression.dart';
-import 'package:nanoid/nanoid.dart';
-import 'package:path/path.dart' as p;
 import 'package:path/path.dart';
 
 import '../models/playlist_model.dart';
 import '../models/song_model.dart';
-import 'constants.dart' as constants;
+import 'bible_parser.dart';
 import 'constants.dart';
+import 'helper_functions.dart';
 
 class FileUtils {
   static initializeDirectories() async {
-    Directory('${await photosDirectory()}/thumbnails').create(recursive: true);
-    Directory('${await videosDirectory()}/thumbnails').create(recursive: true);
+    Directory(await photoThumbnailsDirectory()).create(recursive: true);
+    Directory(await videoThumbnailsDirectory()).create(recursive: true);
     Directory(await songsDirectory()).create(recursive: false);
     Directory(await playlistsDirectory()).create(recursive: false);
     Directory(await biblesDirectory()).create(recursive: false);
@@ -25,14 +23,14 @@ class FileUtils {
   }
 
   static Future<void> importPhotos(List<File> files) async {
-    String dir = await constants.photosDirectory();
+    String dir = await photosDirectory();
 
     for (File file in files) {
-      String filePath = p.join(dir, basename(file.path));
+      String filePath = join(dir, basename(file.path));
 
       await file.copy(filePath);
 
-      String thumbnailPath = p.join(dir, 'thumbnails', basename(file.path));
+      String thumbnailPath = join(dir, 'thumbnails', basename(file.path));
 
       final output = compress(
         ImageFileConfiguration(
@@ -53,30 +51,30 @@ class FileUtils {
 
   //! TODO: make thumbnails
   static void importVideos(List<File> files) async {
-    String dir = await constants.videosDirectory();
+    String dir = await videosDirectory();
 
     for (File file in files) {
-      String filePath = p.join(dir, basename(file.path));
+      String filePath = join(dir, basename(file.path));
 
       await file.copy(filePath);
     }
   }
 
   static void importSongs(List<File> files) async {
-    String dir = await constants.songsDirectory();
+    String dir = await songsDirectory();
 
     for (File file in files) {
-      String filePath = p.join(dir, basename(file.path));
+      String filePath = join(dir, basename(file.path));
 
       await file.copy(filePath);
     }
   }
 
   static void importPlaylist(List<File> files) async {
-    String dir = await constants.playlistsDirectory();
+    String dir = await playlistsDirectory();
 
     for (File file in files) {
-      String filePath = p.join(dir, basename(file.path));
+      String filePath = join(dir, basename(file.path));
 
       await file.copy(filePath);
     }
@@ -93,13 +91,19 @@ class FileUtils {
   }
 
   static getVideoFilePath(String fileName) async {
-    String dir = await constants.videosDirectory();
+    String dir = await videosDirectory();
 
-    return p.join(dir, fileName);
+    return join(dir, fileName);
+  }
+
+  static getPhotoFilePath(String fileName) async {
+    String dir = await photosDirectory();
+
+    return join(dir, fileName);
   }
 
   static Future<String> getPlaylistPath(String fileName) async {
-    return p.join(await playlistsDirectory(), fileName);
+    return join(await playlistsDirectory(), fileName);
   }
 
   static void savePlaylist(Playlist playlist) async {
@@ -112,7 +116,7 @@ class FileUtils {
     }
   }
 
-  static void addMediaToPlaylist(Set<String> media, Playlist playlist) async {
+  static void addMediaToPlaylist(Set<String> media, Playlist playlist) {
     Set<String> list = {...playlist.media, ...media};
 
     savePlaylist(playlist.copyWith(media: list.toList()));
@@ -123,9 +127,9 @@ class FileUtils {
   }
 
   static void addNewPlaylist() async {
-    String fileName = '${customAlphabet(customIdAlphabet, 30)}.cpss';
+    String fileName = '$generateRandomID.cpss';
 
-    File(p.join(await playlistsDirectory(), fileName)).writeAsStringSync(Playlist.addNew(fileName).toJson());
+    File(join(await playlistsDirectory(), fileName)).writeAsStringSync(Playlist.addNew(fileName).toJson());
   }
 
   static void saveSettings(Map<String, String> settings) async {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../core/constants.dart';
 
@@ -29,11 +28,7 @@ class ProjectionTextWidget extends StatelessWidget {
                         softWrap: true,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.fade,
-                        style: const TextStyle(
-                          fontFamily: 'LemonMilk',
-                          fontSize: 80,
-                          color: Colors.white,
-                        ),
+                        style: songSlideTextStyle
                       )
                     : Text(
                         text,
@@ -55,12 +50,7 @@ class ProjectionTextWidget extends StatelessWidget {
                 children: [
                   Text(
                     reference,
-                    style: GoogleFonts.raleway(
-                      textStyle: const TextStyle(
-                        fontSize: 50,
-                        color: Colors.white,
-                      ),
-                    ),
+                    style: refTextStyle
                   ),
                   const SizedBox(
                     width: 50,

@@ -22,7 +22,7 @@ final ctrlKeyNotifier = StateProvider<bool>((ref) {
 });
 
 final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((ref) {
-  return ScriptureNotifier(ref);
+  return ScriptureNotifier(ref, ref.read(directoriesProvider)['biblesDir']!);
 });
 
 final biblesDirectoryProvider = StateProvider<String?>((ref) {
@@ -45,14 +45,19 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
 });
 
 final activePlaylistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
-  return PlaylistNotifier(ref);
+  // return ref.watch(initProvider).maybeMap(
+    // data: (data) {
+      return PlaylistNotifier(ref);
+  //   },
+  //   orElse: () {
+  //     return PlaylistNotifier(null);
+  //   },
+  // );
 });
 
-final slidePanelTitleProvider = StateProvider<String>(
-  (ref) {
-    return '';
-  },
-);
+final slidePanelTitleProvider = StateProvider<String>((ref) {
+  return '';
+});
 
 final settingsProvider = StateNotifierProvider<SettingsNotifier, Map<String, String>>((ref) {
   String file = ref.watch(directoriesProvider)['settingsFile']!;

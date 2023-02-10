@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
-import 'package:freecps/media_center/notifiers/bibles_notifier.dart';
+import 'package:freecps/media_center/notifiers/media_center_bibles_notifier.dart';
 
 import '../../core/file_utils.dart';
 import '../media_center_providers.dart';
@@ -31,25 +31,10 @@ class MediaCenterBiblesTab extends ConsumerWidget {
                 mainAxisExtent: 200,
               ),
               itemBuilder: (context, index) {
-                // String selectedFileName = ref.watch(selectedPlaylistProvider);
                 BibleData bible = bibles[index];
-
-                return GestureDetector(
-                  onTap: () {
-                    //ref.read(selectedPlaylistProvider.notifier).state = playlist.fileName;
-                  },
-                  child: Card(
-                    // shape: playlist.fileName == selectedFileName
-                    //     ? const RoundedRectangleBorder(
-                    //         side: BorderSide(
-                    //           color: Color(0xff1e66f5),
-                    //           width: 1.5,
-                    //         ),
-                    //       )
-                    //     : null,
-                    child: Center(
-                      child: Text(bible.item2),
-                    ),
+                return Card(
+                  child: Center(
+                    child: Text(bible.item2),
                   ),
                 );
               },

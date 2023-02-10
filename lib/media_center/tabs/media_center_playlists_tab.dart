@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants.dart' as constants;
+import '../../core/constants.dart';
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../../models/playlist_model.dart';
@@ -102,15 +102,15 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
         ),
         ElevatedButton(
           onPressed: () async {
-             FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  allowMultiple: true,
-                  type: FileType.custom,
-                  allowedExtensions: constants.playlistFileExtension,
-                );
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              allowMultiple: true,
+              type: FileType.custom,
+              allowedExtensions: playlistFileExtension,
+            );
 
-                if (result == null) return;
+            if (result == null) return;
 
-                FileUtils.importPlaylist(FileUtils.filePickerResultToFile(result));
+            FileUtils.importPlaylist(FileUtils.filePickerResultToFile(result));
           },
           child: const Text('Import'),
         ),

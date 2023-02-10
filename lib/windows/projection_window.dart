@@ -31,7 +31,7 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
           child: Stack(
             children: [
               ColorFiltered(
-                colorFilter: const ColorFilter.mode(Colors.black38, BlendMode.darken),
+                colorFilter: const ColorFilter.mode(Colors.black45, BlendMode.darken),
                 child: Video(
                   player: player,
                   fit: BoxFit.cover,

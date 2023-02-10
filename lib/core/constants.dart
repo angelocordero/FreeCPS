@@ -1,6 +1,6 @@
-import 'dart:ui';
-
-import 'package:path/path.dart' as p;
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -28,6 +28,25 @@ enum SlideType {
   song,
 }
 
+TextStyle songSlideTextStyle = const TextStyle(
+  fontFamily: 'LemonMilk',
+  fontSize: 80,
+  color: Colors.white,
+);
+
+TextStyle verseSlideTextStyle = const TextStyle(
+  fontFamily: 'SegoeUI',
+  fontSize: 80,
+  color: Colors.white,
+);
+
+TextStyle refTextStyle = GoogleFonts.raleway(
+  textStyle: const TextStyle(
+    fontSize: 50,
+    color: Colors.white,
+  ),
+);
+
 List<String> videoFileExtensions = ['mp4', 'mov'];
 List<String> photoFileExtensions = ['jpg', 'jpeg', 'png'];
 List<String> bibleFileExtenstion = ['cpsb'];
@@ -39,43 +58,47 @@ Future<String> appDirectory() async {
 }
 
 Future<String> biblesDirectory() async {
-  return p.join(await appDirectory(), 'bibles');
+  return join(await appDirectory(), 'bibles');
 }
 
 Future<String> songsDirectory() async {
-  return p.join(await mediaDirectory(), 'songs');
+  return join(await mediaDirectory(), 'songs');
 }
 
 Future<String> mediaDirectory() async {
-  return p.join(await appDirectory(), 'media');
+  return join(await appDirectory(), 'media');
 }
 
 Future<String> settingsFile() async {
-  return p.join(await settingsDir(),'settings.json');
+  return join(await settingsDir(), 'settings.json');
 }
 
 Future<String> settingsDir() async {
-  return p.join(await appDirectory(), 'settings');
+  return join(await appDirectory(), 'settings');
 }
 
 Future<String> photosDirectory() async {
-  return p.join(await mediaDirectory(), 'photos');
+  return join(await mediaDirectory(), 'photos');
 }
 
 Future<String> photoThumbnailsDirectory() async {
-  return p.join(await photosDirectory(), 'thumbnails');
+  return join(await photosDirectory(), 'thumbnails');
+}
+
+Future<String> videoThumbnailsDirectory() async {
+  return join(await videosDirectory(), 'thumbnails');
 }
 
 Future<String> videosDirectory() async {
-  return p.join(await mediaDirectory(), 'videos');
+  return join(await mediaDirectory(), 'videos');
 }
 
 Future<String> playlistsDirectory() async {
-  return p.join(await mediaDirectory(), 'playlists');
+  return join(await mediaDirectory(), 'playlists');
 }
 
 Future<String> getPlaylistPath(String fileName) async {
-  return p.join(await playlistsDirectory(), fileName);
+  return join(await playlistsDirectory(), fileName);
 }
 
 List<String> superscriptMap = [
