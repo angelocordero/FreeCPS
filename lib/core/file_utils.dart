@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -19,6 +20,8 @@ class FileUtils {
     Directory(await songsDirectory()).create(recursive: false);
     Directory(await playlistsDirectory()).create(recursive: false);
     Directory(await biblesDirectory()).create(recursive: false);
+
+    File(await settingsFile()).createSync(recursive: true);
   }
 
   static Future<void> importPhotos(List<File> files) async {
@@ -123,5 +126,9 @@ class FileUtils {
     String fileName = '${customAlphabet(customIdAlphabet, 30)}.cpss';
 
     File(p.join(await playlistsDirectory(), fileName)).writeAsStringSync(Playlist.addNew(fileName).toJson());
+  }
+
+  static void saveSettings(Map<String, String> settings) async {
+    File(await settingsFile()).writeAsStringSync(const JsonEncoder.withIndent(' ').convert(settings));
   }
 }

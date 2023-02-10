@@ -50,6 +50,14 @@ Future<String> mediaDirectory() async {
   return p.join(await appDirectory(), 'media');
 }
 
+Future<String> settingsFile() async {
+  return p.join(await settingsDir(),'settings.json');
+}
+
+Future<String> settingsDir() async {
+  return p.join(await appDirectory(), 'settings');
+}
+
 Future<String> photosDirectory() async {
   return p.join(await mediaDirectory(), 'photos');
 }

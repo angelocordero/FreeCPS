@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+import 'package:freecps/core/providers_declaration.dart';
 import 'package:path/path.dart';
 
 import '../core/constants.dart';
@@ -10,22 +10,24 @@ import '../core/file_utils.dart';
 import '../models/playlist_model.dart';
 
 class PlaylistNotifier extends StateNotifier<Playlist> {
-  PlaylistNotifier() : super(Playlist.empty()) {
+  PlaylistNotifier(this.ref) : super(Playlist.empty()) {
     _init();
   }
 
   late String playlistDir;
   late String songsDir;
+  StateNotifierProviderRef<PlaylistNotifier, Playlist> ref;
 
   select(String fileName) async {
     String fileDir = await FileUtils.getPlaylistPath(fileName);
- 
 
     try {
       state = Playlist.fromJson(File(fileDir).readAsStringSync(), songsDir);
 
       // save selected playlist filename to hive database
-      Hive.box('settings').put('playlist', fileName);
+      // Hive.box('settings').put('playlist', fileName);
+
+      ref.read(settingsProvider.notifier).update('playlist', fileName);
     } catch (e) {
       debugPrint(e.toString());
       state = Playlist.error();
@@ -37,10 +39,12 @@ class PlaylistNotifier extends StateNotifier<Playlist> {
     songsDir = await songsDirectory();
 
     // get already selected playlist from hive database
-    String? playlistFileName = Hive.box('settings').get('playlist');
+    //String? playlistFileName = Hive.box('settings').get('playlist');
+
+    String? playlistFileName = ref.read(settingsProvider)['playlist'];
 
     if (playlistFileName != null) {
-      await select( playlistFileName);
+      await select(playlistFileName);
     }
 
     await _listen();

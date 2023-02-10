@@ -52,7 +52,6 @@ dependencies:
   mime: ^1.0.3
   google_fonts: ^3.0.1
   nanoid: ^1.0.0
-  hive: ^2.2.3
   
   resizable_widget:
         git:

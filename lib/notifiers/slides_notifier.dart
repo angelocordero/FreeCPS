@@ -53,7 +53,13 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     _scriptureReference = scripture.scriptureRef;
     _setSlidesPanelTitle(scriptureRefToRefString(scripture.scriptureRef));
 
+    bool breakOnNewVerse = _ref.read(settingsProvider.select((value) => value['break_on_new_verse'])) == 'true' ? true : false;
+
     if (endVerse != null) {
+      if (breakOnNewVerse == false) {
+        stitchVerses(scripture, startVerse, endVerse);
+        return;
+      }
       _setMultipleScriptureSlides(scripture, startVerse, endVerse);
       return;
     }
@@ -195,5 +201,43 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
 
   void _setSlidesPanelTitle(String title) {
     _ref.read(slidePanelTitleProvider.notifier).state = title;
+  }
+
+  void stitchVerses(Scripture scripture, int startVerse, int endVerse) {
+    String passage = '';
+
+    scripture.verses!
+        .getRange(
+      startVerse - 1,
+      endVerse,
+    )
+        .forEach(
+      (verse) {
+        String text = _getTextWithSuperscript(verse.num, verse.text);
+
+        passage = '$passage $text';
+      },
+    );
+
+    int maxChars = maxCharacters(
+      passage,
+      const TextStyle(
+        fontFamily: 'LemonMilk',
+        fontSize: 80,
+        color: Colors.white,
+      ),
+    );
+
+    if (passage.length > maxChars) {
+      state = splitSlides(passage, maxChars, scripture);
+    } else {
+      state = [
+        Slide(
+          text: passage,
+          reference: _scriptureRefToString(scripture.scriptureRef),
+          slideType: SlideType.scripture,
+        ),
+      ];
+    }
   }
 }

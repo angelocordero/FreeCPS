@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
+import 'package:freecps/core/file_utils.dart';
+import 'package:freecps/notifiers/settings_notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../models/playlist_model.dart';
@@ -42,7 +45,7 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
 });
 
 final activePlaylistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
-  return PlaylistNotifier();
+  return PlaylistNotifier(ref);
 });
 
 final slidePanelTitleProvider = StateProvider<String>(
@@ -50,3 +53,42 @@ final slidePanelTitleProvider = StateProvider<String>(
     return '';
   },
 );
+
+final settingsProvider = StateNotifierProvider<SettingsNotifier, Map<String, String>>((ref) {
+  String file = ref.watch(directoriesProvider)['settingsFile']!;
+
+  return SettingsNotifier(file);
+});
+
+final directoriesProvider = StateProvider<Map<String, String>>((ref) {
+  return {};
+});
+
+final initProvider = FutureProvider<bool?>((ref) async {
+  bool? initialized;
+
+  try {
+    await FileUtils.initializeDirectories();
+
+    ref.read(directoriesProvider.notifier).state = {
+      'photosDir': await photosDirectory(),
+      'videosDir': await videosDirectory(),
+      'appDir': await appDirectory(),
+      'biblesDir': await biblesDirectory(),
+      'songsDir': await songsDirectory(),
+      'mediaDir': await mediaDirectory(),
+      'settingsDir': await settingsDir(),
+      'settingsFile': await settingsFile(),
+      'photoThumbnailsDir': await photoThumbnailsDirectory(),
+      'playlistDir': await playlistsDirectory(),
+    };
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    initialized = true;
+  } catch (e) {
+    //
+  }
+
+  return initialized;
+});

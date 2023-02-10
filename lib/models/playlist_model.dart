@@ -91,7 +91,7 @@ class Playlist {
     };
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() => const JsonEncoder.withIndent(' ').convert(toMap());
 
   Playlist copyWith({
     String? title,

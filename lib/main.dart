@@ -1,10 +1,7 @@
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 
-import 'core/file_utils.dart';
 import 'windows/main_window.dart';
 import 'windows/projection_window.dart';
 import 'package:window_manager/window_manager.dart';
@@ -15,9 +12,7 @@ void main(List<String> args) async {
   if (args.isEmpty) {
     // TODO: put minimum size in main window
     // TODO: put in initialize window before main window?
-    FileUtils.initializeDirectories();
-    Hive.init(await getApplicationSupportDirectory().then((value) => value.path));
-    await Hive.openBox('settings');
+
     runApp(
       ProviderScope(
         child: MaterialApp(

@@ -34,6 +34,16 @@ class ScriptureSettings extends ConsumerWidget {
             },
             child: const Text('Save Verses To Playlist'),
           ),
+          const SizedBox(
+            height: 50,
+          ),
+          SwitchListTile(
+            title: const Text('Break on new verse'),
+            value: ref.watch(settingsProvider.select((value) => value['break_on_new_verse'])) == 'true' ? true : false,
+            onChanged: (bool newValue) {
+              ref.read(settingsProvider.notifier).update('break_on_new_verse', newValue.toString());
+            },
+          ),
         ],
       ),
     );
