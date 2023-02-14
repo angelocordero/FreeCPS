@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants.dart';
 import '../core/providers_declaration.dart';
 
-
 /// Slide widget for songs in slide panel
 class SongSlideWidget extends ConsumerWidget {
   const SongSlideWidget({super.key, required this.text, required this.reference, required this.index});

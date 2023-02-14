@@ -135,4 +135,10 @@ class FileUtils {
   static void saveSettings(Map<String, String> settings) async {
     File(await settingsFile()).writeAsStringSync(const JsonEncoder.withIndent(' ').convert(settings));
   }
+
+  static void saveSong(Song song) async {
+    String songPath = join(await songsDirectory(), song.fileName);
+
+    File(songPath).writeAsStringSync(song.toJson());
+  }
 }

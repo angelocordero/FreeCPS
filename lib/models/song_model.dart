@@ -78,11 +78,11 @@ class Song {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
-      'lyrics': lyrics,
-      'fileName': fileName,
       'artist': artist,
+      'fileName': fileName,
+      'lyrics': lyrics,
     };
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() => const JsonEncoder.withIndent(' ').convert(toMap());
 }

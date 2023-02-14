@@ -1,14 +1,22 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/media_center/widgets/song_editor.dart';
+import 'package:freecps/media_center/widgets/song_preview.dart';
 
 import '../../core/constants.dart';
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
-import '../widgets/song_preview.dart';
+import '../notifiers/song_editor_lyrics_fields_notifier.dart';
 import '../widgets/song_slide_preview.dart';
+
+final songEditorProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFieldsNotifier, Widget>((ref) {
+  Song song = ref.watch(selectedSongProvider);
+
+  return SongEditorLyricsFieldsNotifier(song);
+});
 
 class MediaCenterSongsTab extends ConsumerWidget {
   const MediaCenterSongsTab({
@@ -54,9 +62,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
                   flex: 2,
                   child: selectedSong == Song.empty()
                       ? Container()
-                      : SongPreview(
-                          song: selectedSong,
-                        ),
+                      : ref.watch(isEditingProvider)
+                          ? const SongEditor()
+                          : SongPreview(song: selectedSong),
                 ),
                 const VerticalDivider(),
                 Flexible(
@@ -72,6 +80,17 @@ class MediaCenterSongsTab extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                bool isEditing = ref.read(isEditingProvider);
+
+                ref.read(isEditingProvider.notifier).state = !isEditing;
+              },
+              child: const Text('Edit'),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
             ElevatedButton(
               onPressed: () {
                 FileUtils.addSongToPlaylist(selectedSong, ref.read(activePlaylistProvider));

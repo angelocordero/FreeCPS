@@ -26,10 +26,10 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     List<Slide> temp = [];
 
     for (var entries in song.lyrics.entries) {
-      String ref = entries.key;
+      String sectionLabel = entries.key;
 
       for (var element in entries.value) {
-        temp.add(Slide(text: element, reference: ref, slideType: SlideType.song));
+        temp.add(Slide(text: element, reference: sectionLabel, slideType: SlideType.song));
       }
     }
 

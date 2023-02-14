@@ -88,3 +88,9 @@ final playlistPreviewSelectedObjectProvider = StateProvider.autoDispose<dynamic>
 
   return null;
 });
+
+final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
+  ref.watch(selectedSongProvider);
+
+  return false;
+});
