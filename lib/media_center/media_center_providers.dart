@@ -56,6 +56,12 @@ final selectedSongProvider = StateProvider.autoDispose<Song>((ref) {
     return Song.empty();
   }
 
+  Song editedSong = ref.read(editedSongProvider);
+
+  if (editedSong != Song.empty()) {
+    return editedSong;
+  }
+
   return songs.first;
 });
 
@@ -93,4 +99,8 @@ final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
   ref.watch(selectedSongProvider);
 
   return false;
+});
+
+final editedSongProvider = StateProvider.autoDispose<Song>((ref) {
+  return Song.empty();
 });

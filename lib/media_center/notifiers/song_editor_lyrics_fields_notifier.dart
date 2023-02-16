@@ -4,7 +4,9 @@ import 'package:freecps/core/file_utils.dart';
 import 'package:freecps/media_center/widgets/song_editor_text_field_tile.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../core/helper_functions.dart';
 import '../../models/song_model.dart';
+import '../media_center_providers.dart';
 
 typedef CursorPosition = Tuple2<int, int>;
 typedef FieldData = Tuple2<TextEditingController, String>;
@@ -12,14 +14,16 @@ typedef FieldData = Tuple2<TextEditingController, String>;
 //TODO: MASSIVE MASSIVE REFACTOR
 
 class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
-  SongEditorLyricsFieldsNotifier(this.song) : super(Container()) {
+  SongEditorLyricsFieldsNotifier(this.song, this.ref) : super(Container()) {
     init();
   }
 
   final List<SongEditorTextFieldTile> _fields = [];
   final List<FieldData> _fieldsData = [];
 
-  final Song song;
+  Song song;
+
+  AutoDisposeStateNotifierProviderRef<SongEditorLyricsFieldsNotifier, Widget> ref;
 
   CursorPosition? cursorPosition;
 
@@ -30,10 +34,6 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     cursorPosition = CursorPosition(fieldIndex - 1, cursorPos);
   }
 
-  void resetCursorPosition() {
-    cursorPosition == null;
-  }
-
   init() {
     for (var entry in song.lyrics.entries) {
       for (var element in entry.value) {
@@ -42,10 +42,24 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
       }
     }
 
+    titleController.text = song.title;
+    artistController.text = song.artist;
+
     _setState();
   }
 
   insertSlide() {
+    if (_fieldsData.isEmpty) {
+      TextEditingController insertController = TextEditingController();
+
+      _fieldsData.add(FieldData(insertController, 'Verse 1'));
+      cursorPosition = null;
+
+      _setState();
+
+      return;
+    }
+
     if (cursorPosition == null) return;
 
     int index = cursorPosition!.item1;
@@ -78,6 +92,9 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
   }
 
   save() {
+    if (titleController.text.isEmpty) return;
+    if (_fieldsData.isEmpty) return;
+
     Map<String, List<dynamic>> lyrics = {};
     List<String> sections = _fieldsData.map((e) => e.item2).toList();
 
@@ -85,15 +102,24 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
       lyrics[section] = _fieldsData.where((element) => element.item2 == section && element.item1.text.isNotEmpty).map((e) => e.item1.text).toList();
     }
 
-    Song editedSong = song.copyWith(lyrics: lyrics, title: titleController.text, artist: artistController.text);
+    song = song.copyWith(lyrics: lyrics, title: titleController.text, artist: artistController.text);
 
-    FileUtils.saveSong(editedSong);
+    if (song.fileName.isEmpty) {
+      String fileName = '${generateRandomID()}.cpss';
+
+      song = song.copyWith(fileName: fileName);
+    }
+
+    FileUtils.saveSong(song);
+
+    bool isEditing = ref.read(isEditingProvider);
+
+    ref.read(isEditingProvider.notifier).state = !isEditing;
+
+    ref.read(editedSongProvider.notifier).state = song;
   }
 
-  Widget _textFieldList(String title, String artist) {
-    titleController.text = title;
-    artistController.text = artist;
-
+  Widget _textFieldList() {
     return Expanded(
       child: ListView(
         children: [
@@ -122,7 +148,6 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
                 flex: 2,
                 child: TextField(
                   controller: artistController,
-                  onTap: () {},
                 ),
               ),
             ],
@@ -146,6 +171,6 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
       ));
     }
 
-    state = _textFieldList(song.title, song.artist);
+    state = _textFieldList();
   }
 }

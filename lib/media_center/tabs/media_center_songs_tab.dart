@@ -15,7 +15,7 @@ import '../widgets/song_slide_preview.dart';
 final songEditorProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFieldsNotifier, Widget>((ref) {
   Song song = ref.watch(selectedSongProvider);
 
-  return SongEditorLyricsFieldsNotifier(song);
+  return SongEditorLyricsFieldsNotifier(song, ref);
 });
 
 class MediaCenterSongsTab extends ConsumerWidget {
@@ -50,7 +50,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
                           ref.read(selectedSongProvider.notifier).state = song;
                         },
                         child: ListTile(
-                          selected: selectedSong == song,
+                          selected: selectedSong.fileName == song.fileName,
                           title: Text(song.title),
                         ),
                       );
@@ -60,11 +60,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
                 const VerticalDivider(),
                 Flexible(
                   flex: 2,
-                  child: selectedSong == Song.empty()
-                      ? Container()
-                      : ref.watch(isEditingProvider)
-                          ? const SongEditor()
-                          : SongPreview(song: selectedSong),
+                  child: ref.watch(isEditingProvider) ? const SongEditor() : SongPreview(song: selectedSong),
                 ),
                 const VerticalDivider(),
                 Flexible(
@@ -82,6 +78,21 @@ class MediaCenterSongsTab extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () {
+                ref.read(selectedSongProvider.notifier).state = Song.empty();
+
+                bool isEditing = ref.read(isEditingProvider);
+
+                ref.read(isEditingProvider.notifier).state = !isEditing;
+              },
+              child: const Text('New Song'),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (ref.read(selectedSongProvider) == Song.empty()) return;
+
                 bool isEditing = ref.read(isEditingProvider);
 
                 ref.read(isEditingProvider.notifier).state = !isEditing;

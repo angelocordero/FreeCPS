@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../media_center_providers.dart';
 import '../tabs/media_center_songs_tab.dart';
 
 class SongEditor extends ConsumerWidget {
@@ -23,10 +22,6 @@ class SongEditor extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 ref.read(songEditorProvider.notifier).save();
-
-                bool isEditing = ref.read(isEditingProvider);
-
-                ref.read(isEditingProvider.notifier).state = !isEditing;
               },
               child: const Text('Save song'),
             ),

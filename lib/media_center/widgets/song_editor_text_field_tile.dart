@@ -49,8 +49,11 @@ class SongEditorTextFieldTile extends ConsumerWidget {
                       cursorPos: controller.selection.baseOffset,
                     );
               },
-              onTapOutside: (_) {
-                ref.read(songEditorProvider.notifier).resetCursorPosition();
+              onChanged: (input) {
+                 ref.read(songEditorProvider.notifier).setCursorPosition(
+                      fieldIndex: index,
+                      cursorPos: controller.selection.baseOffset,
+                    );
               },
             ),
           ),
