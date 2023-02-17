@@ -5,15 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/song_model.dart';
 
 class MediaCenterSongsNotifier extends StateNotifier<List<Song>> {
-  MediaCenterSongsNotifier(this.path) : super([]) {
+  MediaCenterSongsNotifier(this._path) : super([]) {
     _setState();
     _listen();
   }
 
-  String path;
+  final String _path;
+
+  List<Song> _songs = [];
 
   void _listen() {
-    Directory(path).watch().listen((event) {
+    Directory(_path).watch().listen((event) {
       if (!mounted) return;
 
       try {
@@ -25,10 +27,20 @@ class MediaCenterSongsNotifier extends StateNotifier<List<Song>> {
   }
 
   void _setState() {
-    state = Directory(path).listSync(recursive: false).whereType<File>().map((file) {
+    _songs = Directory(_path).listSync(recursive: false).whereType<File>().map((file) {
       return Song.fromJson(file.readAsStringSync());
     }).toList();
 
-    state.sort((a, b) => a.title.compareTo(b.title));
+    _songs.sort((a, b) => a.title.compareTo(b.title));
+
+    state = _songs;
+  }
+
+  void search(String query) {
+    state = _songs.where((element) => element.title.toLowerCase().startsWith(query)).toList();
+  }
+
+  void clearSearch() {
+    state = _songs;
   }
 }

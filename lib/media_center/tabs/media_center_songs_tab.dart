@@ -38,23 +38,39 @@ class MediaCenterSongsTab extends ConsumerWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: ListView.builder(
-                    itemCount: songs.length,
-                    itemBuilder: (context, index) {
-                      Song song = songs[index];
-
-                      return GestureDetector(
-                        onTap: () {
-                          if (selectedSong == song) return;
-
-                          ref.read(selectedSongProvider.notifier).state = song;
+                  child: Column(
+                    children: [
+                      TextField(
+                        onChanged: (input) {
+                          if (input.isEmpty) {
+                            ref.read(songsProvider.notifier).clearSearch();
+                            return;
+                          }
+    
+                          ref.read(songsProvider.notifier).search(input);
                         },
-                        child: ListTile(
-                          selected: selectedSong.fileName == song.fileName,
-                          title: Text(song.title),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: songs.length,
+                          itemBuilder: (context, index) {
+                            Song song = songs[index];
+    
+                            return GestureDetector(
+                              onTap: () {
+                                if (selectedSong == song) return;
+    
+                                ref.read(selectedSongProvider.notifier).state = song;
+                              },
+                              child: ListTile(
+                                selected: selectedSong.fileName == song.fileName,
+                                title: Text(song.title),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
                 ),
                 const VerticalDivider(),
@@ -79,9 +95,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 ref.read(selectedSongProvider.notifier).state = Song.empty();
-
+    
                 bool isEditing = ref.read(isEditingProvider);
-
+    
                 ref.read(isEditingProvider.notifier).state = !isEditing;
               },
               child: const Text('New Song'),
@@ -92,9 +108,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 if (ref.read(selectedSongProvider) == Song.empty()) return;
-
+    
                 bool isEditing = ref.read(isEditingProvider);
-
+    
                 ref.read(isEditingProvider.notifier).state = !isEditing;
               },
               child: const Text('Edit'),
@@ -118,9 +134,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
                   type: FileType.custom,
                   allowedExtensions: songFileExtension,
                 );
-
+    
                 if (result == null) return;
-
+    
                 FileUtils.importSongs(FileUtils.filePickerResultToFile(result));
               },
               child: const Text('Import'),

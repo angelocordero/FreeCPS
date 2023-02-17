@@ -127,7 +127,7 @@ class FileUtils {
   }
 
   static void addNewPlaylist() async {
-    String fileName = '$generateRandomID.cpss';
+    String fileName = '$generateRandomID.cpsp';
 
     File(join(await playlistsDirectory(), fileName)).writeAsStringSync(Playlist.addNew(fileName).toJson());
   }
