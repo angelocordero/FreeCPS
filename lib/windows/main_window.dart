@@ -19,9 +19,21 @@ import '../panels/verses_list.dart';
 class MainWindow extends ConsumerWidget {
   const MainWindow({super.key});
 
+
+
   // TODO: change appbar to custom app bar
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    DesktopMultiWindow.setMethodHandler((call, _) async {
+      if (call.method == 'close') {
+        bool isLive = ref.read(liveProvider);
+
+        await ProjectionUtils.close();
+
+        ref.read(liveProvider.notifier).state = !isLive;
+      }
+    });
+
     return ref.watch(initProvider).when(
       data: (data) {
         return Scaffold(

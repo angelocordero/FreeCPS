@@ -22,11 +22,26 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   Widget second = Container();
   bool showingFirst = false;
 
+  bool focused = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      showPerformanceOverlay: true,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: focused
+            ? FloatingActionButton(
+                onPressed: () {
+                  DesktopMultiWindow.invokeMethod(0, 'close');
+                  //dispose();
+                },
+                child: const Icon(
+                  Icons.close,
+                ),
+              )
+            : null,
         body: SizedBox.expand(
           child: Stack(
             children: [
@@ -55,15 +70,30 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
 
   @override
   void dispose() {
+    super.dispose();
     player.dispose();
     windowManager.close();
-    super.dispose();
   }
 
   @override
   void initState() {
+    super.initState();
+
     player = Player(id: 9999);
     player.setPlaylistMode(PlaylistMode.loop);
+
+    WidgetsBinding.instance.addPersistentFrameCallback((_) async {
+      try {
+        bool focus = await windowManager.isFocused();
+        if (mounted) {
+          setState(() {
+            focused = focus;
+          });
+        }
+      } catch (e) {
+        //
+      }
+    });
 
     DesktopMultiWindow.setMethodHandler(
       (call, _) async {
@@ -87,8 +117,6 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
         }
       },
     );
-
-    super.initState();
   }
 
   void clearBackground() {
