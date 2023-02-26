@@ -67,8 +67,8 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
 
     String text = _fieldsData[index].item1.text;
 
-    String text1 = text.substring(0, cursorPos);
-    String text2 = text.substring(cursorPos, text.length);
+    String text1 = text.substring(0, cursorPos).trim();
+    String text2 = text.substring(cursorPos, text.length).trim();
 
     _fieldsData[index].item1.text = text1;
 
@@ -99,10 +99,11 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     List<String> sections = _fieldsData.map((e) => e.item2).toList();
 
     for (String section in sections) {
-      lyrics[section] = _fieldsData.where((element) => element.item2 == section && element.item1.text.isNotEmpty).map((e) => e.item1.text).toList();
+      lyrics[section] =
+          _fieldsData.where((element) => element.item2 == section && element.item1.text.isNotEmpty).map((e) => e.item1.text.trim()).toList();
     }
 
-    song = song.copyWith(lyrics: lyrics, title: titleController.text, artist: artistController.text);
+    song = song.copyWith(lyrics: lyrics, title: titleController.text.trim(), artist: artistController.text.trim());
 
     if (song.fileName.isEmpty) {
       String fileName = '${generateRandomID()}.cpss';
