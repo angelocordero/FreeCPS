@@ -8,13 +8,13 @@ import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
 
-class PlaylistPreviewPanel extends ConsumerWidget {
-  const PlaylistPreviewPanel({super.key});
+class PlaylistDetailsPanel extends ConsumerWidget {
+  const PlaylistDetailsPanel({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Playlist playlist = ref.watch(previewedPlaylistProvider);
-    dynamic selected = ref.watch(playlistPreviewSelectedObjectProvider);
+    dynamic selected = ref.watch(playlistSelectedPreviewProvider);
 
     return ListView(
       children: [
@@ -30,7 +30,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
     );
   }
 
-  ReorderableListView mediaList(Playlist playlist, selected, WidgetRef ref) {
+  ReorderableListView mediaList(Playlist playlist, dynamic selected, WidgetRef ref) {
     return ReorderableListView(
       shrinkWrap: true,
       buildDefaultDragHandles: playlist.media.length > 1,
@@ -40,7 +40,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
             key: ValueKey(e.hashCode),
             selected: selected is String && selected == e,
             onTap: () {
-              ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
+              ref.read(playlistSelectedPreviewProvider.notifier).state = e;
             },
             title: Text(e),
           ),
@@ -63,7 +63,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
     );
   }
 
-  ReorderableListView versesList(Playlist playlist, WidgetRef ref, selected) {
+  ReorderableListView versesList(Playlist playlist, WidgetRef ref, dynamic selected) {
     return ReorderableListView(
       buildDefaultDragHandles: playlist.verses.length > 1,
       shrinkWrap: true,
@@ -72,7 +72,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
           (e) => ListTile(
             key: ValueKey(e.hashCode),
             onTap: () {
-              ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
+              ref.read(playlistSelectedPreviewProvider.notifier).state = e;
             },
             selected: selected is SavedVerseSlides && selected == e,
             title: Text(
@@ -98,7 +98,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
     );
   }
 
-  ReorderableListView songsList(Playlist playlist, WidgetRef ref, selected) {
+  ReorderableListView songsList(Playlist playlist, WidgetRef ref, dynamic selected) {
     return ReorderableListView(
       buildDefaultDragHandles: playlist.songs.length > 1,
       shrinkWrap: true,
@@ -108,7 +108,7 @@ class PlaylistPreviewPanel extends ConsumerWidget {
               (e) => ListTile(
                 key: ValueKey(e.hashCode),
                 onTap: () {
-                  ref.read(playlistPreviewSelectedObjectProvider.notifier).state = e;
+                  ref.read(playlistSelectedPreviewProvider.notifier).state = e;
                 },
                 selected: selected is Song && selected == e,
                 title: Text(e.title),

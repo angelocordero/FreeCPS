@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/media_center/tabs/media_center_bibles_tab.dart';
+import 'package:freecps/media_center/tabs/bibles_tab.dart';
 
 import 'media_center_providers.dart';
-import 'tabs/media_center_photos_tab.dart';
-import 'tabs/media_center_playlists_tab.dart';
-import 'tabs/media_center_songs_tab.dart';
-import 'tabs/media_center_videos_tab.dart';
+import 'tabs/photos_tab.dart';
+import 'tabs/playlists_tab.dart';
+import 'tabs/songs_tab.dart';
+import 'tabs/videos_tab.dart';
 
 class MediaCenter extends ConsumerWidget {
   const MediaCenter({super.key});
@@ -68,11 +68,11 @@ class MediaCenter extends ConsumerWidget {
                   const Expanded(
                     child: TabBarView(
                       children: [
-                        MediaCenterPlaylistsTab(),
-                        MediaCenterPhotosTab(),
-                        MediaCenterVideosTab(),
-                        MediaCenterSongsTab(),
-                        MediaCenterBiblesTab(),
+                        PlaylistsTab(),
+                        PhotosTab(),
+                        VideosTab(),
+                        SongsTab(),
+                        BiblesTab(),
                       ],
                     ),
                   ),

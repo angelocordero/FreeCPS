@@ -10,20 +10,20 @@ class ScripturePickerPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FocusScope(
+    return const FocusScope(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'SCRIPTURE',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
-            const Divider(),
+            Divider(),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -31,7 +31,7 @@ class ScripturePickerPanel extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Translation: '),
                       SizedBox(
                         width: 20,
@@ -41,7 +41,7 @@ class ScripturePickerPanel extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Book'),
                       SizedBox(
                         width: 20,
@@ -51,7 +51,7 @@ class ScripturePickerPanel extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Chapter'),
                       SizedBox(
                         width: 20,
@@ -61,7 +61,7 @@ class ScripturePickerPanel extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Verse'),
                       SizedBox(
                         width: 20,

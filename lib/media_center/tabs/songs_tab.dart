@@ -18,8 +18,8 @@ final songEditorProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFie
   return SongEditorLyricsFieldsNotifier(song, ref);
 });
 
-class MediaCenterSongsTab extends ConsumerWidget {
-  const MediaCenterSongsTab({
+class SongsTab extends ConsumerWidget {
+  const SongsTab({
     Key? key,
   }) : super(key: key);
 
@@ -46,7 +46,7 @@ class MediaCenterSongsTab extends ConsumerWidget {
                             ref.read(songsProvider.notifier).clearSearch();
                             return;
                           }
-    
+
                           ref.read(songsProvider.notifier).search(input);
                         },
                       ),
@@ -55,11 +55,11 @@ class MediaCenterSongsTab extends ConsumerWidget {
                           itemCount: songs.length,
                           itemBuilder: (context, index) {
                             Song song = songs[index];
-    
+
                             return GestureDetector(
                               onTap: () {
                                 if (selectedSong == song) return;
-    
+
                                 ref.read(selectedSongProvider.notifier).state = song;
                               },
                               child: ListTile(
@@ -95,9 +95,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 ref.read(selectedSongProvider.notifier).state = Song.empty();
-    
+
                 bool isEditing = ref.read(isEditingProvider);
-    
+
                 ref.read(isEditingProvider.notifier).state = !isEditing;
               },
               child: const Text('New Song'),
@@ -108,9 +108,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 if (ref.read(selectedSongProvider) == Song.empty()) return;
-    
+
                 bool isEditing = ref.read(isEditingProvider);
-    
+
                 ref.read(isEditingProvider.notifier).state = !isEditing;
               },
               child: const Text('Edit'),
@@ -134,9 +134,9 @@ class MediaCenterSongsTab extends ConsumerWidget {
                   type: FileType.custom,
                   allowedExtensions: songFileExtension,
                 );
-    
+
                 if (result == null) return;
-    
+
                 FileUtils.importSongs(FileUtils.filePickerResultToFile(result));
               },
               child: const Text('Import'),

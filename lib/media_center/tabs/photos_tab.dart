@@ -10,8 +10,8 @@ import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../media_center_providers.dart';
 
-class MediaCenterPhotosTab extends ConsumerWidget {
-  const MediaCenterPhotosTab({
+class PhotosTab extends ConsumerWidget {
+  const PhotosTab({
     Key? key,
   }) : super(key: key);
 

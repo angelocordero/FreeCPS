@@ -1,7 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/core/constants.dart';
-import 'package:freecps/core/file_utils.dart';
-import 'package:freecps/notifiers/settings_notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../models/playlist_model.dart';
@@ -10,8 +7,11 @@ import '../models/slide_model.dart';
 import '../notifiers/playlist_notifier.dart';
 import '../notifiers/projected_slide_notifier.dart';
 import '../notifiers/scripture_notifier.dart';
+import '../notifiers/settings_notifier.dart';
 import '../notifiers/slides_notifier.dart';
 import '../notifiers/verse_list_controller_notifier.dart';
+import 'constants.dart';
+import 'file_utils.dart';
 
 final liveProvider = StateProvider<bool>((ref) {
   return false;
@@ -45,14 +45,7 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
 });
 
 final activePlaylistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
-  // return ref.watch(initProvider).maybeMap(
-    // data: (data) {
       return PlaylistNotifier(ref);
-  //   },
-  //   orElse: () {
-  //     return PlaylistNotifier(null);
-  //   },
-  // );
 });
 
 final slidePanelTitleProvider = StateProvider<String>((ref) {

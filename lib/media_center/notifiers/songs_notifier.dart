@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/song_model.dart';
 
-class MediaCenterSongsNotifier extends StateNotifier<List<Song>> {
-  MediaCenterSongsNotifier(this._path) : super([]) {
+class SongsNotifier extends StateNotifier<List<Song>> {
+  SongsNotifier(this._path) : super([]) {
     _setState();
     _listen();
   }

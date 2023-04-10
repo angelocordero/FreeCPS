@@ -10,8 +10,8 @@ import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../media_center_providers.dart';
 
-class MediaCenterVideosTab extends ConsumerWidget {
-  const MediaCenterVideosTab({
+class VideosTab extends ConsumerWidget {
+  const VideosTab({
     Key? key,
   }) : super(key: key);
 

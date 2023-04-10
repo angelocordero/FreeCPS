@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/media_center/tabs/media_center_songs_tab.dart';
+import 'package:freecps/media_center/tabs/songs_tab.dart';
 
 import '../../core/constants.dart';
 

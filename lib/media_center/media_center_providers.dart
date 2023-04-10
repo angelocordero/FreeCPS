@@ -6,35 +6,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/providers_declaration.dart';
 import '../models/playlist_model.dart';
 import '../models/song_model.dart';
-import 'notifiers/media_center_bibles_notifier.dart';
-import 'notifiers/media_center_photos_notifier.dart';
-import 'notifiers/media_center_playlist_preview_notifier.dart';
-import 'notifiers/media_center_playlists_notifier.dart';
-import 'notifiers/media_center_videos_notifier.dart';
-import 'notifiers/media_center_songs_notifier.dart';
+import 'notifiers/bibles_notifier.dart';
+import 'notifiers/photos_notifier.dart';
+import 'notifiers/playlist_preview_panel_notifier.dart';
+import 'notifiers/playlists_notifier.dart';
+import 'notifiers/videos_notifier.dart';
+import 'notifiers/songs_notifier.dart';
 
 //TODO make these async
 
-final photosProvider = StateNotifierProvider.autoDispose<MediaCenterPhotosNotifier, List<File>>((ref) {
-  return MediaCenterPhotosNotifier(ref.watch(directoriesProvider)['photoThumbnailsDir']!);
+final photosProvider = StateNotifierProvider.autoDispose<PhotosNotifier, List<File>>((ref) {
+  return PhotosNotifier(ref.watch(directoriesProvider)['photoThumbnailsDir']!);
 });
 
-final videosProvider = StateNotifierProvider.autoDispose<MediaCenterVideosNotifier, List<File>>((ref) {
-  return MediaCenterVideosNotifier(ref.watch(directoriesProvider)['videosDir']!);
+final videosProvider = StateNotifierProvider.autoDispose<VideosNotifier, List<File>>((ref) {
+  return VideosNotifier(ref.watch(directoriesProvider)['videosDir']!);
 });
 
-final playlistsProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylistsNotifier, List<Playlist>>((ref) {
+final playlistsProvider = StateNotifierProvider.autoDispose<PlaylistsNotifier, List<Playlist>>((ref) {
   Map<String, String> dirs = ref.watch(directoriesProvider);
 
-  return MediaCenterPlaylistsNotifier(dirs['playlistDir']!, dirs['songsDir']!);
+  return PlaylistsNotifier(dirs['playlistDir']!, dirs['songsDir']!);
 });
 
-final songsProvider = StateNotifierProvider.autoDispose<MediaCenterSongsNotifier, List<Song>>((ref) {
-  return MediaCenterSongsNotifier(ref.watch(directoriesProvider)['songsDir']!);
+final songsProvider = StateNotifierProvider.autoDispose<SongsNotifier, List<Song>>((ref) {
+  return SongsNotifier(ref.watch(directoriesProvider)['songsDir']!);
 });
 
-final biblesProvider = StateNotifierProvider.autoDispose<MediaCenterBiblesNotifier, List<BibleData>>((ref) {
-  return MediaCenterBiblesNotifier(ref.watch(directoriesProvider)['biblesDir']!);
+final biblesProvider = StateNotifierProvider.autoDispose<BiblesNotifier, List<BibleData>>((ref) {
+  return BiblesNotifier(ref.watch(directoriesProvider)['biblesDir']!);
 });
 
 final mediaCenterCtrlKeyNotifier = StateProvider.autoDispose<bool>((ref) {
@@ -80,13 +80,14 @@ final previewedPlaylistProvider = StateProvider.autoDispose<Playlist>((ref) {
   }
 });
 
-final playlistPreviewProvider = StateNotifierProvider.autoDispose<MediaCenterPlaylistPreviewNotifier, Widget>((ref) {
-  dynamic selected = ref.watch(playlistPreviewSelectedObjectProvider);
+final playlistPreviewPanelProvider = StateNotifierProvider.autoDispose<PlaylistPreviewPanelNotifier, Widget>((ref) {
+  dynamic selected = ref.watch(playlistSelectedPreviewProvider);
+  String photosDir = ref.watch(directoriesProvider)['photosDir']!;
 
-  return MediaCenterPlaylistPreviewNotifier(args: selected, photosDir: ref.watch(directoriesProvider)['photosDir']!);
+  return PlaylistPreviewPanelNotifier(args: selected, photosDir: photosDir);
 });
 
-final playlistPreviewSelectedObjectProvider = StateProvider.autoDispose<dynamic>((ref) {
+final playlistSelectedPreviewProvider = StateProvider.autoDispose<dynamic>((ref) {
   List<Song> songs = ref.watch(previewedPlaylistProvider.select((value) => value.songs));
   if (songs.isNotEmpty) {
     return songs.first;

@@ -7,10 +7,10 @@ import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../../models/playlist_model.dart';
 import '../media_center_providers.dart';
-import '../widgets/playlist_preview_panel.dart';
+import '../widgets/playlist_details_panel.dart';
 
-class MediaCenterPlaylistsTab extends ConsumerWidget {
-  const MediaCenterPlaylistsTab({
+class PlaylistsTab extends ConsumerWidget {
+  const PlaylistsTab({
     Key? key,
   }) : super(key: key);
 
@@ -55,12 +55,12 @@ class MediaCenterPlaylistsTab extends ConsumerWidget {
                 const VerticalDivider(),
                 const Flexible(
                   flex: 2,
-                  child: PlaylistPreviewPanel(),
+                  child: PlaylistDetailsPanel(),
                 ),
                 const VerticalDivider(),
                 Flexible(
                   flex: 2,
-                  child: ref.watch(playlistPreviewProvider),
+                  child: ref.watch(playlistPreviewPanelProvider),
                 ),
               ],
             ),

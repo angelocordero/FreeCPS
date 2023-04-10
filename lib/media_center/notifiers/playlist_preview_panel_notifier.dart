@@ -10,8 +10,8 @@ import 'package:path/path.dart';
 import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
 
-class MediaCenterPlaylistPreviewNotifier extends StateNotifier<Widget> {
-  MediaCenterPlaylistPreviewNotifier({required dynamic args, required this.photosDir}) : super(Container()) {
+class PlaylistPreviewPanelNotifier extends StateNotifier<Widget> {
+  PlaylistPreviewPanelNotifier({required dynamic args, required this.photosDir}) : super(Container()) {
     _preview(args);
   }
 

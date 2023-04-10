@@ -2,13 +2,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/constants.dart';
-import 'package:freecps/media_center/notifiers/media_center_bibles_notifier.dart';
+import 'package:freecps/media_center/notifiers/bibles_notifier.dart';
 
 import '../../core/file_utils.dart';
 import '../media_center_providers.dart';
 
-class MediaCenterBiblesTab extends ConsumerWidget {
-  const MediaCenterBiblesTab({
+class BiblesTab extends ConsumerWidget {
+  const BiblesTab({
     Key? key,
   }) : super(key: key);
 

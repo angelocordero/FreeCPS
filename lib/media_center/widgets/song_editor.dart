@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../tabs/media_center_songs_tab.dart';
+import '../tabs/songs_tab.dart';
 
 class SongEditor extends ConsumerWidget {
   const SongEditor({super.key});

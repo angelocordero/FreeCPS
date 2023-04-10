@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MediaCenterVideosNotifier extends StateNotifier<List<File>> {
-  MediaCenterVideosNotifier(this.path) : super([]) {
+class PhotosNotifier extends StateNotifier<List<File>> {
+  PhotosNotifier(this.path) : super([]) {
     _setState();
     _listen();
   }

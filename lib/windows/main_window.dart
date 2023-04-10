@@ -19,8 +19,6 @@ import '../panels/verses_list.dart';
 class MainWindow extends ConsumerWidget {
   const MainWindow({super.key});
 
-
-
   // TODO: change appbar to custom app bar
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -117,8 +115,8 @@ class MainWindow extends ConsumerWidget {
                     ProjectionControls(),
                   ],
                 ),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Expanded(
                       flex: 1,
                       child: ScripturePickerPanel(),

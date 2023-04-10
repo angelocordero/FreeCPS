@@ -7,8 +7,8 @@ import 'package:tuple/tuple.dart';
 
 typedef BibleData = Tuple2<String, String>;
 
-class MediaCenterBiblesNotifier extends StateNotifier<List<BibleData>> {
-  MediaCenterBiblesNotifier(this.path) : super([]) {
+class BiblesNotifier extends StateNotifier<List<BibleData>> {
+  BiblesNotifier(this.path) : super([]) {
     _setState();
     _listen();
   }
