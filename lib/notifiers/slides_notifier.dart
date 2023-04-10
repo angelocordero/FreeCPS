@@ -9,8 +9,10 @@ import '../models/playlist_model.dart';
 import '../models/saved_verse_slides.dart';
 import '../models/scripture_model.dart';
 import '../models/scripture_reference_model.dart';
+import '../models/scripture_slide_model.dart';
 import '../models/slide_model.dart';
 import '../models/song_model.dart';
+import '../models/song_slide_model.dart';
 import '../models/verse_model.dart';
 
 /// Notifier that holds all the generated slides in the Slides Panel
@@ -29,7 +31,7 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
       String sectionLabel = entries.key;
 
       for (var element in entries.value) {
-        temp.add(Slide(text: element, reference: sectionLabel, slideType: SlideType.song));
+        temp.add(SongSlide(text: element, reference: sectionLabel));
       }
     }
 
@@ -89,16 +91,13 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
         int maxChars = maxCharacters(text, songSlideTextStyle);
 
         if (text.length > maxChars) {
-          
           _splitSlides(text, maxChars, scripture);
           temp.addAll(_splitSlides(text, maxChars, scripture));
-
         } else {
           temp.add(
-            Slide(
+            ScriptureSlide(
               text: text,
               reference: scriptureRefToString(scripture.scriptureRef),
-              slideType: SlideType.scripture,
             ),
           );
         }
@@ -117,10 +116,9 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
       state = _splitSlides(text, maxChars, scripture);
     } else {
       state = [
-        Slide(
+        ScriptureSlide(
           text: text,
           reference: scriptureRefToString(scripture.scriptureRef),
-          slideType: SlideType.scripture,
         ),
       ];
     }
@@ -150,10 +148,9 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
       String slideText = text.substring(start, end);
 
       temp.add(
-        Slide(
+        ScriptureSlide(
           text: slideText,
           reference: scriptureRefToString(scripture.scriptureRef),
-          slideType: SlideType.scripture,
         ),
       );
     }
@@ -177,7 +174,6 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
     }
   }
 
-
   void _setSlidesPanelTitle(String title) {
     _ref.read(slidePanelTitleProvider.notifier).state = title;
   }
@@ -196,10 +192,9 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
       state = _splitSlides(passage, maxChars, scripture);
     } else {
       state = [
-        Slide(
+        ScriptureSlide(
           text: passage,
           reference: scriptureRefToString(scripture.scriptureRef),
-          slideType: SlideType.scripture,
         ),
       ];
     }

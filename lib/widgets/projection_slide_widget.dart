@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:freecps/models/scripture_slide_model.dart';
+import 'package:freecps/models/song_slide_model.dart';
 
 import '../core/constants.dart';
+import '../models/slide_model.dart';
 
 class ProjectionTextWidget extends StatelessWidget {
-  const ProjectionTextWidget({super.key, required this.text, required this.reference, required this.slideType});
+  const ProjectionTextWidget({super.key, required this.slide});
 
-  final String reference;
-  final String text;
-  final SlideType slideType;
+  final Slide slide;
 
   @override
   Widget build(BuildContext context) {
+    String? reference = slide is SongSlide ? null : (Slide as ScriptureSlide).reference;
+    String text = slide.text;
+
     return Container(
       color: Colors.transparent,
       height: 1080,
@@ -21,15 +25,8 @@ class ProjectionTextWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Center(
-                child: slideType == SlideType.song
-                    ? Text(
-                        text,
-                        maxLines: 10,
-                        softWrap: true,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.fade,
-                        style: songSlideTextStyle
-                      )
+                child: slide is SongSlide
+                    ? Text(text, maxLines: 10, softWrap: true, textAlign: TextAlign.center, overflow: TextOverflow.fade, style: songSlideTextStyle)
                     : Text(
                         text,
                         maxLines: 10,
@@ -44,14 +41,11 @@ class ProjectionTextWidget extends StatelessWidget {
                       ),
               ),
             ),
-            if (reference.isNotEmpty)
+            if (reference != null)
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    reference,
-                    style: refTextStyle
-                  ),
+                  Text(reference, style: refTextStyle),
                   const SizedBox(
                     width: 50,
                   ),

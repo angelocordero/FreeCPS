@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constants.dart';
-import '../../models/slide_model.dart';
 import '../../models/song_model.dart';
+import '../../models/song_slide_model.dart';
 import '../../widgets/song_slide_widget.dart';
 
 class SongSlidePreview extends StatelessWidget {
@@ -12,13 +11,13 @@ class SongSlidePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Slide> slides = [];
+    List<SongSlide> slides = [];
 
     for (var entries in song.lyrics.entries) {
       String ref = entries.key;
 
       for (var element in entries.value) {
-        slides.add(Slide(text: element, reference: ref, slideType: SlideType.song));
+        slides.add(SongSlide(text: element, reference: ref));
       }
     }
 

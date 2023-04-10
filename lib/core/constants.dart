@@ -23,11 +23,6 @@ Map<String, Color> catpuccinColorsSample = {
   'Default': const Color(0xff40a02b),
 };
 
-enum SlideType {
-  scripture,
-  song,
-}
-
 TextStyle songSlideTextStyle = const TextStyle(
   fontFamily: 'LemonMilk',
   fontSize: 80,

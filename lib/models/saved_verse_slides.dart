@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'scripture_reference_model.dart';
+import 'scripture_slide_model.dart';
 import 'slide_model.dart';
 import 'verse_reference_model.dart';
 
@@ -20,9 +21,9 @@ class SavedVerseSlides {
 
   factory SavedVerseSlides.fromMap(Map<String, dynamic> map) {
     return SavedVerseSlides(
-      verseSlides: List<Slide>.from(
-        (map['verseSlides'] as List<dynamic>).map<Slide>(
-          (x) => Slide.fromMap(x as Map<String, dynamic>),
+      verseSlides: List<ScriptureSlide>.from(
+        (map['verseSlides'] as List<dynamic>).map<ScriptureSlide>(
+          (x) => ScriptureSlide.fromMap(x as Map<String, dynamic>),
         ),
       ),
       scriptureRef: ScriptureReference(

@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/constants.dart';
 import '../core/projection_utils.dart';
 import '../models/slide_model.dart';
 
@@ -76,11 +75,6 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
 
     Slide slide = slides[index];
 
-    if (slide.slideType == SlideType.song) {
-      ProjectionUtils.showSlide(slide.text, isLive);
-    } else if (slide.slideType == SlideType.scripture) {
-      String arguments = '${slide.text}<split>${slide.reference}';
-      ProjectionUtils.showSlide(arguments, isLive);
-    }
+    ProjectionUtils.showSlide(slide.toJson().toString(), isLive);
   }
 }

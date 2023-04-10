@@ -4,9 +4,11 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freecps/core/constants.dart';
+import 'package:freecps/models/scripture_slide_model.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../models/slide_model.dart';
+import '../models/song_slide_model.dart';
 import '../widgets/projection_slide_widget.dart';
 
 class ProjectionWindow extends StatefulWidget {
@@ -106,14 +108,15 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
         } else if (call.method == 'close') {
           dispose();
         } else if (call.method == 'showSlide') {
-          List<String> args = (call.arguments as String).split('<split>');
-
-          if (args.length == 1) {
-            showNextSlide(args.first, '', SlideType.song);
-            return;
+          try {
+            showNextSlide(ScriptureSlide.fromJson(call.arguments as String));
+          } catch (e) {
+            try {
+              showNextSlide(SongSlide.fromJson(call.arguments as String));
+            } catch (e) {
+              //
+            }
           }
-
-          showNextSlide(args[0], args[1], SlideType.scripture);
         }
       },
     );
@@ -133,19 +136,15 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
     player.open(file);
   }
 
-  void showNextSlide(String text, String reference, SlideType slideType) {
+  void showNextSlide(Slide slide) {
     setState(() {
       if (showingFirst) {
         second = ProjectionTextWidget(
-          text: text,
-          reference: reference,
-          slideType: slideType,
+          slide: slide,
         );
       } else {
         first = ProjectionTextWidget(
-          text: text,
-          reference: reference,
-          slideType: slideType,
+          slide: slide,
         );
       }
 
