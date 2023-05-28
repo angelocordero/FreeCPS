@@ -2,10 +2,10 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/media_center_slide_route.dart';
 import 'package:resizable_widget/resizable_widget.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 
-import '../core/custom_popup_route.dart';
 import '../core/projection_utils.dart';
 import '../core/providers_declaration.dart';
 import '../media_center/media_center.dart';
@@ -18,6 +18,7 @@ import '../panels/verses_list.dart';
 
 class MainWindow extends ConsumerWidget {
   const MainWindow({super.key});
+
 
   // TODO: change appbar to custom app bar
   @override
@@ -42,7 +43,7 @@ class MainWindow extends ConsumerWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    CustomPopupRoute(
+                    MediaCenterSlideRoute(
                       builder: (context) {
                         return const MediaCenter();
                       },

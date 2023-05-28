@@ -25,58 +25,83 @@ class MediaCenter extends ConsumerWidget {
         ref.read(mediaCenterCtrlKeyNotifier.notifier).state = false;
       },
       child: Padding(
-        padding: const EdgeInsets.all(100.0),
+        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.15),
         child: Material(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+          color: Theme.of(context).colorScheme.secondary,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+            ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: DefaultTabController(
-              length: 5,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ref.watch(mediaCenterCtrlKeyNotifier) ? Container() : Container(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.only(left: 1),
+            child: Material(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 0, 20, 20),
+                child: DefaultTabController(
+                  length: 5,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Media Center',
-                        style: TextStyle(fontSize: 30),
+                      ref.watch(mediaCenterCtrlKeyNotifier) ? Container() : Container(),
+                      SizedBox(
+                        height: kToolbarHeight,
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.close),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            const Text(
+                              'Media Center',
+                              style: TextStyle(fontSize: 25),
+                            )
+                          ],
+                        ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.close_rounded),
+                      const Divider(
+                        height: 5,
+                      ),
+                      const TabBar(
+                        tabs: [
+                          Tab(text: 'Playlists'),
+                          Tab(text: 'Photos'),
+                          Tab(text: 'Videos'),
+                          Tab(text: 'Songs'),
+                          Tab(text: 'Bibles'),
+                        ],
+                      ),
+                      const Expanded(
+                        child: TabBarView(
+                          children: [
+                            PlaylistsTab(),
+                            PhotosTab(),
+                            VideosTab(),
+                            SongsTab(),
+                            BiblesTab(),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  const Divider(),
-                  const TabBar(
-                    tabs: [
-                      Tab(text: 'Playlists'),
-                      Tab(text: 'Photos'),
-                      Tab(text: 'Videos'),
-                      Tab(text: 'Songs'),
-                      Tab(text: 'Bibles'),
-                    ],
-                  ),
-                  const Expanded(
-                    child: TabBarView(
-                      children: [
-                        PlaylistsTab(),
-                        PhotosTab(),
-                        VideosTab(),
-                        SongsTab(),
-                        BiblesTab(),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomPopupRoute<T> extends PageRoute<T> {
-  CustomPopupRoute({
+class MediaCenterSlideRoute<T> extends PageRoute<T> {
+  MediaCenterSlideRoute({
     required WidgetBuilder builder,
     RouteSettings? settings,
     bool fullscreenDialog = false,
@@ -14,10 +14,13 @@ class CustomPopupRoute<T> extends PageRoute<T> {
   bool get opaque => false;
 
   @override
-  bool get barrierDismissible => false;
+  bool get barrierDismissible => true;
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  Duration get reverseTransitionDuration => const Duration(milliseconds: 300);
 
   @override
   bool get maintainState => false;
@@ -26,8 +29,16 @@ class CustomPopupRoute<T> extends PageRoute<T> {
   Color get barrierColor => Colors.black54;
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    return child;
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return SlideTransition(
+      position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero).animate(animation),
+      child: child,
+    );
   }
 
   @override
