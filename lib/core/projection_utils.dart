@@ -15,10 +15,16 @@ class ProjectionUtils {
     await methodChannel(methodName: 'clearSlide', isLive: isLive);
   }
 
-  static Future<void> showSlide(String arguments, bool isLive) async {
+  static Future<void> showSongSlide(String arguments, bool isLive) async {
     if (!isLive) return;
 
-    await methodChannel(methodName: 'showSlide', arguments: arguments, isLive: isLive);
+    await methodChannel(methodName: 'showSongSlide', arguments: arguments, isLive: isLive);
+  }
+
+  static Future<void> showScriptureSlide(String arguments, bool isLive) async {
+    if (!isLive) return;
+
+    await methodChannel(methodName: 'showScriptureSlide', arguments: arguments, isLive: isLive);
   }
 
   static Future<void> setBackground(String filePath, bool isLive) async {

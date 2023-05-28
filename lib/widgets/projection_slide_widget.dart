@@ -12,7 +12,8 @@ class ProjectionTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? reference = slide is SongSlide ? null : (Slide as ScriptureSlide).reference;
+    String? reference = slide is SongSlide ? null : (slide as ScriptureSlide).reference;
+
     String text = slide.text;
 
     return Container(

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import '../core/constants.dart';
+typedef VerseRange = ({int start, int? end});
 
 class VerseReference {
   VerseReference({
@@ -10,18 +10,18 @@ class VerseReference {
     List<String> num = verseString.split('-');
 
     if (num.length == 2) {
-      verseRange = VerseRange(int.tryParse(num[0]) ?? 1, int.tryParse(num[1]));
+      verseRange = (start: int.tryParse(num[0]) ?? 1, end: int.tryParse(num[1]));
       return;
     }
 
-    verseRange = VerseRange(int.tryParse(num[0]) ?? 1, null);
+    verseRange = (start: int.tryParse(num[0]) ?? 1, end: null);
   }
 
-  VerseRange verseRange = const VerseRange(1, null);
+  VerseRange verseRange = const (start: 1, end: null);
   String verseString = '1';
 
   VerseReference.defaultVerse() {
-    verseRange = const VerseRange(1, null);
+    verseRange = const (start: 1, end: null);
   }
 
   factory VerseReference.fromJson(String source) => VerseReference.fromMap(json.decode(source) as Map<String, dynamic>);

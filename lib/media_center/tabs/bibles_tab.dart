@@ -34,7 +34,7 @@ class BiblesTab extends ConsumerWidget {
                 BibleData bible = bibles[index];
                 return Card(
                   child: Center(
-                    child: Text(bible.item2),
+                    child: Text(bible.translationName),
                   ),
                 );
               },

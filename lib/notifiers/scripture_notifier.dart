@@ -224,15 +224,15 @@ class ScriptureNotifier extends StateNotifier<Scripture> {
 
     //List<int?> verseList = Utils.verseListFromVerseString(state.scriptureRef.verse);
 
-    if (state.scriptureRef.verse!.verseRange.item1 >= _verseMax!) {
+    if (state.scriptureRef.verse!.verseRange.start >= _verseMax!) {
       verseRef = _verseMax.toString();
       return;
     }
 
-    if (state.scriptureRef.verse!.verseRange.item2 == null) return;
+    if (state.scriptureRef.verse!.verseRange.end == null) return;
 
-    if (state.scriptureRef.verse!.verseRange.item1 > _verseMax!) {
-      verseRef = '${state.scriptureRef.verse!.verseRange.item1}-$_verseMax';
+    if (state.scriptureRef.verse!.verseRange.start > _verseMax!) {
+      verseRef = '${state.scriptureRef.verse!.verseRange.start}-$_verseMax';
       return;
     }
 

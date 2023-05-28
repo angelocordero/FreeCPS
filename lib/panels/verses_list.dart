@@ -16,8 +16,8 @@ class VersesList extends ConsumerWidget {
 
     List<Verse>? verseList = scripture.verses ?? [];
 
-    int startVerse = scripture.scriptureRef.verse?.verseRange.item1 ?? 0;
-    int? endVerse = scripture.scriptureRef.verse?.verseRange.item2;
+    int startVerse = scripture.scriptureRef.verse?.verseRange.start ?? 0;
+    int? endVerse = scripture.scriptureRef.verse?.verseRange.end;
 
     return FocusScope(
       child: Padding(

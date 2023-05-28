@@ -44,14 +44,14 @@ class SongEditorTextFieldTile extends ConsumerWidget {
               minLines: 5,
               maxLines: 10,
               onTap: () {
-                ref.read(songEditorProvider.notifier).setCursorPosition(
-                      fieldIndex: index,
+                ref.read(songEditorProvider.notifier).setCursorLocation(
+                      textFieldIndex: index,
                       cursorPos: controller.selection.baseOffset,
                     );
               },
               onChanged: (input) {
-                 ref.read(songEditorProvider.notifier).setCursorPosition(
-                      fieldIndex: index,
+                ref.read(songEditorProvider.notifier).setCursorLocation(
+                      textFieldIndex: index,
                       cursorPos: controller.selection.baseOffset,
                     );
               },

@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../core/constants.dart';
+import '../models/verse_reference_model.dart';
 
 class VerseListControllerNotifier extends StateNotifier<ItemScrollController> {
   VerseListControllerNotifier() : super(ItemScrollController());
@@ -13,16 +13,16 @@ class VerseListControllerNotifier extends StateNotifier<ItemScrollController> {
     List<String> num = verseString.split('-');
 
     if (num.length == 2) {
-      verseRange = VerseRange(int.tryParse(num[0]) ?? 1, int.tryParse(num[1]));
+      verseRange = (start: int.tryParse(num[0]) ?? 1, end: int.tryParse(num[1]));
     } else {
-      verseRange = VerseRange(int.tryParse(num[0]) ?? 1, null);
+      verseRange = (start: int.tryParse(num[0]) ?? 1, end: null);
     }
 
-    if (verseRange.item2 == null) {
-      state.scrollTo(index: verseRange.item1 - 1, duration: const Duration(milliseconds: 100), curve: Curves.linear);
+    if (verseRange.end == null) {
+      state.scrollTo(index: verseRange.start - 1, duration: const Duration(milliseconds: 100), curve: Curves.linear);
       return;
     } else {
-      int index = verseRange.item2! - 4;
+      int index = verseRange.end! - 4;
 
       if (index <= 0) {
         state.scrollTo(index: 0, duration: const Duration(milliseconds: 100), curve: Curves.linear);

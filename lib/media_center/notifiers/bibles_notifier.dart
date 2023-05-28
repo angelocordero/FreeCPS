@@ -3,9 +3,8 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
-import 'package:tuple/tuple.dart';
 
-typedef BibleData = Tuple2<String, String>;
+typedef BibleData = ({String name, String translationName});
 
 class BiblesNotifier extends StateNotifier<List<BibleData>> {
   BiblesNotifier(this.path) : super([]) {
@@ -36,7 +35,7 @@ class BiblesNotifier extends StateNotifier<List<BibleData>> {
 
         String translationName = jsonDecode(File(join(dir.path, '$name.metadata.json')).readAsStringSync())['translationName'];
 
-        return BibleData(name, translationName);
+        return (name: name, translationName: translationName);
       },
     ).toList();
   }

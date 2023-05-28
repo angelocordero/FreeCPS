@@ -9,7 +9,7 @@ import 'package:window_manager/window_manager.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   DartVLC.initialize();
-  //windowManager.ensureInitialized();
+  windowManager.ensureInitialized();
   if (args.isEmpty) {
     // TODO: put minimum size in main window
     // TODO: put in initialize window before main window?

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/models/scripture_slide_model.dart';
+import 'package:freecps/models/song_slide_model.dart';
 
 import '../core/projection_utils.dart';
 import '../models/slide_model.dart';
@@ -75,6 +77,10 @@ class ProjectedSlideNotifier extends StateNotifier<int?> {
 
     Slide slide = slides[index];
 
-    ProjectionUtils.showSlide(slide.toJson().toString(), isLive);
+    if (slide is SongSlide) {
+      ProjectionUtils.showSongSlide(slide.toJson().toString(), isLive);
+    } else if (slide is ScriptureSlide) {
+      ProjectionUtils.showScriptureSlide(slide.toJson().toString(), isLive);
+    }
   }
 }

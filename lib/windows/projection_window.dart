@@ -29,7 +29,7 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      showPerformanceOverlay: true,
+      showPerformanceOverlay: false,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -107,16 +107,10 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
           clearSlide();
         } else if (call.method == 'close') {
           dispose();
-        } else if (call.method == 'showSlide') {
-          try {
-            showNextSlide(ScriptureSlide.fromJson(call.arguments as String));
-          } catch (e) {
-            try {
-              showNextSlide(SongSlide.fromJson(call.arguments as String));
-            } catch (e) {
-              //
-            }
-          }
+        } else if (call.method == 'showScriptureSlide') {
+          showNextSlide(ScriptureSlide.fromJson(call.arguments as String));
+        } else if (call.method == 'showSongSlide') {
+          showNextSlide(SongSlide.fromJson(call.arguments as String));
         }
       },
     );

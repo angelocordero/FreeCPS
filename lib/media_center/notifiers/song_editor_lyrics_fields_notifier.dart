@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/file_utils.dart';
 import 'package:freecps/media_center/widgets/song_editor_text_field_tile.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../core/helper_functions.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
 
-typedef CursorPosition = Tuple2<int, int>;
-typedef FieldData = Tuple2<TextEditingController, String>;
+typedef CursorLocation = ({int textFieldIndex, int cursorPosition});
+typedef FieldData = ({TextEditingController controller, String label});
 
 //TODO: MASSIVE MASSIVE REFACTOR
 
@@ -25,20 +24,20 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
 
   AutoDisposeStateNotifierProviderRef<SongEditorLyricsFieldsNotifier, Widget> ref;
 
-  CursorPosition? cursorPosition;
+  CursorLocation? cursorLocation;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController artistController = TextEditingController();
 
-  void setCursorPosition({required int fieldIndex, required int cursorPos}) {
-    cursorPosition = CursorPosition(fieldIndex - 1, cursorPos);
+  void setCursorLocation({required int textFieldIndex, required int cursorPos}) {
+    cursorLocation = (textFieldIndex: textFieldIndex - 1, cursorPosition: cursorPos);
   }
 
   init() {
     for (var entry in song.lyrics.entries) {
       for (var element in entry.value) {
         TextEditingController controller = TextEditingController.fromValue(TextEditingValue(text: element));
-        _fieldsData.add(FieldData(controller, entry.key));
+        _fieldsData.add((controller: controller, label: entry.key));
       }
     }
 
@@ -52,41 +51,29 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     if (_fieldsData.isEmpty) {
       TextEditingController insertController = TextEditingController();
 
-      _fieldsData.add(FieldData(insertController, 'Verse 1'));
-      cursorPosition = null;
+      _fieldsData.add((controller: insertController, label: 'Verse 1'));
+      cursorLocation = null;
 
       _setState();
 
       return;
     }
 
-    if (cursorPosition == null) return;
+    if (cursorLocation == null) return;
 
-    int index = cursorPosition!.item1;
-    int cursorPos = cursorPosition!.item2;
+    int index = cursorLocation!.textFieldIndex;
+    int cursorPos = cursorLocation!.cursorPosition;
 
-    String text = _fieldsData[index].item1.text;
+    String text = _fieldsData[index].controller.text;
 
     String text1 = text.substring(0, cursorPos).trim();
     String text2 = text.substring(cursorPos, text.length).trim();
 
-    _fieldsData[index].item1.text = text1;
+    _fieldsData[index].controller.text = text1;
 
     TextEditingController insertController = TextEditingController(text: text2);
 
-    _fieldsData.insert(index + 1, FieldData(insertController, _fieldsData[index].item2));
-
-    _setState();
-  }
-
-  test() {
-    if (cursorPosition == null) return;
-
-    String label = _fieldsData[cursorPosition!.item1].item2;
-
-    for (int i = 0; i < _fieldsData.length; i++) {
-      _fieldsData[i] = _fieldsData[i].withItem2(label);
-    }
+    _fieldsData.insert(index + 1, (controller: insertController, label: _fieldsData[index].label));
 
     _setState();
   }
@@ -96,11 +83,17 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     if (_fieldsData.isEmpty) return;
 
     Map<String, List<dynamic>> lyrics = {};
-    List<String> sections = _fieldsData.map((e) => e.item2).toList();
+    List<String> sections = _fieldsData.map((fields) => fields.label).toList();
 
     for (String section in sections) {
-      lyrics[section] =
-          _fieldsData.where((element) => element.item2 == section && element.item1.text.isNotEmpty).map((e) => e.item1.text.trim()).toList();
+      lyrics[section] = _fieldsData
+          .where(
+            (fields) => fields.label == section && fields.controller.text.isNotEmpty,
+          )
+          .map(
+            (field) => field.controller.text.trim(),
+          )
+          .toList();
     }
 
     song = song.copyWith(lyrics: lyrics, title: titleController.text.trim(), artist: artistController.text.trim());
@@ -166,8 +159,8 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
       FieldData fieldData = _fieldsData[i];
 
       _fields.add(SongEditorTextFieldTile(
-        label: fieldData.item2,
-        controller: fieldData.item1,
+        label: fieldData.label,
+        controller: fieldData.controller,
         index: i + 1,
       ));
     }

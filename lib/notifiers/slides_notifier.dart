@@ -49,8 +49,8 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
   generateScriptureSlides({
     required Scripture scripture,
   }) {
-    int startVerse = scripture.scriptureRef.verse!.verseRange.item1;
-    int? endVerse = scripture.scriptureRef.verse!.verseRange.item2;
+    int startVerse = scripture.scriptureRef.verse!.verseRange.start;
+    int? endVerse = scripture.scriptureRef.verse!.verseRange.end;
 
     _scriptureReference = scripture.scriptureRef;
     _setSlidesPanelTitle(scriptureRefToString(scripture.scriptureRef));

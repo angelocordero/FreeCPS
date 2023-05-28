@@ -35,17 +35,17 @@ class VerseListTile extends ConsumerWidget {
           if (ref.read(ctrlKeyNotifier)) {
             if (verseRef == null) return;
 
-            if (verseRef.verseRange.item2 == null && verseRef.verseRange.item1 > index + 1) {
-              ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.item1}';
+            if (verseRef.verseRange.end == null && verseRef.verseRange.start > index + 1) {
+              ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.start}';
               return;
             }
 
-            if (verseRef.verseRange.item1 > index + 1 && verseRef.verseRange.item2 != null) {
-              ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.item2}';
+            if (verseRef.verseRange.start > index + 1 && verseRef.verseRange.end != null) {
+              ref.read(scriptureProvider.notifier).verseRef = '${index + 1}-${verseRef.verseRange.end}';
               return;
             }
 
-            ref.read(scriptureProvider.notifier).verseRef = '${verseRef.verseRange.item1}-${index + 1}';
+            ref.read(scriptureProvider.notifier).verseRef = '${verseRef.verseRange.start}-${index + 1}';
             return;
           }
 
