@@ -6,7 +6,6 @@ import 'package:freecps/models/scripture_slide_model.dart';
 import '../core/providers_declaration.dart';
 import '../models/slide_model.dart';
 import '../models/song_slide_model.dart';
-import '../widgets/scripture_slide_widget.dart';
 import '../widgets/song_slide_widget.dart';
 
 class SlidesPanel extends ConsumerWidget {
@@ -58,7 +57,7 @@ class SlidesPanel extends ConsumerWidget {
                         focusNode.requestFocus();
                       },
                       child: slides[index] is ScriptureSlide
-                          ? ScriptureSlideWidget(
+                          ? _ScriptureSlideWidget(
                               text: slides[index].text,
                               index: index,
                             )
@@ -73,6 +72,36 @@ class SlidesPanel extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Slide widget for scripture in slide panel
+class _ScriptureSlideWidget extends ConsumerWidget {
+  const _ScriptureSlideWidget({required this.text, required this.index});
+
+  final int index;
+  final String text;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    int? selected = ref.watch(projectedSlideNotifier);
+
+    return Card(
+      shape: selected == index
+          ? const RoundedRectangleBorder(
+              side: BorderSide(
+                color: Color(0xff1e66f5),
+                width: 1.5,
+              ),
+            )
+          : null,
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
         ),
       ),
     );

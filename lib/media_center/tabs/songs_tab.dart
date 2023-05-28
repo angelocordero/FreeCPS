@@ -1,16 +1,16 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/media_center/widgets/song_editor.dart';
 import 'package:freecps/media_center/widgets/song_preview.dart';
 
 import '../../core/constants.dart';
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
 import '../../models/song_model.dart';
+import '../../models/song_slide_model.dart';
+import '../../widgets/song_slide_widget.dart';
 import '../media_center_providers.dart';
 import '../notifiers/song_editor_lyrics_fields_notifier.dart';
-import '../widgets/song_slide_preview.dart';
 
 final songEditorProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFieldsNotifier, Widget>((ref) {
   Song song = ref.watch(selectedSongProvider);
@@ -76,12 +76,12 @@ class SongsTab extends ConsumerWidget {
                 const VerticalDivider(),
                 Flexible(
                   flex: 2,
-                  child: ref.watch(isEditingProvider) ? const SongEditor() : SongPreview(song: selectedSong),
+                  child: ref.watch(isEditingProvider) ? const _SongEditor() : SongPreview(song: selectedSong),
                 ),
                 const VerticalDivider(),
                 Flexible(
                   flex: 2,
-                  child: SongSlidePreview(
+                  child: _SongSlidePreview(
                     song: selectedSong,
                   ),
                 ),
@@ -143,6 +143,72 @@ class SongsTab extends ConsumerWidget {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _SongSlidePreview extends StatelessWidget {
+  const _SongSlidePreview({required this.song});
+
+  final Song song;
+
+  @override
+  Widget build(BuildContext context) {
+    List<SongSlide> slides = [];
+
+    for (var entries in song.lyrics.entries) {
+      String ref = entries.key;
+
+      for (var element in entries.value) {
+        slides.add(SongSlide(text: element, reference: ref));
+      }
+    }
+
+    return GridView.builder(
+      itemCount: slides.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 50,
+        crossAxisSpacing: 50,
+        mainAxisExtent: 170,
+      ),
+      itemBuilder: (context, index) {
+        return SongSlideWidget(
+          text: slides[index].text,
+          reference: slides[index].reference!,
+          index: index,
+        );
+      },
+    );
+  }
+}
+
+class _SongEditor extends ConsumerWidget {
+  const _SongEditor();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                ref.read(songEditorProvider.notifier).insertSlide();
+              },
+              child: const Text('Inser Slide in cursor position'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(songEditorProvider.notifier).save();
+              },
+              child: const Text('Save song'),
+            ),
+          ],
+        ),
+        ref.watch(songEditorProvider),
       ],
     );
   }

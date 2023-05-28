@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:freecps/models/scripture_slide_model.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../core/constants.dart';
 import '../models/slide_model.dart';
 import '../models/song_slide_model.dart';
-import '../widgets/projection_slide_widget.dart';
 
 class ProjectionWindow extends StatefulWidget {
   const ProjectionWindow({super.key});
@@ -133,11 +133,11 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   void showNextSlide(Slide slide) {
     setState(() {
       if (showingFirst) {
-        second = ProjectionTextWidget(
+        second = _ProjectionTextWidget(
           slide: slide,
         );
       } else {
-        first = ProjectionTextWidget(
+        first = _ProjectionTextWidget(
           slide: slide,
         );
       }
@@ -156,5 +156,62 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
 
       showingFirst = !showingFirst;
     });
+  }
+}
+
+class _ProjectionTextWidget extends StatelessWidget {
+  const _ProjectionTextWidget({required this.slide});
+
+  final Slide slide;
+
+  @override
+  Widget build(BuildContext context) {
+    String? reference = slide is SongSlide ? null : (slide as ScriptureSlide).reference;
+
+    String text = slide.text;
+
+    return Container(
+      color: Colors.transparent,
+      height: 1080,
+      width: 1920,
+      child: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: slide is SongSlide
+                    ? Text(text, maxLines: 10, softWrap: true, textAlign: TextAlign.center, overflow: TextOverflow.fade, style: songSlideTextStyle)
+                    : Text(
+                        text,
+                        maxLines: 10,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.fade,
+                        style: const TextStyle(
+                          fontFamily: 'SegoeUI',
+                          fontSize: 80,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+            if (reference != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(reference, style: refTextStyle),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                ],
+              ),
+            const SizedBox(
+              height: 50,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

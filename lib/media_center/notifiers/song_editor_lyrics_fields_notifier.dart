@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/file_utils.dart';
-import 'package:freecps/media_center/widgets/song_editor_text_field_tile.dart';
 
+import '../../core/constants.dart';
 import '../../core/helper_functions.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
+import '../tabs/songs_tab.dart';
 
 typedef CursorLocation = ({int textFieldIndex, int cursorPosition});
 typedef FieldData = ({TextEditingController controller, String label});
@@ -17,7 +18,7 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     init();
   }
 
-  final List<SongEditorTextFieldTile> _fields = [];
+  final List<_SongEditorTextFieldTile> _fields = [];
   final List<FieldData> _fieldsData = [];
 
   Song song;
@@ -158,7 +159,7 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     for (int i = 0; i < _fieldsData.length; i++) {
       FieldData fieldData = _fieldsData[i];
 
-      _fields.add(SongEditorTextFieldTile(
+      _fields.add(_SongEditorTextFieldTile(
         label: fieldData.label,
         controller: fieldData.controller,
         index: i + 1,
@@ -166,5 +167,64 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     }
 
     state = _textFieldList();
+  }
+}
+
+class _SongEditorTextFieldTile extends ConsumerWidget {
+  const _SongEditorTextFieldTile({required this.label, required this.controller, required this.index});
+
+  final String label;
+  final TextEditingController controller;
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Color color = catpuccinColorsSample[label] ?? Colors.blueGrey;
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: color,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+            color: color,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(index.toString()),
+                Text(label),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              textAlign: TextAlign.center,
+              controller: controller,
+              minLines: 5,
+              maxLines: 10,
+              onTap: () {
+                ref.read(songEditorProvider.notifier).setCursorLocation(
+                      textFieldIndex: index,
+                      cursorPos: controller.selection.baseOffset,
+                    );
+              },
+              onChanged: (input) {
+                ref.read(songEditorProvider.notifier).setCursorLocation(
+                      textFieldIndex: index,
+                      cursorPos: controller.selection.baseOffset,
+                    );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
