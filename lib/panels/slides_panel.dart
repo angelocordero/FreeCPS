@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/scripture_slide_model.dart';
-import 'package:freecps/windows/projection_window.dart';
 
 import '../core/providers_declaration.dart';
+import '../models/scripture_slide_model.dart';
 import '../models/slide_model.dart';
 import '../models/song_slide_model.dart';
-import '../widgets/projection_text_widget.dart';
 import '../widgets/song_slide_widget.dart';
 
 class SlidesPanel extends ConsumerWidget {

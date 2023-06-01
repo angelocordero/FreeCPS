@@ -41,6 +41,9 @@ class SongsTab extends ConsumerWidget {
                   child: Column(
                     children: [
                       TextField(
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                        ),
                         onChanged: (input) {
                           if (input.isEmpty) {
                             ref.read(songsProvider.notifier).clearSearch();
@@ -171,7 +174,7 @@ class _SongSlidePreview extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 50,
         crossAxisSpacing: 50,
-        mainAxisExtent: 170,
+        childAspectRatio: 16 / 10.68,
       ),
       itemBuilder: (context, index) {
         return SongSlideWidget(

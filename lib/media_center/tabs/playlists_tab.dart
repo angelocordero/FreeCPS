@@ -21,7 +21,7 @@ class PlaylistsTab extends ConsumerWidget {
     List<Playlist> playlists = ref.watch(playlistsProvider);
 
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.only(top: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -54,12 +54,16 @@ class PlaylistsTab extends ConsumerWidget {
                     },
                   ),
                 ),
-                const VerticalDivider(),
+                const VerticalDivider(
+                  width: 20,
+                ),
                 const Flexible(
                   flex: 2,
                   child: _PlaylistDetailsPanel(),
                 ),
-                const VerticalDivider(),
+                const VerticalDivider(
+                  width: 20,
+                ),
                 Flexible(
                   flex: 2,
                   child: ref.watch(playlistPreviewPanelProvider),

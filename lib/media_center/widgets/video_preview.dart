@@ -1,27 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:freecps/media_center/widgets/video_controls.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
-class VideoPreview extends StatelessWidget {
+class VideoPreview extends StatefulWidget {
   const VideoPreview({super.key, required this.filePath});
 
   final String filePath;
 
   @override
-  Widget build(BuildContext context) {
-    final Player player = Player();
-    final VideoController controller = VideoController(player, configuration: const VideoControllerConfiguration(width: 1280, height: 720));
+  State<VideoPreview> createState() => _VideoPreviewState();
+}
 
-    player.setPlaylistMode(PlaylistMode.loop);
-    player.open(Media(filePath));
+class _VideoPreviewState extends State<VideoPreview> {
+  late final Player player;
+  late final VideoController controller;
 
-    return AspectRatio(
-      aspectRatio: 1280 / 720,
-      child: Video(
-        controller: controller,
-        height: 720,
-        width: 1280,
-      ),
+  @override
+  void initState() {
+    player = Player();
+    controller = VideoController(
+      player,
+      configuration: const VideoControllerConfiguration(width: 1280, height: 720),
     );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    player.open(Media(widget.filePath), play: false);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Video(
+            controller: controller,
+            height: 720,
+            width: 1280,
+          ),
+        ),
+        VideoControls(player: player),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
   }
 }
