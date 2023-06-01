@@ -1,47 +1,27 @@
-import 'dart:io';
-import 'dart:math';
-
-import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
-// TODO not used because not working
-
-class VideoPreview extends StatefulWidget {
+class VideoPreview extends StatelessWidget {
   const VideoPreview({super.key, required this.filePath});
 
   final String filePath;
 
   @override
-  State<VideoPreview> createState() => _VideoPreviewState();
-}
-
-class _VideoPreviewState extends State<VideoPreview> {
-  late Player player;
-
-  @override
-  void initState() {
-    player = Player(id: Random().nextInt(999));
-    player.setPlaylistMode(PlaylistMode.loop);
-    player.open(Media.file(File(widget.filePath)));
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final Player player = Player();
+    final VideoController controller = VideoController(player, configuration: const VideoControllerConfiguration(width: 1280, height: 720));
+
+    player.setPlaylistMode(PlaylistMode.loop);
+    player.open(Media(filePath));
+
     return AspectRatio(
       aspectRatio: 1280 / 720,
       child: Video(
-        player: player,
+        controller: controller,
         height: 720,
         width: 1280,
-        showControls: false,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    player.dispose();
-    super.dispose();
   }
 }

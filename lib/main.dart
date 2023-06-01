@@ -1,6 +1,6 @@
-import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_kit/media_kit.dart';
 
 import 'windows/main_window.dart';
 import 'windows/projection_window.dart';
@@ -8,8 +8,8 @@ import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  DartVLC.initialize();
   windowManager.ensureInitialized();
+  MediaKit.ensureInitialized();
   if (args.isEmpty) {
     // TODO: put minimum size in main window
     // TODO: put in initialize window before main window?

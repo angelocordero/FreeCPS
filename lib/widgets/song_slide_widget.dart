@@ -30,7 +30,8 @@ class SongSlideWidget extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
+          AspectRatio(
+            aspectRatio: 16 / 9,
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
@@ -41,10 +42,13 @@ class SongSlideWidget extends ConsumerWidget {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-            color: color,
-            child: Text(reference),
+          AspectRatio(
+            aspectRatio: 16 / 1.5,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              color: color,
+              child: Text(reference),
+            ),
           ),
         ],
       ),

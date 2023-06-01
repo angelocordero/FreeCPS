@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 
 import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
+import '../widgets/video_preview.dart';
 
 class PlaylistPreviewPanelNotifier extends StateNotifier<Widget> {
   PlaylistPreviewPanelNotifier({required dynamic args, required this.photosDir}) : super(Container()) {
@@ -27,7 +28,7 @@ class PlaylistPreviewPanelNotifier extends StateNotifier<Widget> {
     }
   }
 
-  void _previewMedia(String args) {
+  Future<void> _previewMedia(String args) async {
     for (var e in photoFileExtensions) {
       if (args.toLowerCase().contains(e)) {
         String filePath = join(photosDir, args);
@@ -38,13 +39,11 @@ class PlaylistPreviewPanelNotifier extends StateNotifier<Widget> {
 
     for (var e in videoFileExtensions) {
       if (args.toLowerCase().contains(e)) {
-        //String filePath = join(await videosDirectory(), args);
+        String filePath = join(await videosDirectory(), args);
 
         // TODO show thumbnail
-        state = const Center(
-          child: Text('Video Preview is currently not supported\n https://github.com/alexmercerind/dart_vlc/issues/357'),
-        );
-        //state = VideoPreview(filePath: filePath);
+
+        state = VideoPreview(filePath: filePath);
 
         return;
       }

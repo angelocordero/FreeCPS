@@ -1,15 +1,14 @@
-import 'dart:io';
-
-import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freecps/models/scripture_slide_model.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../core/constants.dart';
 import '../models/slide_model.dart';
 import '../models/song_slide_model.dart';
+import '../widgets/projection_text_widget.dart';
 
 class ProjectionWindow extends StatefulWidget {
   const ProjectionWindow({super.key});
@@ -20,11 +19,13 @@ class ProjectionWindow extends StatefulWidget {
 
 class _ProjectionWindowState extends State<ProjectionWindow> {
   Widget first = Container();
-  late final Player player;
   Widget second = Container();
-  bool showingFirst = false;
 
+  bool showingFirst = false;
   bool focused = false;
+
+  late final player = Player();
+  late final controller = VideoController(player);
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +51,8 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
               ColorFiltered(
                 colorFilter: const ColorFilter.mode(Colors.black45, BlendMode.darken),
                 child: Video(
-                  player: player,
+                  controller: controller,
                   fit: BoxFit.cover,
-                  showControls: false,
                 ),
               ),
               Center(
@@ -81,7 +81,6 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   void initState() {
     super.initState();
 
-    player = Player(id: 9999);
     player.setPlaylistMode(PlaylistMode.loop);
 
     WidgetsBinding.instance.addPersistentFrameCallback((_) async {
@@ -117,15 +116,15 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   }
 
   void clearBackground() {
-    Media file = Media.asset('media/black.jpg');
+    Media file = Media('media/black.jpg');
     player.open(file);
   }
 
   void setBackground(MethodCall call) {
     if (call.arguments == '' || call.arguments == null) return;
 
-    Media file = Media.file(
-      File(call.arguments),
+    Media file = Media(
+      call.arguments,
     );
     player.open(file);
   }
@@ -133,11 +132,11 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   void showNextSlide(Slide slide) {
     setState(() {
       if (showingFirst) {
-        second = _ProjectionTextWidget(
+        second = ProjectionTextWidget(
           slide: slide,
         );
       } else {
-        first = _ProjectionTextWidget(
+        first = ProjectionTextWidget(
           slide: slide,
         );
       }
@@ -159,59 +158,4 @@ class _ProjectionWindowState extends State<ProjectionWindow> {
   }
 }
 
-class _ProjectionTextWidget extends StatelessWidget {
-  const _ProjectionTextWidget({required this.slide});
 
-  final Slide slide;
-
-  @override
-  Widget build(BuildContext context) {
-    String? reference = slide is SongSlide ? null : (slide as ScriptureSlide).reference;
-
-    String text = slide.text;
-
-    return Container(
-      color: Colors.transparent,
-      height: 1080,
-      width: 1920,
-      child: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: slide is SongSlide
-                    ? Text(text, maxLines: 10, softWrap: true, textAlign: TextAlign.center, overflow: TextOverflow.fade, style: songSlideTextStyle)
-                    : Text(
-                        text,
-                        maxLines: 10,
-                        softWrap: true,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.fade,
-                        style: const TextStyle(
-                          fontFamily: 'SegoeUI',
-                          fontSize: 80,
-                          color: Colors.white,
-                        ),
-                      ),
-              ),
-            ),
-            if (reference != null)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(reference, style: refTextStyle),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                ],
-              ),
-            const SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

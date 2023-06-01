@@ -9,7 +9,7 @@
 
 #include "desktop_multi_window/desktop_multi_window_plugin.h"
 #include "window_manager/window_manager_plugin.h"
-#include "dart_vlc/dart_vlc_plugin.h"
+#include "media_kit_video/media_kit_video_plugin.h"
 
 struct _MyApplication {
   GtkApplication parent_instance;
@@ -70,9 +70,9 @@ static void my_application_activate(GApplication* application) {
     g_autoptr(FlPluginRegistrar) window_manager_registrar =
         fl_plugin_registry_get_registrar_for_plugin(registry, "WindowManagerPlugin");
     window_manager_plugin_register_with_registrar(window_manager_registrar);
-    g_autoptr(FlPluginRegistrar) dart_vlc_registrar =
-        fl_plugin_registry_get_registrar_for_plugin(registry, "DartVlc");
-    dart_vlc_plugin_register_with_registrar(dart_vlc_registrar);
+    g_autoptr(FlPluginRegistrar) media_kit_registrar =
+        fl_plugin_registry_get_registrar_for_plugin(registry, "MedaKit");
+    media_kit_video_plugin_register_with_registrar(media_kit_registrar);
   });
 
    //! IMPORTANT

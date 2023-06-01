@@ -6,7 +6,6 @@
 
 #include "desktop_multi_window/desktop_multi_window_plugin.h"
 #include "window_manager/window_manager_plugin.h"
-#include "dart_vlc/dart_vlc_plugin.h"
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
@@ -39,8 +38,7 @@ bool FlutterWindow::OnCreate() {
     auto *registry = flutter_view_controller->engine();
     WindowManagerPluginRegisterWithRegistrar(
         registry->GetRegistrarForPlugin("WindowManagerPlugin"));
-    DartVlcPluginRegisterWithRegistrar(
-        registry->GetRegistrarForPlugin("DartVlcPlugin"));
+   
   });
 
   //! IMPORTANT 

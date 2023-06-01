@@ -38,7 +38,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   desktop_multi_window: ^0.2.0
   window_manager: ^0.3.0
-  dart_vlc: ^0.4.0
   flutter_riverpod: ^2.1.1
   tap_debouncer: ^2.0.2
   flutter_typeahead: ^4.1.1
@@ -51,6 +50,12 @@ dependencies:
   mime: ^1.0.3
   google_fonts: ^4.0.3
   nanoid: ^1.0.0
+
+  media_kit: ^0.0.8                              
+  media_kit_video: ^0.0.10        
+  media_kit_native_event_loop: ^1.0.4  
+  media_kit_libs_windows_video: ^1.0.2
+  media_kit_libs_linux: ^1.0.2
   
   resizable_widget:
         git:

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/models/scripture_slide_model.dart';
+import 'package:freecps/windows/projection_window.dart';
 
 import '../core/providers_declaration.dart';
 import '../models/slide_model.dart';
 import '../models/song_slide_model.dart';
+import '../widgets/projection_text_widget.dart';
 import '../widgets/song_slide_widget.dart';
 
 class SlidesPanel extends ConsumerWidget {
@@ -44,11 +46,11 @@ class SlidesPanel extends ConsumerWidget {
               Expanded(
                 child: GridView.builder(
                   itemCount: slides.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                     mainAxisSpacing: 50,
                     crossAxisSpacing: 50,
-                    mainAxisExtent: 170,
+                    childAspectRatio: slides.firstOrNull is SongSlide ? 16 / 10.675 : 16 / 9, // idk aboout 10.68 but it just works
                   ),
                   itemBuilder: (context, index) {
                     return GestureDetector(
@@ -58,7 +60,7 @@ class SlidesPanel extends ConsumerWidget {
                       },
                       child: slides[index] is ScriptureSlide
                           ? _ScriptureSlideWidget(
-                              text: slides[index].text,
+                              slide: slides[index] as ScriptureSlide,
                               index: index,
                             )
                           : SongSlideWidget(
@@ -80,10 +82,10 @@ class SlidesPanel extends ConsumerWidget {
 
 /// Slide widget for scripture in slide panel
 class _ScriptureSlideWidget extends ConsumerWidget {
-  const _ScriptureSlideWidget({required this.text, required this.index});
+  const _ScriptureSlideWidget({required this.slide, required this.index});
 
   final int index;
-  final String text;
+  final ScriptureSlide slide;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,10 +100,13 @@ class _ScriptureSlideWidget extends ConsumerWidget {
               ),
             )
           : null,
-      child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Center(
+          child: Text(
+            slide.text,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
