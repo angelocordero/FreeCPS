@@ -6,9 +6,10 @@ import '../models/slide_model.dart';
 import '../models/song_slide_model.dart';
 
 class ProjectionTextWidget extends StatelessWidget {
-  const ProjectionTextWidget({super.key, required this.slide});
+  const ProjectionTextWidget({super.key, required this.slide, this.scaleFactor});
 
   final Slide slide;
+  final double? scaleFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +22,28 @@ class ProjectionTextWidget extends StatelessWidget {
       child: Container(
         color: Colors.transparent,
         child: Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: EdgeInsets.all(30.0 * (scaleFactor ?? 1)),
           child: Column(
             children: [
               Expanded(
                 child: Center(
                   child: slide is SongSlide
-                      ? Text(text, maxLines: 10, softWrap: true, textAlign: TextAlign.center, overflow: TextOverflow.fade, style: songSlideTextStyle)
+                      ? Text(
+                          text,
+                          maxLines: 10,
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.fade,
+                          style: songSlideTextStyle,
+                          textScaleFactor: (scaleFactor ?? 1),
+                        )
                       : Text(
                           text,
                           maxLines: 10,
                           softWrap: true,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.fade,
+                          textScaleFactor: (scaleFactor ?? 1),
                           style: const TextStyle(
                             fontFamily: 'SegoeUI',
                             fontSize: 80,
@@ -46,14 +56,18 @@ class ProjectionTextWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(reference, style: refTextStyle),
-                    const SizedBox(
-                      width: 50,
+                    Text(
+                      reference,
+                      style: refTextStyle,
+                      textScaleFactor: (scaleFactor ?? 1),
+                    ),
+                    SizedBox(
+                      width: 50 * (scaleFactor ?? 1),
                     ),
                   ],
                 ),
-              const SizedBox(
-                height: 50,
+              SizedBox(
+                height: 50 * (scaleFactor ?? 1),
               ),
             ],
           ),

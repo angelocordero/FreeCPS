@@ -25,6 +25,15 @@ final scriptureProvider = StateNotifierProvider<ScriptureNotifier, Scripture>((r
   return ScriptureNotifier(ref, ref.read(directoriesProvider)['biblesDir']!);
 });
 
+final slidesPanelWeightProvider = StateProvider<double>((ref) {
+  return constantSlidePanelInitialWeight;
+});
+
+final projectionToSlidePanelScaleFactorProvider = StateProvider<double>((ref) {
+
+  return 1;
+});
+
 final biblesDirectoryProvider = StateProvider<String?>((ref) {
   return null;
 });
@@ -45,7 +54,7 @@ final verseListControllerProvider = StateNotifierProvider<VerseListControllerNot
 });
 
 final activePlaylistProvider = StateNotifierProvider<PlaylistNotifier, Playlist>((ref) {
-      return PlaylistNotifier(ref);
+  return PlaylistNotifier(ref);
 });
 
 final slidePanelTitleProvider = StateProvider<String>((ref) {

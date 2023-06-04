@@ -24,7 +24,10 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
 
   ScriptureReference? _scriptureReference;
 
-  generateSongSlide({required Song song}) {
+  generateSongSlide({
+    required Song song,
+    required double scaleFactor,
+  }) {
     List<Slide> temp = [];
 
     for (var entries in song.lyrics.entries) {
@@ -34,13 +37,19 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
         temp.add(SongSlide(text: element, reference: sectionLabel));
       }
     }
+    _ref.read(projectionToSlidePanelScaleFactorProvider.notifier).state = scaleFactor;
 
     state = List<Slide>.from(temp);
     _setSlidesPanelTitle(song.title);
     _scriptureReference = null;
   }
 
-  generateSavedVerseSlides(SavedVerseSlides slides) {
+  generateSavedVerseSlides({
+    required SavedVerseSlides slides,
+    required double scaleFactor,
+  }) {
+    _ref.read(projectionToSlidePanelScaleFactorProvider.notifier).state = scaleFactor;
+
     state = slides.verseSlides;
 
     _setSlidesPanelTitle(scriptureRefToString(slides.scriptureRef));
@@ -48,12 +57,15 @@ class SlidesNotifier extends StateNotifier<List<Slide>> {
 
   generateScriptureSlides({
     required Scripture scripture,
+    required double scaleFactor,
   }) {
     int startVerse = scripture.scriptureRef.verse!.verseRange.start;
     int? endVerse = scripture.scriptureRef.verse!.verseRange.end;
 
     _scriptureReference = scripture.scriptureRef;
     _setSlidesPanelTitle(scriptureRefToString(scripture.scriptureRef));
+
+    _ref.read(projectionToSlidePanelScaleFactorProvider.notifier).state = scaleFactor;
 
     if (endVerse == null) {
       _setSingleVerseScriptureSlide(scripture, startVerse);

@@ -2,8 +2,10 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/core/constants.dart';
+import 'package:freecps/core/helper_functions.dart';
 import 'package:freecps/core/media_center_slide_route.dart';
-import 'package:resizable_widget/resizable_widget.dart';
+import 'package:multi_split_view/multi_split_view.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
 
 import '../core/projection_utils.dart';
@@ -19,6 +21,22 @@ import '../panels/verses_list.dart';
 class MainWindow extends ConsumerWidget {
   const MainWindow({super.key});
 
+  static final MultiSplitViewController topSplitViewController = MultiSplitViewController(
+    areas: [
+      Area(
+        weight: 0.175,
+        minimalWeight: 0.15,
+      ),
+      Area(
+        weight: constantSlidePanelInitialWeight,
+        minimalWeight: 0.5,
+      ),
+      Area(
+        weight: 0.175,
+        minimalWeight: 0.15,
+      ),
+    ],
+  );
 
   // TODO: change appbar to custom app bar
   @override
@@ -89,7 +107,16 @@ class MainWindow extends ConsumerWidget {
             autofocus: true,
             onKey: (event) {
               if (event is RawKeyDownEvent && event.isKeyPressed(LogicalKeyboardKey.enter) || event.isKeyPressed(LogicalKeyboardKey.numpadEnter)) {
-                ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: ref.read(scriptureProvider));
+                double scaleFactor = calculateScaleOfSlides(
+                  mediaQueryWidth: MediaQuery.sizeOf(context).width,
+                  projectionWindowWidth: 1920,
+                  slidesPanelWeight: ref.read(slidesPanelWeightProvider),
+                );
+
+                ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(
+                      scripture: ref.read(scriptureProvider),
+                      scaleFactor: scaleFactor,
+                    );
               } else if (event is RawKeyDownEvent && event.isKeyPressed(LogicalKeyboardKey.controlLeft) ||
                   event.isKeyPressed(LogicalKeyboardKey.shiftLeft)) {
                 ref.read(ctrlKeyNotifier.notifier).state = true;
@@ -98,43 +125,71 @@ class MainWindow extends ConsumerWidget {
                 ref.read(ctrlKeyNotifier.notifier).state = false;
               }
             },
-            child: ResizableWidget(
-              isHorizontalSeparator: true,
-              isDisabledSmartHide: true,
-              percentages: const [0.65, 0.35], // optional
-              minPercentages: const [0.6, 0.0],
-              maxPercentages: const [0.7, double.infinity],
-              children: [
-                ResizableWidget(
-                  isDisabledSmartHide: true,
-                  percentages: const [0.175, 0.65, 0.175], // optional
-                  minPercentages: const [0.15, 0.0, 0.15],
-                  maxPercentages: const [0.2, double.infinity, 0.2],
-                  children: const [
-                    PlaylistPanel(),
-                    SlidesPanel(),
-                    ProjectionControls(),
-                  ],
+            child: MultiSplitViewTheme(
+              data: MultiSplitViewThemeData(
+                dividerPainter: DividerPainters.background(
+                  color: Theme.of(context).dividerColor,
                 ),
-                const Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: ScripturePickerPanel(),
+                dividerThickness: 5,
+              ),
+              child: MultiSplitView(
+                axis: Axis.vertical,
+                controller: MultiSplitViewController(
+                  areas: [
+                    Area(
+                      weight: 0.6,
+                      minimalWeight: 0.5,
                     ),
-                    VerticalDivider(),
-                    Expanded(
-                      flex: 4,
-                      child: VersesList(),
-                    ),
-                    VerticalDivider(),
-                    Expanded(
-                      flex: 1,
-                      child: ScriptureSettings(),
+                    Area(
+                      weight: 0.4,
+                      minimalWeight: 0.3,
                     ),
                   ],
                 ),
-              ],
+                children: [
+                  MultiSplitViewTheme(
+                    data: MultiSplitViewThemeData(
+                      dividerPainter: DividerPainters.background(color: Theme.of(context).dividerColor),
+                      dividerThickness: 5,
+                    ),
+                    child: MultiSplitView(
+                      axis: Axis.horizontal,
+                      controller: topSplitViewController,
+                      children: const [
+                        PlaylistPanel(),
+                        SlidesPanel(),
+                        ProjectionControls(),
+                      ],
+                      onWeightChange: () {
+                        ref.read(slidesPanelWeightProvider.notifier).state = topSplitViewController.getArea(1).weight!;
+                        ref.read(projectionToSlidePanelScaleFactorProvider.notifier).state = calculateScaleOfSlides(
+                          mediaQueryWidth: MediaQuery.sizeOf(context).width,
+                          projectionWindowWidth: 1920,
+                          slidesPanelWeight: topSplitViewController.getArea(1).weight!,
+                        );
+                      },
+                    ),
+                  ),
+                  const Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: ScripturePickerPanel(),
+                      ),
+                      VerticalDivider(),
+                      Expanded(
+                        flex: 4,
+                        child: VersesList(),
+                      ),
+                      VerticalDivider(),
+                      Expanded(
+                        flex: 1,
+                        child: ScriptureSettings(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../core/helper_functions.dart';
 import '../core/input_formatters.dart';
 import '../core/providers_declaration.dart';
 import '../models/scripture_model.dart';
@@ -150,7 +151,13 @@ class _VerseField extends ConsumerWidget {
         controller: _controller,
         enabled: scripture.scriptureRef.translation != null,
         onSubmitted: (value) {
-          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
+          double scaleFactor = calculateScaleOfSlides(
+            mediaQueryWidth: MediaQuery.sizeOf(context).width,
+            projectionWindowWidth: 1920,
+            slidesPanelWeight: ref.read(slidesPanelWeightProvider),
+          );
+
+          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture, scaleFactor: scaleFactor);
         },
         onChanged: (value) {
           scriptureNotifer.verseRef = value;
@@ -200,7 +207,13 @@ class _ChapterField extends ConsumerWidget {
         controller: _controller,
         enabled: scripture.scriptureRef.translation != null,
         onSubmitted: (value) {
-          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
+          double scaleFactor = calculateScaleOfSlides(
+            mediaQueryWidth: MediaQuery.sizeOf(context).width,
+            projectionWindowWidth: 1920,
+            slidesPanelWeight: ref.read(slidesPanelWeightProvider),
+          );
+
+          ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture, scaleFactor: scaleFactor);
         },
         onChanged: (value) {
           if (value == '') {

@@ -60,6 +60,7 @@ dependencies:
   resizable_widget:
         git:
             url: https://github.com/angelocordero/resizable_widget.git
+  multi_split_view: ^2.4.0
 
 dev_dependencies:
   flutter_test:

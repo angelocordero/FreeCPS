@@ -70,3 +70,16 @@ String formatDuration(Duration position) {
 
   return formattedTime;
 }
+
+double calculateScaleOfSlides({required double mediaQueryWidth, required double projectionWindowWidth, required double slidesPanelWeight}) {
+  double panelWidth = (mediaQueryWidth * slidesPanelWeight) - 40 - 5;
+
+  double widthOfSlide = (panelWidth - 190 - 32) / 4;
+
+  double slidesPanelToSlideScaleFactor = widthOfSlide / panelWidth;
+
+  //double slidesPanelToSlideScaleFactor = 0.22009921089;
+  double scaleFactor = mediaQueryWidth / projectionWindowWidth * slidesPanelWeight * slidesPanelToSlideScaleFactor;
+
+  return scaleFactor;
+}

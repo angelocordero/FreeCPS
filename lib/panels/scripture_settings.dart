@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/helper_functions.dart';
 import '../core/providers_declaration.dart';
 import '../models/playlist_model.dart';
 import '../models/scripture_model.dart';
@@ -19,7 +20,16 @@ class ScriptureSettings extends ConsumerWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(scripture: scripture);
+              double scaleFactor = calculateScaleOfSlides(
+                mediaQueryWidth: MediaQuery.sizeOf(context).width,
+                projectionWindowWidth: 1920,
+                slidesPanelWeight: ref.read(slidesPanelWeightProvider),
+              );
+
+              ref.read(projectionSlidesProvider.notifier).generateScriptureSlides(
+                    scripture: scripture,
+                    scaleFactor: scaleFactor,
+                  );
             },
             child: const Text('Generate Verse Slides'),
           ),

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/models/song_slide_model.dart';
+import 'package:freecps/widgets/projection_text_widget.dart';
 
 import '../core/constants.dart';
 import '../core/providers_declaration.dart';
 
 /// Slide widget for songs in slide panel
 class SongSlideWidget extends ConsumerWidget {
-  const SongSlideWidget({super.key, required this.text, required this.reference, required this.index});
+  const SongSlideWidget({super.key, required this.slide, required this.index, required this.scaleFactor});
 
   final int index;
-  final String reference;
-  final String text;
+  final SongSlide slide;
+  final double scaleFactor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Color color = catpuccinColorsSample[reference] ?? Colors.blueGrey;
+    final Color color = catpuccinColorsSample[slide.reference] ?? Colors.blueGrey;
 
     int? selected = ref.watch(projectedSlideNotifier);
 
@@ -32,22 +34,20 @@ class SongSlideWidget extends ConsumerWidget {
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            child: ProjectionTextWidget(
+              slide: slide,
+              scaleFactor: scaleFactor,
             ),
           ),
-          AspectRatio(
-            aspectRatio: 16 / 1.5,
+          Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               color: color,
-              child: Text(reference),
+              child: Text(
+                slide.reference ?? '',
+                style: const TextStyle(fontSize: 100),
+                textScaleFactor: scaleFactor,
+              ),
             ),
           ),
         ],

@@ -55,7 +55,16 @@ class _PlaylistVersesExpansionTile extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () async {
-                ref.read(projectionSlidesProvider.notifier).generateSavedVerseSlides(savedVerseSlides);
+                double scaleFactor = calculateScaleOfSlides(
+                  mediaQueryWidth: MediaQuery.sizeOf(context).width,
+                  projectionWindowWidth: 1920,
+                  slidesPanelWeight: ref.read(slidesPanelWeightProvider),
+                );
+
+                ref.read(projectionSlidesProvider.notifier).generateSavedVerseSlides(
+                      slides: savedVerseSlides,
+                      scaleFactor: scaleFactor,
+                    );
               },
               child: Card(
                 child: ListTile(
@@ -135,7 +144,16 @@ class _PlaylistSongsExpansionTile extends ConsumerWidget {
             return GestureDetector(
               onTap: () {
                 if (song.title != Song.error().title) {
-                  ref.read(projectionSlidesProvider.notifier).generateSongSlide(song: song);
+                  double scaleFactor = calculateScaleOfSlides(
+                    mediaQueryWidth: MediaQuery.sizeOf(context).width,
+                    projectionWindowWidth: 1920,
+                    slidesPanelWeight: ref.read(slidesPanelWeightProvider),
+                  );
+
+                  ref.read(projectionSlidesProvider.notifier).generateSongSlide(
+                        song: song,
+                        scaleFactor: scaleFactor,
+                      );
                 }
               },
               child: Card(

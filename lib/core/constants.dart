@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart';
 
 String blackBackgroundFilePath = 'media/black.jpg';
 
-
 const String customIdAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 Map<String, Color> catpuccinColorsSample = {
@@ -39,6 +38,8 @@ TextStyle refTextStyle = GoogleFonts.raleway(
     color: Colors.white,
   ),
 );
+
+double constantSlidePanelInitialWeight = 0.65;
 
 List<String> videoFileExtensions = ['mp4', 'mov'];
 List<String> photoFileExtensions = ['jpg', 'jpeg', 'png'];

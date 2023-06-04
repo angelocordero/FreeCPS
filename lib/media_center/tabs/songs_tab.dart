@@ -174,13 +174,14 @@ class _SongSlidePreview extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 50,
         crossAxisSpacing: 50,
-        childAspectRatio: 16 / 10.68,
+        childAspectRatio: 16 / 10.675,
       ),
       itemBuilder: (context, index) {
         return SongSlideWidget(
-          text: slides[index].text,
-          reference: slides[index].reference!,
+          slide: slides[index],
           index: index,
+          // TODO change this scalefactor to match slide size in preview
+          scaleFactor: 1,
         );
       },
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freecps/widgets/projection_text_widget.dart';
 
 import '../core/providers_declaration.dart';
 import '../models/scripture_slide_model.dart';
@@ -48,9 +49,11 @@ class SlidesPanel extends ConsumerWidget {
                     crossAxisCount: 4,
                     mainAxisSpacing: 50,
                     crossAxisSpacing: 50,
-                    childAspectRatio: slides.firstOrNull is SongSlide ? 16 / 10.675 : 16 / 9, // idk aboout 10.68 but it just works
+                    childAspectRatio: slides.firstOrNull is SongSlide ? 16 / 10.675 : 16 / 9, // idk about 10.675 but it just works
                   ),
                   itemBuilder: (context, index) {
+                    double scaleFactor = ref.watch(projectionToSlidePanelScaleFactorProvider);
+
                     return GestureDetector(
                       onTap: () {
                         ref.read(projectedSlideNotifier.notifier).click(index);
@@ -60,11 +63,12 @@ class SlidesPanel extends ConsumerWidget {
                           ? _ScriptureSlideWidget(
                               slide: slides[index] as ScriptureSlide,
                               index: index,
+                              scaleFactor: scaleFactor,
                             )
                           : SongSlideWidget(
-                              text: slides[index].text,
-                              reference: (slides[index] as SongSlide).reference!,
+                              slide: slides[index] as SongSlide,
                               index: index,
+                              scaleFactor: scaleFactor,
                             ),
                     );
                   },
@@ -80,10 +84,11 @@ class SlidesPanel extends ConsumerWidget {
 
 /// Slide widget for scripture in slide panel
 class _ScriptureSlideWidget extends ConsumerWidget {
-  const _ScriptureSlideWidget({required this.slide, required this.index});
+  const _ScriptureSlideWidget({required this.slide, required this.index, required this.scaleFactor});
 
   final int index;
   final ScriptureSlide slide;
+  final double scaleFactor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,14 +103,9 @@ class _ScriptureSlideWidget extends ConsumerWidget {
               ),
             )
           : null,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Center(
-          child: Text(
-            slide.text,
-            textAlign: TextAlign.center,
-          ),
-        ),
+      child: ProjectionTextWidget(
+        slide: slide,
+        scaleFactor: scaleFactor,
       ),
     );
   }
