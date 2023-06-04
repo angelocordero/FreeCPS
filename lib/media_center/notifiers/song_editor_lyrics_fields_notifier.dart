@@ -2,53 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/core/file_utils.dart';
 
-import '../../core/constants.dart';
 import '../../core/helper_functions.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
 import '../tabs/songs_tab.dart';
+import '../widgets/song_editor_text_field_tile.dart';
 
+/// Index of lyrics field and the position of the cursor in the field
 typedef CursorLocation = ({int textFieldIndex, int cursorPosition});
 typedef FieldData = ({TextEditingController controller, String label});
 
-//TODO: MASSIVE MASSIVE REFACTOR
-
-class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
-  SongEditorLyricsFieldsNotifier(this.song, this.ref) : super(Container()) {
-    init();
+class SongEditorLyricsFieldsNotifier extends StateNotifier<List<SongEditorTextFieldTile>> {
+  SongEditorLyricsFieldsNotifier(this.song, this.ref) : super([]) {
+    _init();
   }
 
-  final List<_SongEditorTextFieldTile> _fields = [];
-  final List<FieldData> _fieldsData = [];
-
+  CursorLocation? cursorLocation;
+  final AutoDisposeStateNotifierProviderRef<SongEditorLyricsFieldsNotifier, List<SongEditorTextFieldTile>> ref;
   Song song;
 
-  AutoDisposeStateNotifierProviderRef<SongEditorLyricsFieldsNotifier, Widget> ref;
-
-  CursorLocation? cursorLocation;
-
-  TextEditingController titleController = TextEditingController();
-  TextEditingController artistController = TextEditingController();
+  final List<FieldData> _fieldsData = [];
 
   void setCursorLocation({required int textFieldIndex, required int cursorPos}) {
     cursorLocation = (textFieldIndex: textFieldIndex - 1, cursorPosition: cursorPos);
   }
 
-  init() {
-    for (var entry in song.lyrics.entries) {
-      for (var element in entry.value) {
-        TextEditingController controller = TextEditingController.fromValue(TextEditingValue(text: element));
-        _fieldsData.add((controller: controller, label: entry.key));
-      }
-    }
-
-    titleController.text = song.title;
-    artistController.text = song.artist;
-
-    _setState();
-  }
-
-  insertSlide() {
+  // adds a field to the list
+  insertField() {
+    // if there are no fields, adds field to begin the list and return
     if (_fieldsData.isEmpty) {
       TextEditingController insertController = TextEditingController();
 
@@ -59,6 +40,10 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
 
       return;
     }
+
+    // if there are fields, insert a field to the cursor location
+    // splits the text based on the cursor
+    // puts text after the cursor into the newly inserted field
 
     if (cursorLocation == null) return;
 
@@ -79,7 +64,10 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     _setState();
   }
 
-  save() {
+  save({
+    required TextEditingController titleController,
+    required TextEditingController artistController,
+  }) {
     if (titleController.text.isEmpty) return;
     if (_fieldsData.isEmpty) return;
 
@@ -110,121 +98,37 @@ class SongEditorLyricsFieldsNotifier extends StateNotifier<Widget> {
     bool isEditing = ref.read(isEditingProvider);
 
     ref.read(isEditingProvider.notifier).state = !isEditing;
-
     ref.read(editedSongProvider.notifier).state = song;
   }
 
-  Widget _textFieldList() {
-    return Expanded(
-      child: ListView(
-        children: [
-          Row(
-            children: [
-              const Text('Title: '),
-              Flexible(
-                flex: 1,
-                child: Container(),
-              ),
-              Flexible(
-                flex: 2,
-                child: TextField(
-                  controller: titleController,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Text('Artist: '),
-              const Spacer(
-                flex: 1,
-              ),
-              Flexible(
-                flex: 2,
-                child: TextField(
-                  controller: artistController,
-                ),
-              ),
-            ],
-          ),
-          ..._fields,
-        ],
-      ),
-    );
+
+  /// initializes the fields
+  /// takes all labels, ie. Verses, Chorus, etc. and gets all lines of lyrics from each label
+  /// assigns each line to a corresponding field
+  _init() {
+    for (var entry in song.lyrics.entries) {
+      for (var element in entry.value) {
+        TextEditingController controller = TextEditingController.fromValue(TextEditingValue(text: element));
+        _fieldsData.add((controller: controller, label: entry.key));
+      }
+    }
+
+    _setState();
   }
 
   void _setState() {
-    _fields.clear();
+    state.clear();
 
     for (int i = 0; i < _fieldsData.length; i++) {
       FieldData fieldData = _fieldsData[i];
 
-      _fields.add(_SongEditorTextFieldTile(
+      state.add(SongEditorTextFieldTile(
         label: fieldData.label,
         controller: fieldData.controller,
         index: i + 1,
       ));
     }
 
-    state = _textFieldList();
-  }
-}
-
-class _SongEditorTextFieldTile extends ConsumerWidget {
-  const _SongEditorTextFieldTile({required this.label, required this.controller, required this.index});
-
-  final String label;
-  final TextEditingController controller;
-  final int index;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Color color = catpuccinColorsSample[label] ?? Colors.blueGrey;
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: color,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-            color: color,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(index.toString()),
-                Text(label),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              textAlign: TextAlign.center,
-              controller: controller,
-              minLines: 5,
-              maxLines: 10,
-              onTap: () {
-                ref.read(songEditorProvider.notifier).setCursorLocation(
-                      textFieldIndex: index,
-                      cursorPos: controller.selection.baseOffset,
-                    );
-              },
-              onChanged: (input) {
-                ref.read(songEditorProvider.notifier).setCursorLocation(
-                      textFieldIndex: index,
-                      cursorPos: controller.selection.baseOffset,
-                    );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+    state = state.toList();
   }
 }

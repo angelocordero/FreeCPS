@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/song_model.dart';
 
 class SongPreview extends StatelessWidget {
-  const SongPreview({super.key, required this.song});
+  const SongPreview(this.song, {super.key});
 
   final Song song;
 

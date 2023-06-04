@@ -1,6 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:freecps/media_center/widgets/song_preview.dart';
 
 import '../../core/constants.dart';
@@ -11,11 +13,18 @@ import '../../models/song_slide_model.dart';
 import '../../widgets/song_slide_widget.dart';
 import '../media_center_providers.dart';
 import '../notifiers/song_editor_lyrics_fields_notifier.dart';
+import '../widgets/song_editor_text_field_tile.dart';
 
-final songEditorProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFieldsNotifier, Widget>((ref) {
+final songEditorLyricsFieldProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFieldsNotifier, List<SongEditorTextFieldTile>>((ref) {
   Song song = ref.watch(selectedSongProvider);
 
   return SongEditorLyricsFieldsNotifier(song, ref);
+});
+
+final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
+  ref.watch(selectedSongProvider);
+
+  return false;
 });
 
 class SongsTab extends ConsumerWidget {
@@ -79,7 +88,7 @@ class SongsTab extends ConsumerWidget {
                 const VerticalDivider(),
                 Flexible(
                   flex: 2,
-                  child: ref.watch(isEditingProvider) ? const _SongEditor() : SongPreview(song: selectedSong),
+                  child: ref.watch(isEditingProvider) ? _SongEditor(selectedSong) : SongPreview(selectedSong),
                 ),
                 const VerticalDivider(),
                 Flexible(
@@ -189,7 +198,12 @@ class _SongSlidePreview extends StatelessWidget {
 }
 
 class _SongEditor extends ConsumerWidget {
-  const _SongEditor();
+  _SongEditor(this.song);
+
+  final Song song;
+
+  late final TextEditingController titleController = TextEditingController(text: song.title);
+  late final TextEditingController artistController = TextEditingController(text: song.artist);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -200,19 +214,55 @@ class _SongEditor extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                ref.read(songEditorProvider.notifier).insertSlide();
+                ref.read(songEditorLyricsFieldProvider.notifier).insertField();
               },
               child: const Text('Inser Slide in cursor position'),
             ),
             ElevatedButton(
               onPressed: () {
-                ref.read(songEditorProvider.notifier).save();
+                ref.read(songEditorLyricsFieldProvider.notifier).save(
+                      titleController: titleController,
+                      artistController: artistController,
+                    );
               },
               child: const Text('Save song'),
             ),
           ],
         ),
-        ref.watch(songEditorProvider),
+        Row(
+          children: [
+            const Text('Title: '),
+            Flexible(
+              flex: 1,
+              child: Container(),
+            ),
+            Flexible(
+              flex: 2,
+              child: TextField(
+                controller: titleController,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            const Text('Artist: '),
+            const Spacer(
+              flex: 1,
+            ),
+            Flexible(
+              flex: 2,
+              child: TextField(
+                controller: artistController,
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: ListView(
+            children: [...ref.watch(songEditorLyricsFieldProvider)],
+          ),
+        ),
       ],
     );
   }

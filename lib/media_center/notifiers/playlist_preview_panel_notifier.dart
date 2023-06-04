@@ -73,6 +73,6 @@ class PlaylistPreviewPanelNotifier extends StateNotifier<Widget> {
   }
 
   void _previewSong(Song args) {
-    state = SongPreview(song: args);
+    state = SongPreview( args);
   }
 }

@@ -56,9 +56,9 @@ final selectedSongProvider = StateProvider.autoDispose<Song>((ref) {
     return Song.empty();
   }
 
-  Song editedSong = ref.read(editedSongProvider);
+  Song? editedSong = ref.read(editedSongProvider);
 
-  if (editedSong != Song.empty()) {
+  if (editedSong != null) {
     return editedSong;
   }
 
@@ -96,12 +96,7 @@ final playlistSelectedPreviewProvider = StateProvider.autoDispose<dynamic>((ref)
   return null;
 });
 
-final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
-  ref.watch(selectedSongProvider);
-
-  return false;
-});
-
-final editedSongProvider = StateProvider.autoDispose<Song>((ref) {
-  return Song.empty();
+/// Highlights songs after editing
+final editedSongProvider = StateProvider.autoDispose<Song?>((ref) {
+  return null;
 });
