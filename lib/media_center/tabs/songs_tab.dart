@@ -12,14 +12,8 @@ import '../../models/song_model.dart';
 import '../../models/song_slide_model.dart';
 import '../../widgets/song_slide_widget.dart';
 import '../media_center_providers.dart';
-import '../notifiers/song_editor_lyrics_fields_notifier.dart';
+import '../notifiers/song_editor_fields_data_notifier.dart';
 import '../widgets/song_editor_text_field_tile.dart';
-
-final songEditorLyricsFieldProvider = StateNotifierProvider.autoDispose<SongEditorLyricsFieldsNotifier, List<SongEditorTextFieldTile>>((ref) {
-  Song song = ref.watch(selectedSongProvider);
-
-  return SongEditorLyricsFieldsNotifier(song, ref);
-});
 
 final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
   ref.watch(selectedSongProvider);
@@ -207,6 +201,8 @@ class _SongEditor extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final List<FieldData> fieldsData = ref.watch(songEditorFieldsDataNotifierProvider);
+
     return Column(
       children: [
         Row(
@@ -214,13 +210,13 @@ class _SongEditor extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                ref.read(songEditorLyricsFieldProvider.notifier).insertField();
+                ref.read(songEditorFieldsDataNotifierProvider.notifier).insertField();
               },
               child: const Text('Inser Slide in cursor position'),
             ),
             ElevatedButton(
               onPressed: () {
-                ref.read(songEditorLyricsFieldProvider.notifier).save(
+                ref.read(songEditorFieldsDataNotifierProvider.notifier).save(
                       titleController: titleController,
                       artistController: artistController,
                     );
@@ -259,8 +255,17 @@ class _SongEditor extends ConsumerWidget {
           ],
         ),
         Expanded(
-          child: ListView(
-            children: [...ref.watch(songEditorLyricsFieldProvider)],
+          child: ListView.builder(
+            itemCount: fieldsData.length,
+            itemBuilder: (context, index) {
+              FieldData fieldData = fieldsData[index];
+
+              return SongEditorTextFieldTile(
+                label: fieldData.label,
+                controller: fieldData.controller,
+                index: index + 1,
+              );
+            },
           ),
         ),
       ],

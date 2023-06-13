@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants.dart';
-import '../tabs/songs_tab.dart';
+import '../notifiers/song_editor_fields_data_notifier.dart';
 
 class SongEditorTextFieldTile extends ConsumerWidget {
   const SongEditorTextFieldTile({super.key, required this.label, required this.controller, required this.index});
@@ -44,13 +44,13 @@ class SongEditorTextFieldTile extends ConsumerWidget {
               minLines: 5,
               maxLines: 10,
               onTap: () {
-                ref.read(songEditorLyricsFieldProvider.notifier).setCursorLocation(
+                ref.read(songEditorFieldsDataNotifierProvider.notifier).setCursorLocation(
                       textFieldIndex: index,
                       cursorPos: controller.selection.baseOffset,
                     );
               },
               onChanged: (input) {
-                ref.read(songEditorLyricsFieldProvider.notifier).setCursorLocation(
+                ref.read(songEditorFieldsDataNotifierProvider.notifier).setCursorLocation(
                       textFieldIndex: index,
                       cursorPos: controller.selection.baseOffset,
                     );
