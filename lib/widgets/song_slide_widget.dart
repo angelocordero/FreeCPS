@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/song_slide_model.dart';
 import 'package:freecps/widgets/projection_text_widget.dart';
 
 import '../core/constants.dart';
 import '../core/providers_declaration.dart';
+import '../models/slide_model.dart';
 
 /// Slide widget for songs in slide panel
 class SongSlideWidget extends ConsumerWidget {

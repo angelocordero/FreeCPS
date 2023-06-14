@@ -9,10 +9,8 @@ import '../models/playlist_model.dart';
 import '../models/saved_verse_slides.dart';
 import '../models/scripture_model.dart';
 import '../models/scripture_reference_model.dart';
-import '../models/scripture_slide_model.dart';
 import '../models/slide_model.dart';
 import '../models/song_model.dart';
-import '../models/song_slide_model.dart';
 import '../models/verse_model.dart';
 
 /// Notifier that holds all the generated slides in the Slides Panel

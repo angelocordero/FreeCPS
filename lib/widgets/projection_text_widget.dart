@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:freecps/models/scripture_slide_model.dart';
 
 import '../core/constants.dart';
 import '../models/slide_model.dart';
-import '../models/song_slide_model.dart';
 
 class ProjectionTextWidget extends StatelessWidget {
   const ProjectionTextWidget({super.key, required this.slide, this.scaleFactor});

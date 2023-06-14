@@ -8,12 +8,11 @@ import 'package:freecps/media_center/widgets/song_preview.dart';
 import '../../core/constants.dart';
 import '../../core/file_utils.dart';
 import '../../core/providers_declaration.dart';
+import '../../models/slide_model.dart';
 import '../../models/song_model.dart';
-import '../../models/song_slide_model.dart';
 import '../../widgets/song_slide_widget.dart';
 import '../media_center_providers.dart';
 import '../notifiers/song_editor_fields_data_notifier.dart';
-import '../widgets/song_editor_text_field_tile.dart';
 
 final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
   ref.watch(selectedSongProvider);
@@ -260,7 +259,7 @@ class _SongEditor extends ConsumerWidget {
             itemBuilder: (context, index) {
               FieldData fieldData = fieldsData[index];
 
-              return SongEditorTextFieldTile(
+              return _SongEditorTextFieldTile(
                 label: fieldData.label,
                 controller: fieldData.controller,
                 index: index + 1,
@@ -269,6 +268,65 @@ class _SongEditor extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SongEditorTextFieldTile extends ConsumerWidget {
+  const _SongEditorTextFieldTile({required this.label, required this.controller, required this.index});
+
+  final TextEditingController controller;
+  final int index;
+  final String label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Color color = catpuccinColorsSample[label] ?? Colors.blueGrey;
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: color,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+            color: color,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(index.toString()),
+                Text(label),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              textAlign: TextAlign.center,
+              controller: controller,
+              minLines: 5,
+              maxLines: 10,
+              onTap: () {
+                ref.read(songEditorFieldsDataNotifierProvider.notifier).setCursorLocation(
+                      textFieldIndex: index,
+                      cursorPos: controller.selection.baseOffset,
+                    );
+              },
+              onChanged: (input) {
+                ref.read(songEditorFieldsDataNotifierProvider.notifier).setCursorLocation(
+                      textFieldIndex: index,
+                      cursorPos: controller.selection.baseOffset,
+                    );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

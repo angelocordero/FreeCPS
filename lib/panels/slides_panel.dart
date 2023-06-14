@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freecps/widgets/projection_text_widget.dart';
 
 import '../core/providers_declaration.dart';
-import '../models/scripture_slide_model.dart';
 import '../models/slide_model.dart';
-import '../models/song_slide_model.dart';
 import '../widgets/song_slide_widget.dart';
 
 class SlidesPanel extends ConsumerWidget {
@@ -54,22 +52,25 @@ class SlidesPanel extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     double scaleFactor = ref.watch(projectionToSlidePanelScaleFactorProvider);
 
+                    Slide slide = slides[index];
+
                     return GestureDetector(
                       onTap: () {
                         ref.read(projectedSlideNotifier.notifier).click(index);
                         focusNode.requestFocus();
                       },
-                      child: slides[index] is ScriptureSlide
-                          ? _ScriptureSlideWidget(
-                              slide: slides[index] as ScriptureSlide,
-                              index: index,
-                              scaleFactor: scaleFactor,
-                            )
-                          : SongSlideWidget(
-                              slide: slides[index] as SongSlide,
-                              index: index,
-                              scaleFactor: scaleFactor,
-                            ),
+                      child: switch (slide) {
+                        ScriptureSlide() => _ScriptureSlideWidget(
+                            slide: slide,
+                            index: index,
+                            scaleFactor: scaleFactor,
+                          ),
+                        SongSlide() => SongSlideWidget(
+                            slide: slide,
+                            index: index,
+                            scaleFactor: scaleFactor,
+                          ),
+                      },
                     );
                   },
                 ),

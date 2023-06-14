@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'scripture_reference_model.dart';
-import 'scripture_slide_model.dart';
 import 'slide_model.dart';
 import 'verse_reference_model.dart';
 

@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freecps/models/scripture_slide_model.dart';
-import 'package:freecps/models/song_slide_model.dart';
 
 import '../core/projection_utils.dart';
 import '../models/slide_model.dart';
