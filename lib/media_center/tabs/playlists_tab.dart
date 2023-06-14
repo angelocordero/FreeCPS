@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
 
 import '../../core/constants.dart';
 import '../../core/file_utils.dart';
@@ -10,6 +13,8 @@ import '../../models/playlist_model.dart';
 import '../../models/saved_verse_slides.dart';
 import '../../models/song_model.dart';
 import '../media_center_providers.dart';
+import '../widgets/song_preview.dart';
+import '../widgets/video_preview.dart';
 
 class PlaylistsTab extends ConsumerWidget {
   const PlaylistsTab({
@@ -42,14 +47,12 @@ class PlaylistsTab extends ConsumerWidget {
                         title = '${playlist.title} (Active)';
                       }
 
-                      return GestureDetector(
+                      return ListTile(
                         onTap: () {
                           ref.read(previewedPlaylistProvider.notifier).state = playlist;
                         },
-                        child: ListTile(
-                          selected: playlist.fileName == selectedFileName,
-                          title: Text(title),
-                        ),
+                        selected: playlist.fileName == selectedFileName,
+                        title: Text(title),
                       );
                     },
                   ),
@@ -66,7 +69,7 @@ class PlaylistsTab extends ConsumerWidget {
                 ),
                 Flexible(
                   flex: 2,
-                  child: ref.watch(playlistPreviewPanelProvider),
+                  child: _preview(ref),
                 ),
               ],
             ),
@@ -75,6 +78,58 @@ class PlaylistsTab extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Widget _preview(WidgetRef ref) {
+    dynamic args = ref.watch(playlistSelectedPreviewProvider);
+
+    if (args case Song song) {
+      return SongPreview(song);
+    } else if (args case SavedVerseSlides savedVerseSlides) {
+      return ListView(
+        children: [
+          Text(scriptureRefToString(savedVerseSlides.scriptureRef)),
+          const Divider(
+            height: 30,
+          ),
+          ...savedVerseSlides.verseSlides.map(
+            (e) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(e.text),
+                const Divider(
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else if (args case String fileName) {
+      for (var e in photoFileExtensions) {
+        if (fileName.toLowerCase().contains(e)) {
+          String photosDir = ref.read(directoriesProvider)['photosDir']!;
+
+          String filePath = join(photosDir, fileName);
+          return Image.file(File(filePath));
+        }
+      }
+
+      for (var e in videoFileExtensions) {
+        if (fileName.toLowerCase().contains(e)) {
+          String videosDir = ref.read(directoriesProvider)['videosDir']!;
+
+          String filePath = join(videosDir, fileName);
+
+          // TODO show thumbnail
+
+          return VideoPreview(filePath: filePath);
+        }
+      }
+      return Container();
+    } else {
+      return Container();
+    }
   }
 
   Row _buttons(WidgetRef ref, BuildContext context) {
@@ -136,18 +191,18 @@ class _PlaylistDetailsPanel extends ConsumerWidget {
     return ListView(
       children: [
         const Text('Songs'),
-        songsList(playlist, ref, selected),
+        _songsList(playlist, ref, selected),
         const Divider(),
         const Text('Verses'),
-        versesList(playlist, ref, selected),
+        _versesList(playlist, ref, selected),
         const Divider(),
         const Text('Media'),
-        mediaList(playlist, selected, ref)
+        _mediaList(playlist, selected, ref)
       ],
     );
   }
 
-  ReorderableListView mediaList(Playlist playlist, dynamic selected, WidgetRef ref) {
+  ReorderableListView _mediaList(Playlist playlist, dynamic selected, WidgetRef ref) {
     return ReorderableListView(
       shrinkWrap: true,
       buildDefaultDragHandles: playlist.media.length > 1,
@@ -180,7 +235,7 @@ class _PlaylistDetailsPanel extends ConsumerWidget {
     );
   }
 
-  ReorderableListView versesList(Playlist playlist, WidgetRef ref, dynamic selected) {
+  ReorderableListView _versesList(Playlist playlist, WidgetRef ref, dynamic selected) {
     return ReorderableListView(
       buildDefaultDragHandles: playlist.verses.length > 1,
       shrinkWrap: true,
@@ -215,7 +270,7 @@ class _PlaylistDetailsPanel extends ConsumerWidget {
     );
   }
 
-  ReorderableListView songsList(Playlist playlist, WidgetRef ref, dynamic selected) {
+  ReorderableListView _songsList(Playlist playlist, WidgetRef ref, dynamic selected) {
     return ReorderableListView(
       buildDefaultDragHandles: playlist.songs.length > 1,
       shrinkWrap: true,

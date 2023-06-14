@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/providers_declaration.dart';
@@ -8,7 +7,6 @@ import '../models/playlist_model.dart';
 import '../models/song_model.dart';
 import 'notifiers/bibles_notifier.dart';
 import 'notifiers/photos_notifier.dart';
-import 'notifiers/playlist_preview_panel_notifier.dart';
 import 'notifiers/playlists_notifier.dart';
 import 'notifiers/videos_notifier.dart';
 import 'notifiers/songs_notifier.dart';
@@ -78,13 +76,6 @@ final previewedPlaylistProvider = StateProvider.autoDispose<Playlist>((ref) {
   } else {
     return Playlist.empty();
   }
-});
-
-final playlistPreviewPanelProvider = StateNotifierProvider.autoDispose<PlaylistPreviewPanelNotifier, Widget>((ref) {
-  dynamic selected = ref.watch(playlistSelectedPreviewProvider);
-  String photosDir = ref.watch(directoriesProvider)['photosDir']!;
-
-  return PlaylistPreviewPanelNotifier(args: selected, photosDir: photosDir);
 });
 
 final playlistSelectedPreviewProvider = StateProvider.autoDispose<dynamic>((ref) {
