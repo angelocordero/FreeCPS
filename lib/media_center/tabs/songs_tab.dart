@@ -12,7 +12,7 @@ import '../../models/slide_model.dart';
 import '../../models/song_model.dart';
 import '../../widgets/song_slide_widget.dart';
 import '../media_center_providers.dart';
-import '../notifiers/song_editor_fields_data_notifier.dart';
+import '../notifiers/song_editor_fields_notifier.dart';
 
 final isEditingProvider = StateProvider.autoDispose<bool>((ref) {
   ref.watch(selectedSongProvider);
@@ -200,7 +200,7 @@ class _SongEditor extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<FieldData> fieldsData = ref.watch(songEditorFieldsDataNotifierProvider);
+    final List<FieldData> fieldsData = ref.watch(songEditorFieldsNotifierProvider);
 
     return Column(
       children: [
@@ -209,13 +209,13 @@ class _SongEditor extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                ref.read(songEditorFieldsDataNotifierProvider.notifier).insertField();
+                ref.read(songEditorFieldsNotifierProvider.notifier).insertField();
               },
               child: const Text('Inser Slide in cursor position'),
             ),
             ElevatedButton(
               onPressed: () {
-                ref.read(songEditorFieldsDataNotifierProvider.notifier).save(
+                ref.read(songEditorFieldsNotifierProvider.notifier).save(
                       titleController: titleController,
                       artistController: artistController,
                     );
@@ -281,7 +281,7 @@ class _SongEditorTextFieldTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Color color = catpuccinColorsSample[label] ?? Colors.blueGrey;
+    final Color color = lyricsGroupsColors[label] ?? Colors.blueGrey;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
       shape: RoundedRectangleBorder(
@@ -297,10 +297,58 @@ class _SongEditorTextFieldTile extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
             color: color,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(index.toString()),
-                Text(label),
+                const Spacer(),
+                SizedBox(
+                  width: 140,
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButtonFormField<String>(
+                      alignment: Alignment.center,
+                      value: label,
+                      iconSize: 20,
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.all(4),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      items: lyricsGroup.map((e) {
+                        return DropdownMenuItem<String>(
+                          value: e,
+                          child: Text(
+                            e,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value == null) return;
+
+                        ref.read(songEditorFieldsNotifierProvider.notifier).changeFieldGroup(index, value);
+                      },
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Tooltip(
+                  message: 'Remove Slide',
+                  child: SizedBox(
+                    width: 12,
+                    height: 12,
+                    child: IconButton(
+                      padding: const EdgeInsets.all(0),
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.close,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -312,13 +360,13 @@ class _SongEditorTextFieldTile extends ConsumerWidget {
               minLines: 5,
               maxLines: 10,
               onTap: () {
-                ref.read(songEditorFieldsDataNotifierProvider.notifier).setCursorLocation(
+                ref.read(songEditorFieldsNotifierProvider.notifier).setCursorLocation(
                       textFieldIndex: index,
                       cursorPos: controller.selection.baseOffset,
                     );
               },
               onChanged: (input) {
-                ref.read(songEditorFieldsDataNotifierProvider.notifier).setCursorLocation(
+                ref.read(songEditorFieldsNotifierProvider.notifier).setCursorLocation(
                       textFieldIndex: index,
                       cursorPos: controller.selection.baseOffset,
                     );

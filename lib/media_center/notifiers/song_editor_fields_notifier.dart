@@ -7,14 +7,14 @@ import '../../models/song_model.dart';
 import '../media_center_providers.dart';
 import '../tabs/songs_tab.dart';
 
-part 'song_editor_fields_data_notifier.g.dart';
+part 'song_editor_fields_notifier.g.dart';
 
 /// Index of lyrics field and the position of the cursor in the field
 typedef CursorLocation = ({int textFieldIndex, int cursorPosition});
 typedef FieldData = ({TextEditingController controller, String label});
 
 @riverpod
-class SongEditorFieldsDataNotifier extends _$SongEditorFieldsDataNotifier {
+class SongEditorFieldsNotifier extends _$SongEditorFieldsNotifier {
   @override
   List<FieldData> build() {
     Song song = ref.watch(selectedSongProvider);
@@ -37,8 +37,17 @@ class SongEditorFieldsDataNotifier extends _$SongEditorFieldsDataNotifier {
     cursorLocation = (textFieldIndex: textFieldIndex - 1, cursorPosition: cursorPos);
   }
 
+  /// changes the lyrics group of all the fields below the index to match the group of the index
+  void changeFieldGroup(int index, String selectedLabel) {
+    for (int i = index - 1; i < state.length; i++) {
+      state[i] = (controller: state[i].controller, label: selectedLabel);
+    }
+
+    state = List.from(state);
+  }
+
   // adds a field to the list
-  insertField() {
+  void insertField() {
     // if there are no fields, adds field to begin the list and return
     if (state.isEmpty) {
       return _insertFirstField();

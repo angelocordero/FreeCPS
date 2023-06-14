@@ -7,18 +7,33 @@ String blackBackgroundFilePath = 'media/black.jpg';
 
 const String customIdAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-Map<String, Color> catpuccinColorsSample = {
-  'Verse 1': const Color(0xffdd7878),
-  'Verse 2': const Color(0xffea76cb),
-  'Chorus': const Color(0xff8839ef),
-  'Chorus 2': const Color(0xff40a02b),
-  'Pre Chorus': const Color(0xffe64553),
-  'Pre Chorus 1': const Color(0xffe64553),
-  'Pre Chorus 2': const Color(0xfffe640b),
-  'Bridge': const Color(0xff04a5e5),
-  'Tag': const Color(0xff7287fd),
-  'Default': const Color(0xff40a02b),
-};
+List<Color> colorsSample = [
+  const Color(0xffdd7878),
+  const Color(0xffea76cb),
+  const Color(0xff8839ef),
+  const Color(0xff40a02b),
+  const Color(0xffe64553),
+  const Color(0xffe64553),
+  const Color(0xfffe640b),
+  const Color(0xff04a5e5),
+  const Color(0xff7287fd),
+  const Color(0xff40a02b),
+];
+
+List<String> lyricsGroup = [
+  'Verse 1',
+  'Verse 2',
+  'Chorus',
+  'Chorus 2',
+  'Pre Chorus',
+  'Pre Chorus 1',
+  'Pre Chorus 2',
+  'Bridge',
+  'Tag',
+  'Default',
+];
+
+Map<String, Color> lyricsGroupsColors = Map.fromIterables(lyricsGroup, colorsSample);
 
 TextStyle songSlideTextStyle = const TextStyle(
   fontFamily: 'LemonMilk',

@@ -78,7 +78,6 @@ double calculateScaleOfSlides({required double mediaQueryWidth, required double 
 
   double slidesPanelToSlideScaleFactor = widthOfSlide / panelWidth;
 
-  //double slidesPanelToSlideScaleFactor = 0.22009921089;
   double scaleFactor = mediaQueryWidth / projectionWindowWidth * slidesPanelWeight * slidesPanelToSlideScaleFactor;
 
   return scaleFactor;

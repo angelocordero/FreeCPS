@@ -16,7 +16,7 @@ class SongSlideWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Color color = catpuccinColorsSample[slide.reference] ?? Colors.blueGrey;
+    final Color color = lyricsGroupsColors[slide.reference] ?? Colors.blueGrey;
 
     int? selected = ref.watch(projectedSlideNotifier);
 
